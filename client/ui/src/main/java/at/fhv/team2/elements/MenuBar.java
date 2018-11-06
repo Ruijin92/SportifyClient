@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -19,11 +18,14 @@ public class MenuBar extends VBox implements Initializable {
 
     @FXML
     public VBox vBox;
+
     private final int WIDTH = 100;
     private final int HEIGHT = 35;
     private PageProvider pageProvider;
 
-    ArrayList<Button> menuButton = new ArrayList();
+    private Button dashboard;
+    private Button member;
+    private Button participation;
 
     public MenuBar(PageProvider pageProvider) {
 
@@ -38,13 +40,14 @@ public class MenuBar extends VBox implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        addingButtons();
     }
 
-    private void addingButtons() {
+    /**
+     * Adding the Buttons to the Vbox and setting events on them
+     */
+    public void addingButtons() {
 
-        Button dashboard = new Button("Dashboard");
+        dashboard = new Button("Dashboard");
         dashboard.setMinWidth(WIDTH);
         dashboard.setMinHeight(HEIGHT);
 
@@ -52,28 +55,27 @@ public class MenuBar extends VBox implements Initializable {
             pageProvider.switchDashboard();
         });
 
-        Button mitglieder = new Button("Mitglieder");
-        mitglieder.setMinWidth(WIDTH);
-        mitglieder.setMinHeight(HEIGHT);
+        member = new Button("Member");
+        member.setMinWidth(WIDTH);
+        member.setMinHeight(HEIGHT);
 
-        mitglieder.setOnMouseClicked(event -> {
-            pageProvider.switchMitglieder();
+        member.setOnMouseClicked(event -> {
+            pageProvider.switchMember();
         });
 
-        Button wettkampf = new Button("Wettkampf");
-        wettkampf.setMinWidth(WIDTH);
-        wettkampf.setMinHeight(HEIGHT);
+        participation = new Button("Wettkampf");
+        participation.setMinWidth(WIDTH);
+        participation.setMinHeight(HEIGHT);
 
-       vBox.getChildren().addAll(dashboard, mitglieder, wettkampf);
+        participation.setOnMouseClicked(event -> {
+            pageProvider.switchParticipation();
+        });
 
-        menuButton.add(dashboard);
-        menuButton.add(mitglieder);
-        menuButton.add(wettkampf);
-    }
-
-    private void addingListners() {
+        vBox.getChildren().addAll(dashboard, member, participation);
 
     }
 
-    public void initialize(URL location, ResourceBundle resources) { }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 }

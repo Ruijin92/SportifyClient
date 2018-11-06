@@ -1,8 +1,9 @@
-package at.fhv.team2.mitglieder;
+package at.fhv.team2.wettkampf;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,10 +11,11 @@ import java.util.ResourceBundle;
 /**
  * Created by Uray Örnek on 11/6/2018.
  */
-public class Mitglieder extends HBox implements Initializable {
+public class AllParticipations extends HBox implements Initializable {
 
-    public Mitglieder() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Mitglieder.fxml"));
+    public AllParticipations() {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllParticipations.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
 

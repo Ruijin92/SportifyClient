@@ -1,8 +1,8 @@
 package at.fhv.team2;
 
 import at.fhv.team2.dashboard.Dashboard;
-import at.fhv.team2.mitglieder.Mitglieder;
-import sun.applet.Main;
+import at.fhv.team2.member.Member;
+import at.fhv.team2.wettkampf.AllParticipations;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -15,12 +15,15 @@ public class PageProvider {
         this.mainPage = mainPage;
     }
 
-
     public void switchDashboard() {
-        mainPage.anchorPane.setCenter(new Dashboard());
+        mainPage.mainPane.setCenter(new Dashboard());
     }
 
-    public void switchMitglieder() {
-        mainPage.anchorPane.setCenter(new Mitglieder());
+    public void switchMember() {
+        mainPage.mainPane.setCenter(new Member());
+    }
+
+    public void switchParticipation() {
+        mainPage.mainPane.setCenter(new AllParticipations());
     }
 }
