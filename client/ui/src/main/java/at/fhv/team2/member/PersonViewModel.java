@@ -2,6 +2,9 @@ package at.fhv.team2.member;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Uray Örnek on 11/6/2018.
  */
@@ -14,6 +17,8 @@ public class PersonViewModel {
     private SimpleStringProperty street;
     private SimpleStringProperty zipCode;
     private SimpleStringProperty phoneNumber;
+
+    private List<String> sports = new ArrayList<>();
 
     public PersonViewModel(String firstName, String lastName, String city, String street, String zipCode, String phoneNumber){
         this.firstName = new SimpleStringProperty(firstName);

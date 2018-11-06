@@ -45,6 +45,7 @@ public class Member extends HBox implements Initializable {
     public Button changeButton;
 
     private List<CheckBox> sportChecks = new ArrayList<>();
+    private ObservableList<PersonViewModel> personTableList;
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -100,13 +101,13 @@ public class Member extends HBox implements Initializable {
 
     private void addMemberToTable(List<PersonViewModel> person){
 
-        ObservableList<PersonViewModel> persons = FXCollections.observableArrayList(person);
+        personTableList = FXCollections.observableArrayList(person);
 
         firstNameTable.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameTable.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         cityTable.setCellValueFactory(new PropertyValueFactory<>("city"));
 
-        table.setItems(persons);
+        table.setItems(personTableList);
     }
 
     /**
@@ -170,6 +171,16 @@ public class Member extends HBox implements Initializable {
      * @param event
      */
     public void changeData(ActionEvent event) {
+        PersonViewModel pr = (PersonViewModel) table.getSelectionModel().getSelectedItem();
+
+        pr.setFirstName(firstName.getText());
+        pr.setLastName(lastName.getText());
+        pr.setCity(city.getText());
+        pr.setStreet(street.getText());
+        pr.setPhoneNumber(phoneNumber.getText());
+        pr.setZipCode(zipCode.getText());
+
+        //TODO: RMI CONTROLLER der die real Person verändert in der Datenbank
 
         changeButton.setDisable(true);
     }
@@ -181,6 +192,10 @@ public class Member extends HBox implements Initializable {
      */
     public void saveMember(ActionEvent event) {
 
+        PersonViewModel pr = new PersonViewModel(firstName.getText(),lastName.getText(),city.getText(),street.getText(),zipCode.getText(),phoneNumber.getText());
         saveButton.setDisable(true);
+        personTableList.add(pr);
+
+        //TODO: RMI CONTROLLER der die real Person rein speichert
     }
 }
