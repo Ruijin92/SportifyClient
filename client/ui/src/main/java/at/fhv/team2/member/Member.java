@@ -46,6 +46,7 @@ public class Member extends HBox implements Initializable {
 
     private List<CheckBox> sportChecks = new ArrayList<>();
     private ObservableList<PersonViewModel> personTableList;
+    private List<PersonViewModel> persons;
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -197,5 +198,18 @@ public class Member extends HBox implements Initializable {
         personTableList.add(pr);
 
         //TODO: RMI CONTROLLER der die real Person rein speichert
+    }
+
+    public void searchMemberByFirstName(String searchCriteria) {
+        String searchPattern = "/^" + searchCriteria + "/gi";
+        List<PersonViewModel> filteredPersons = new LinkedList<>();
+
+        for (PersonViewModel person : persons) {
+            if (person.getFirstName.match(searchPattern)) {
+                filteredPersons.add(person);
+            }
+        }
+
+        addMemberToTable(filteredPersons);
     }
 }
