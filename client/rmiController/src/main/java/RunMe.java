@@ -1,4 +1,8 @@
-import factory.IControllerFactory;
+import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
+import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.factory.IControllerFactory;
+import at.fhv.sportsclub.model.dept.SportDTO;
+import at.fhv.sportsclub.model.person.PersonDTO;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -14,7 +18,17 @@ public class RunMe {
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(1099);
         IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
-        System.out.println(controllerFactory.getCreateMemberController().createMember());
+
+        IPersonController personController = controllerFactory.getPersonController();
+        IDepartmentController departmentController = controllerFactory.getDepartmentController();
+
+        for (PersonDTO dto : personController.getAllEntries()) {
+            System.out.println(dto.toString());
+        }
+
+        for (SportDTO sportDTO : departmentController.getAllSportEntries()) {
+            System.out.println(sportDTO);
+        }
     }
 
 }
