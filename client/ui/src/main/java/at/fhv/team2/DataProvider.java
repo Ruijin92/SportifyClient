@@ -22,7 +22,7 @@ public class DataProvider {
     private DataProvider(){
         if (controllerFactory == null) {
             try {
-                IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
+                controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
             } catch (RemoteException | NotBoundException e) {
                 e.printStackTrace();
             }

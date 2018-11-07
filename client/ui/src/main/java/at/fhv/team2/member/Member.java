@@ -1,5 +1,13 @@
 package at.fhv.team2.member;
 
+import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
+import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.dept.SportDTO;
+import at.fhv.sportsclub.model.person.AddressDTO;
+import at.fhv.sportsclub.model.person.ContactDTO;
+import at.fhv.sportsclub.model.person.PersonDTO;
+import at.fhv.team2.DataProvider;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,9 +19,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -31,6 +43,7 @@ public class Member extends HBox implements Initializable {
     public TextField dateOfBirth;
     public TextField emailAddress;
     public TextField phoneNumber;
+    public TextField searchInput;
     //endregion
     //region UI-Table
     public TableView table;
@@ -63,23 +76,36 @@ public class Member extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //For Testing---------------------------
-        List<String> sports = new ArrayList<>();
-        sports.add("Tennis");
-        sports.add("Fußball");
-        sports.add("Volleyball");
-        sports.add("Golf");
+        IPersonController personControllerInstance = DataProvider.get().getPersonControllerInstance();
+        IDepartmentController departmentController = DataProvider.get().getDepartmentControllerInstance();
 
-        List<PersonViewModel> persons = new ArrayList<>();
+        ArrayList<PersonDTO> personEntries = null;
+        ArrayList<SportDTO> sportEntries = null;
+        try {
+             personEntries = personControllerInstance.getAllEntries();
+             sportEntries = departmentController.getAllSportEntries();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        persons = new ArrayList<>();
+
+        for (PersonDTO personEntry : personEntries) {
+            persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
+                    personEntry.getAddress().getCity(), personEntry.getAddress().getStreet(),
+                    personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
+        }
+
+        /*
         persons.add(new PersonViewModel("Uray", "Örnek", "Hohenems", "Schubert", "6845", "864345684323"));
         persons.add(new PersonViewModel("Alex", "Zeyer", "Dornbirn", "Hämmerle", "6800", "999523446101"));
         persons.add(new PersonViewModel("Lukas", "Stadlmann", "Dornbirn", "Rauf", "6800", "11111111988"));
         persons.add(new PersonViewModel("Robert", "Schmitzer", "Dornbirn", "Runter", "6860", "621699"));
         persons.add(new PersonViewModel("Marco", "Simeth", "Dornbirn", "Straße", "6845", "694613161"));
         persons.add(new PersonViewModel("Melanie", "Zumtobel", "Dornbirn", "Autsch", "6845", "6966456"));
-        //--------------------------------------
+        */
 
-        addSport(sports);
+        addSport(sportEntries);
 
         saveButton.setDisable(true);
         changeButton.setDisable(true);
@@ -92,9 +118,9 @@ public class Member extends HBox implements Initializable {
      *
      * @param sports
      */
-    private void addSport(List<String> sports) {
-        for (String sp : sports) {
-            CheckBox checkBox = new CheckBox(sp);
+    private void addSport(List<SportDTO> sports) {
+        for (SportDTO sp : sports) {
+            CheckBox checkBox = new CheckBox(sp.getName());
             sportChecks.add(checkBox);
             vBoxSports.getChildren().add(checkBox);
         }
@@ -184,6 +210,23 @@ public class Member extends HBox implements Initializable {
         //TODO: RMI CONTROLLER der die real Person verändert in der Datenbank
 
         changeButton.setDisable(true);
+
+        saveData(pr.getId());
+    }
+
+    private void saveData(String id) {
+        IPersonController personController = DataProvider.get().getPersonControllerInstance();
+        AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
+        ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
+        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO);
+
+        ResponseMessageDTO response = null;
+        try {
+            response = personController.saveOrUpdateEntry(personDTO);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        System.out.println(response.toString());
     }
 
     /**
@@ -193,19 +236,27 @@ public class Member extends HBox implements Initializable {
      */
     public void saveMember(ActionEvent event) {
 
-        PersonViewModel pr = new PersonViewModel(firstName.getText(),lastName.getText(),city.getText(),street.getText(),zipCode.getText(),phoneNumber.getText());
+        PersonViewModel pr = new PersonViewModel(null, firstName.getText(),lastName.getText(),city.getText(),street.getText(),zipCode.getText(),phoneNumber.getText());
         saveButton.setDisable(true);
         personTableList.add(pr);
 
-        //TODO: RMI CONTROLLER der die real Person rein speichert
+        saveData(null);
     }
 
-    public void searchMemberByFirstName(String searchCriteria) {
-        String searchPattern = "/^" + searchCriteria + "/gi";
+
+    public void searchMemberByFirstName() {
+        String searchCriteria = searchInput.getText();
+
+        String searchPattern = "^" + searchCriteria + "\\gi";
         List<PersonViewModel> filteredPersons = new LinkedList<>();
 
+        if (searchCriteria.isEmpty()) {
+            addMemberToTable(persons);
+            return;
+        }
+
         for (PersonViewModel person : persons) {
-            if (person.getFirstName.match(searchPattern)) {
+            if (person.getFirstName().matches(searchCriteria)) {
                 filteredPersons.add(person);
             }
         }

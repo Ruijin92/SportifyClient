@@ -19,8 +19,8 @@
          <children>
             <HBox>
                <children>
-                  <TextField promptText="Mitglieder suchen" />
-                  <Button mnemonicParsing="false" text="Suchen">
+                  <TextField promptText="Mitglieder suchen" fx:id="searchInput"/>
+                  <Button mnemonicParsing="false" text="Suchen" onAction="#searchMemberByFirstName">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>

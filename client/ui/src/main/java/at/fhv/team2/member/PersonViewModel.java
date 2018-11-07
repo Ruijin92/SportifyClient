@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class PersonViewModel {
 
+    private SimpleStringProperty id;
     private SimpleStringProperty firstName;
     private SimpleStringProperty lastName;
     private SimpleStringProperty city;
@@ -20,7 +21,8 @@ public class PersonViewModel {
 
     private List<String> sports = new ArrayList<>();
 
-    public PersonViewModel(String firstName, String lastName, String city, String street, String zipCode, String phoneNumber){
+    public PersonViewModel(String id, String firstName, String lastName, String city, String street, String zipCode, String phoneNumber){
+        this.id = new SimpleStringProperty(id);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.city = new SimpleStringProperty(city);
@@ -98,5 +100,17 @@ public class PersonViewModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber.set(phoneNumber);
+    }
+
+    public String getId() {
+        return id.get();
+    }
+
+    public SimpleStringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
     }
 }
