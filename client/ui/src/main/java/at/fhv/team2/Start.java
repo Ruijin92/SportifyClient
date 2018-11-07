@@ -21,6 +21,7 @@ public class Start extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Registry registry = LocateRegistry.getRegistry(1099);
+        DataProvider.setRegistry(registry);
 
         Parent root = FXMLLoader.load(getClass().getResource("/MainPage.fxml"));
         primaryStage.setTitle("Sportverwaltung");

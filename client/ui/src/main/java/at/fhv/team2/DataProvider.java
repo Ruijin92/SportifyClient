@@ -14,16 +14,26 @@ public class DataProvider {
     private static IPersonController personController = null;
     private static IDepartmentController departmentController = null;
 
-    public DataProvider(Registry registry){
+    private static DataProvider instance = null;
+    private static Registry registry;
+
+
+
+    private DataProvider(){
         if (controllerFactory == null) {
             try {
                 IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (NotBoundException e) {
+            } catch (RemoteException | NotBoundException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static DataProvider get() {
+        if (instance == null) {
+            instance = new DataProvider();
+        }
+        return instance;
     }
 
     public static IPersonController getPersonControllerInstance() {
@@ -46,5 +56,9 @@ public class DataProvider {
             }
         }
         return departmentController;
+    }
+
+    public static void setRegistry(Registry registry) {
+        DataProvider.registry = registry;
     }
 }
