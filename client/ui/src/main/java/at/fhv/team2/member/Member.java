@@ -1,5 +1,6 @@
 package at.fhv.team2.member;
 
+import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
@@ -58,9 +59,11 @@ public class Member extends HBox implements Initializable {
 
     public VBox vBoxSports;
 
-    private List<CheckBox> sportChecks = new ArrayList<>(); 
+    private List<CheckBox> sportChecks = new ArrayList<>();
     private ObservableList<PersonViewModel> personTableList;
     private List<PersonViewModel> persons;
+
+    private ValidationSupport validation = new ValidationSupport();
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -77,13 +80,13 @@ public class Member extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //IPersonController personControllerInstance = DataProvider.get().getPersonControllerInstance();
-        //IDepartmentController departmentController = DataProvider.get().getDepartmentControllerInstance();
+        IPersonController personControllerInstance = DataProvider.get().getPersonControllerInstance();
+        IDepartmentController departmentController = DataProvider.get().getDepartmentControllerInstance();
 
-        //ArrayList<PersonDTO> personEntries = null;
-        //ArrayList<SportDTO> sportEntries = null;
+        ArrayList<PersonDTO> personEntries = null;
+        ArrayList<SportDTO> sportEntries = null;
 
-        /*
+
         try {
             personEntries = personControllerInstance.getAllEntries();
             sportEntries = departmentController.getAllSportEntries();
@@ -99,9 +102,8 @@ public class Member extends HBox implements Initializable {
                     personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
         }
 
-        */
-        //addSport(sportEntries);
-        //addMemberToTable(persons);
+        addSport(sportEntries);
+        addMemberToTable(persons);
 
         saveButton.setDisable(true);
         changeButton.setDisable(true);
@@ -165,9 +167,10 @@ public class Member extends HBox implements Initializable {
         pr.setPhoneNumber(phoneNumber.getText());
         pr.setZipCode(zipCode.getText());
 
-        changeButton.setDisable(true);
-
-        saveData(pr.getId());
+        if (!validation.isInvalid()) {
+            saveData(pr.getId());
+            changeButton.setDisable(true);
+        }
     }
 
     /**
@@ -178,10 +181,12 @@ public class Member extends HBox implements Initializable {
     public void saveMember(ActionEvent event) {
 
         PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText());
-        saveButton.setDisable(true);
-        personTableList.add(pr);
 
-        saveData(null);
+        if (!validation.isInvalid()) {
+            saveData(null);
+            personTableList.add(pr);
+            saveButton.setDisable(true);
+        }
     }
 
     public void searchMemberByFirstName() {
@@ -271,8 +276,6 @@ public class Member extends HBox implements Initializable {
      * Validates the MemberDetail input
      */
     private void validateTheInput() {
-
-        ValidationSupport validation = new ValidationSupport();
 
         validation.registerValidator(firstName, Validator.createEmptyValidator("Have to be filled"));
         validation.registerValidator(lastName, Validator.createEmptyValidator("Have to be filled"));
