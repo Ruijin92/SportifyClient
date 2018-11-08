@@ -1,4 +1,4 @@
-package at.fhv.team2.wettkampf;
+package at.fhv.team2.elements;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,13 +9,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Uray Örnek on 11/6/2018.
+ * Created by Uray Örnek on 11/8/2018.
  */
-public class AllParticipations extends HBox implements Initializable {
+public class Bottom extends HBox implements Initializable {
 
-    public AllParticipations() {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllParticipations.fxml"));
+    public Bottom() {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Bottom.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
 
@@ -31,3 +32,4 @@ public class AllParticipations extends HBox implements Initializable {
 
     }
 }
+

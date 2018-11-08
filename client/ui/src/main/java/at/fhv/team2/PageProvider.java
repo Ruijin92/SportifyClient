@@ -2,7 +2,7 @@ package at.fhv.team2;
 
 import at.fhv.team2.dashboard.Dashboard;
 import at.fhv.team2.member.Member;
-import at.fhv.team2.wettkampf.AllParticipations;
+import at.fhv.team2.wettkampf.AllCompetition;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -23,7 +23,7 @@ public class PageProvider {
         mainPage.mainPane.setCenter(new Member());
     }
 
-    public void switchParticipation() {
-        mainPage.mainPane.setCenter(new AllParticipations());
+    public void switchCompetitions() {
+        mainPage.mainPane.setCenter(new AllCompetition());
     }
 }

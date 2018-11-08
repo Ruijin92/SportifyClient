@@ -1,5 +1,6 @@
 package at.fhv.team2;
 
+import at.fhv.team2.elements.Bottom;
 import at.fhv.team2.elements.MenuBar;
 import at.fhv.team2.elements.Top;
 import javafx.fxml.FXML;
@@ -32,6 +33,6 @@ public class MainPage implements Initializable {
 
         mainPane.setLeft(menubar);
         mainPane.setTop(new Top());
-        mainPane.setBottom(new Top());
+        mainPane.setBottom(new Bottom());
     }
 }
