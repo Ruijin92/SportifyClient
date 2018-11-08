@@ -3,6 +3,10 @@ package at.fhv.team2;
 import at.fhv.team2.dashboard.Dashboard;
 import at.fhv.team2.member.Member;
 import at.fhv.team2.wettkampf.AllCompetition;
+import javafx.geometry.Side;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
+import org.controlsfx.control.MasterDetailPane;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -20,6 +24,7 @@ public class PageProvider {
     }
 
     public void switchMember() {
+
         mainPage.mainPane.setCenter(new Member());
     }
 

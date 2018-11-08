@@ -8,6 +8,7 @@ import at.fhv.sportsclub.model.person.AddressDTO;
 import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.team2.DataProvider;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -81,7 +82,7 @@ public class Member extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+/*
         IPersonController personControllerInstance = DataProvider.get().getPersonControllerInstance();
         IDepartmentController departmentController = DataProvider.get().getDepartmentControllerInstance();
 
@@ -106,7 +107,7 @@ public class Member extends HBox implements Initializable {
 
         addSport(sportEntries);
         addMemberToTable(persons);
-
+*/
         saveButton.setDisable(true);
         changeButton.setDisable(true);
 

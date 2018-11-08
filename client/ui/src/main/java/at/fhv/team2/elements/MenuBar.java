@@ -1,9 +1,11 @@
 package at.fhv.team2.elements;
 
 import at.fhv.team2.PageProvider;
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -19,13 +21,13 @@ public class MenuBar extends VBox implements Initializable {
     @FXML
     public VBox vBox;
 
-    private final int WIDTH = 100;
-    private final int HEIGHT = 35;
+    private final int WIDTH = 120;
+    private final int HEIGHT = 45;
     private PageProvider pageProvider;
 
     private Button dashboard;
     private Button member;
-    private Button participation;
+    private Button competition;
 
     public MenuBar(PageProvider pageProvider) {
 
@@ -50,6 +52,11 @@ public class MenuBar extends VBox implements Initializable {
         dashboard = new Button("Dashboard");
         dashboard.setMinWidth(WIDTH);
         dashboard.setMinHeight(HEIGHT);
+        /*
+        dashboard.setButtonType(JFXButton.ButtonType.FLAT);
+        dashboard.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+        */
+
 
         dashboard.setOnMouseClicked(event -> {
             pageProvider.switchDashboard();
@@ -58,20 +65,28 @@ public class MenuBar extends VBox implements Initializable {
         member = new Button("Member");
         member.setMinWidth(WIDTH);
         member.setMinHeight(HEIGHT);
+        /*
+        member.setButtonType(JFXButton.ButtonType.FLAT);
+        member.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+        */
 
         member.setOnMouseClicked(event -> {
             pageProvider.switchMember();
         });
 
-        participation = new Button("Wettkampf");
-        participation.setMinWidth(WIDTH);
-        participation.setMinHeight(HEIGHT);
+        competition = new Button("Wettkampf");
+        competition.setMinWidth(WIDTH);
+        competition.setMinHeight(HEIGHT);
+        /*
+        competition.setButtonType(JFXButton.ButtonType.FLAT);
+        competition.setStyle("-fx-background-color:grey; -fx-text-fill: white");
+        */
 
-        participation.setOnMouseClicked(event -> {
+        competition.setOnMouseClicked(event -> {
             pageProvider.switchCompetitions();
         });
 
-        vBox.getChildren().addAll(dashboard, member, participation);
+        vBox.getChildren().addAll(dashboard, member, competition);
 
     }
 
