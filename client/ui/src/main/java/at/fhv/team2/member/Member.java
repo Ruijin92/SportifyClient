@@ -18,8 +18,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -51,15 +52,18 @@ public class Member extends HBox implements Initializable {
     public TableColumn lastNameTable;
     public TableColumn cityTable;
     //endregion
-
-    public VBox vBoxSports;
-
+    //region UI-Button
     public Button saveButton;
     public Button changeButton;
+    //endregion
+
+    public VBox vBoxSports;
 
     private List<CheckBox> sportChecks = new ArrayList<>();
     private ObservableList<PersonViewModel> personTableList;
     private List<PersonViewModel> persons;
+
+    private ValidationSupport validation = new ValidationSupport();
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -81,9 +85,11 @@ public class Member extends HBox implements Initializable {
 
         ArrayList<PersonDTO> personEntries = null;
         ArrayList<SportDTO> sportEntries = null;
+
+
         try {
-             personEntries = personControllerInstance.getAllEntries();
-             sportEntries = departmentController.getAllSportEntries();
+            personEntries = personControllerInstance.getAllEntries();
+            sportEntries = departmentController.getAllSportEntries();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -96,60 +102,14 @@ public class Member extends HBox implements Initializable {
                     personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
         }
 
-        /*
-        persons.add(new PersonViewModel("Uray", "Örnek", "Hohenems", "Schubert", "6845", "864345684323"));
-        persons.add(new PersonViewModel("Alex", "Zeyer", "Dornbirn", "Hämmerle", "6800", "999523446101"));
-        persons.add(new PersonViewModel("Lukas", "Stadlmann", "Dornbirn", "Rauf", "6800", "11111111988"));
-        persons.add(new PersonViewModel("Robert", "Schmitzer", "Dornbirn", "Runter", "6860", "621699"));
-        persons.add(new PersonViewModel("Marco", "Simeth", "Dornbirn", "Straße", "6845", "694613161"));
-        persons.add(new PersonViewModel("Melanie", "Zumtobel", "Dornbirn", "Autsch", "6845", "6966456"));
-        */
-
         addSport(sportEntries);
+        addMemberToTable(persons);
 
         saveButton.setDisable(true);
         changeButton.setDisable(true);
 
-        addMemberToTable(persons);
-    }
 
-    /**
-     * adding checkboxes based on the sports in the database
-     *
-     * @param sports
-     */
-    private void addSport(List<SportDTO> sports) {
-        for (SportDTO sp : sports) {
-            CheckBox checkBox = new CheckBox(sp.getName());
-            sportChecks.add(checkBox);
-            vBoxSports.getChildren().add(checkBox);
-        }
-    }
-
-    private void addMemberToTable(List<PersonViewModel> person){
-
-        personTableList = FXCollections.observableArrayList(person);
-
-        firstNameTable.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastNameTable.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        cityTable.setCellValueFactory(new PropertyValueFactory<>("city"));
-
-        table.setItems(personTableList);
-    }
-
-    /**
-     * searching for the selected sports
-     *
-     * @return a list of String which are selected
-     */
-    private List<String> getSelectedSports() {
-        List<String> selectedSports = new ArrayList<>();
-        for (CheckBox cb : sportChecks) {
-            if (cb.isSelected()) {
-                selectedSports.add(cb.getText());
-            }
-        }
-        return selectedSports;
+        validateTheInput();
     }
 
     /**
@@ -207,26 +167,10 @@ public class Member extends HBox implements Initializable {
         pr.setPhoneNumber(phoneNumber.getText());
         pr.setZipCode(zipCode.getText());
 
-        //TODO: RMI CONTROLLER der die real Person verändert in der Datenbank
-
-        changeButton.setDisable(true);
-
-        saveData(pr.getId());
-    }
-
-    private void saveData(String id) {
-        IPersonController personController = DataProvider.get().getPersonControllerInstance();
-        AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
-        ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
-        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO);
-
-        ResponseMessageDTO response = null;
-        try {
-            response = personController.saveOrUpdateEntry(personDTO);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if (!validation.isInvalid()) {
+            saveData(pr.getId());
+            changeButton.setDisable(true);
         }
-        System.out.println(response.toString());
     }
 
     /**
@@ -236,18 +180,21 @@ public class Member extends HBox implements Initializable {
      */
     public void saveMember(ActionEvent event) {
 
-        PersonViewModel pr = new PersonViewModel(null, firstName.getText(),lastName.getText(),city.getText(),street.getText(),zipCode.getText(),phoneNumber.getText());
-        saveButton.setDisable(true);
-        personTableList.add(pr);
+        PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText());
 
-        saveData(null);
+        if (!validation.isInvalid()) {
+            saveData(null);
+            personTableList.add(pr);
+            saveButton.setDisable(true);
+        }
     }
 
-
     public void searchMemberByFirstName() {
+
         String searchCriteria = searchInput.getText();
 
         String searchPattern = "^" + searchCriteria + "\\gi";
+
         List<PersonViewModel> filteredPersons = new LinkedList<>();
 
         if (searchCriteria.isEmpty()) {
@@ -262,5 +209,79 @@ public class Member extends HBox implements Initializable {
         }
 
         addMemberToTable(filteredPersons);
+    }
+
+    private void saveData(String id) {
+        IPersonController personController = DataProvider.get().getPersonControllerInstance();
+
+        AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
+        ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
+        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO);
+
+        ResponseMessageDTO response = null;
+
+        try {
+            response = personController.saveOrUpdateEntry(personDTO);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        System.out.println(response.toString());
+    }
+
+    /**
+     * adding checkboxes based on the sports in the database
+     *
+     * @param sports
+     */
+    private void addSport(List<SportDTO> sports) {
+        for (SportDTO sp : sports) {
+            CheckBox checkBox = new CheckBox(sp.getName());
+            sportChecks.add(checkBox);
+            vBoxSports.getChildren().add(checkBox);
+        }
+    }
+
+    /**
+     * adding Member to the TableView
+     *
+     * @param person is a List of PersonViewModels as an input
+     */
+    private void addMemberToTable(List<PersonViewModel> person) {
+
+        personTableList = FXCollections.observableArrayList(person);
+
+        firstNameTable.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastNameTable.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        cityTable.setCellValueFactory(new PropertyValueFactory<>("city"));
+
+        table.setItems(personTableList);
+    }
+
+    /**
+     * searching for the selected sports
+     *
+     * @return a list of String which are selected
+     */
+    private List<String> getSelectedSports() {
+        List<String> selectedSports = new ArrayList<>();
+        for (CheckBox cb : sportChecks) {
+            if (cb.isSelected()) {
+                selectedSports.add(cb.getText());
+            }
+        }
+        return selectedSports;
+    }
+
+    /**
+     * Validates the MemberDetail input
+     */
+    private void validateTheInput() {
+
+        validation.registerValidator(firstName, Validator.createEmptyValidator("Have to be filled"));
+        validation.registerValidator(lastName, Validator.createEmptyValidator("Have to be filled"));
+        validation.registerValidator(street, Validator.createEmptyValidator("Have to be filled"));
+        validation.registerValidator(zipCode, Validator.createEmptyValidator("Have to be filled"));
+        validation.registerValidator(city, Validator.createEmptyValidator("Have to be filled"));
+        validation.registerValidator(phoneNumber, Validator.createEmptyValidator("Have to be filled"));
     }
 }

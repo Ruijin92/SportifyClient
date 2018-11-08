@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
  */
 public class Top extends HBox implements Initializable {
 
-
     public Top() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Top.fxml"));

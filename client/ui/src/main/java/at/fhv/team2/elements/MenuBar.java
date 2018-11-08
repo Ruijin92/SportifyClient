@@ -68,7 +68,7 @@ public class MenuBar extends VBox implements Initializable {
         participation.setMinHeight(HEIGHT);
 
         participation.setOnMouseClicked(event -> {
-            pageProvider.switchParticipation();
+            pageProvider.switchCompetitions();
         });
 
         vBox.getChildren().addAll(dashboard, member, participation);
