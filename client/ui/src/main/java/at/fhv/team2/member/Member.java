@@ -41,7 +41,6 @@ public class Member extends HBox implements Initializable {
     public TextField street;
     public TextField zipCode;
     public TextField city;
-    public TextField dateOfBirth;
     public TextField emailAddress;
     public TextField phoneNumber;
     public TextField searchInput;
@@ -55,6 +54,9 @@ public class Member extends HBox implements Initializable {
     //region UI-Button
     public Button saveButton;
     public Button changeButton;
+    //endregion
+    //region UI-DatePicker
+    public DatePicker dateOfBirth;
     //endregion
 
     public VBox vBoxSports;
@@ -283,5 +285,7 @@ public class Member extends HBox implements Initializable {
         validation.registerValidator(zipCode, Validator.createEmptyValidator("Have to be filled"));
         validation.registerValidator(city, Validator.createEmptyValidator("Have to be filled"));
         validation.registerValidator(phoneNumber, Validator.createEmptyValidator("Have to be filled"));
+        validation.registerValidator(dateOfBirth, Validator.createEmptyValidator("Have to be selected"));
+        validation.registerValidator(emailAddress, Validator.createEmptyValidator("Have to be filled"));
     }
 }
