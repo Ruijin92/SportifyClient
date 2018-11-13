@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -190,24 +194,32 @@ public class Member extends HBox implements Initializable {
     }
 
     public void searchMemberByFirstName() {
-
         String searchCriteria = searchInput.getText();
 
-        String searchPattern = "^" + searchCriteria + "\\gi";
-
-        List<PersonViewModel> filteredPersons = new LinkedList<>();
+        Pattern p = Pattern.compile("^" + searchCriteria);
+        Matcher m;
 
         if (searchCriteria.isEmpty()) {
             addMemberToTable(persons);
             return;
         }
 
-        for (PersonViewModel person : persons) {
+        List<PersonViewModel> filteredPersons =
+                persons.stream()
+                        .filter(t -> p.matcher(t.getFirstName()).find() == true
+                                || p.matcher(t.getLastName()).find() == true
+                                || p.matcher(t.getStreet()).find() == true
+                                || p.matcher(t.getZipCode()).find() == true
+                                || p.matcher(t.getCity()).find() == true
+                                || p.matcher(t.getPhoneNumber()).find() == true)
+                        .collect(toList());
+
+
+      /*  for (PersonViewModel person : persons) {
             if (person.getFirstName().matches(searchCriteria)) {
                 filteredPersons.add(person);
             }
-        }
-
+        }*/
         addMemberToTable(filteredPersons);
     }
 
