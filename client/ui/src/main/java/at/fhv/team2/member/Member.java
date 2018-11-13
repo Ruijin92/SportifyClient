@@ -214,12 +214,6 @@ public class Member extends HBox implements Initializable {
                                 || p.matcher(t.getPhoneNumber()).find() == true)
                         .collect(toList());
 
-
-      /*  for (PersonViewModel person : persons) {
-            if (person.getFirstName().matches(searchCriteria)) {
-                filteredPersons.add(person);
-            }
-        }*/
         addMemberToTable(filteredPersons);
     }
 
