@@ -11,5 +11,7 @@ public interface IPersonController extends Remote {
 
     ArrayList<PersonDTO> getAllEntries() throws RemoteException;
 
+    PersonDTO getEntryDetails(String id) throws RemoteException;
+
     ResponseMessageDTO saveOrUpdateEntry(PersonDTO personDTO) throws RemoteException;
 }
