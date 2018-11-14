@@ -163,9 +163,7 @@ public class Member extends HBox implements Initializable {
         dateOfBirth.setText(entryDetails.getDateOfBirth().toString());
 
         vBoxSports.getChildren().clear();
-        for (CheckBox sportCheck : sportChecks) {
-            sportCheck.setSelected(false);
-        }
+        setAllCheckboxesToUnselect();
 
         for (SportDTO sport : entryDetails.getSports()) {
             for (CheckBox sportCheck : sportChecks) {
@@ -189,17 +187,18 @@ public class Member extends HBox implements Initializable {
      * @param event
      */
     public void newMember(ActionEvent event) {
-
+        setAllCheckboxesToUnselect();
         saveButton.setDisable(false);
         changeButton.setDisable(true);
 
         firstName.setText("");
         lastName.setText("");
+        dateOfBirth.setText("");
         city.setText("");
         street.setText("");
         zipCode.setText("");
         phoneNumber.setText("");
-
+        emailAddress.setText("");
     }
 
     /**
@@ -229,7 +228,6 @@ public class Member extends HBox implements Initializable {
      * @param event
      */
     public void saveMember(ActionEvent event) {
-
         //TODO: Fix NullPointerException (Sports)
         PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText(), null);
 
@@ -325,6 +323,12 @@ public class Member extends HBox implements Initializable {
             }
         }
         return selectedSports;
+    }
+
+    private void setAllCheckboxesToUnselect() {
+        for (CheckBox sportCheck : sportChecks) {
+            sportCheck.setSelected(false);
+        }
     }
 
     /**
