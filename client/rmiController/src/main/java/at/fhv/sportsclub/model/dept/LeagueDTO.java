@@ -11,6 +11,8 @@ public @Data class LeagueDTO implements Serializable {
 
     public LeagueDTO() {}
 
+    private static final long serialVersionUID = 1109685098267757690L;
+
     private String id;
     private String name;
 }

@@ -8,6 +8,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public @Data class AddressDTO implements Serializable {
 
+    private static final long serialVersionUID = 1111685098267757690L;
+
     private String id;
     private String street;
     private String zipCode;
