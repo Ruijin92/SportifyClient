@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +31,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -68,6 +73,9 @@ public class Member extends HBox implements Initializable {
 
     private ValidationSupport validation = new ValidationSupport();
 
+    private IPersonController personControllerInstance;
+    private IDepartmentController departmentController;
+
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
         fxmlLoader.setController(this);
@@ -82,9 +90,9 @@ public class Member extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-/*
-        IPersonController personControllerInstance = DataProvider.get().getPersonControllerInstance();
-        IDepartmentController departmentController = DataProvider.get().getDepartmentControllerInstance();
+
+        this.personControllerInstance = DataProvider.get().getPersonControllerInstance();
+        this.departmentController = DataProvider.get().getDepartmentControllerInstance();
 
         ArrayList<PersonDTO> personEntries = null;
         ArrayList<SportDTO> sportEntries = null;
@@ -99,10 +107,22 @@ public class Member extends HBox implements Initializable {
 
         persons = new ArrayList<>();
 
-        for (PersonDTO personEntry : personEntries) {
+        /*for (PersonDTO personEntry : personEntries) {
             persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
                     personEntry.getAddress().getCity(), personEntry.getAddress().getStreet(),
                     personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
+        }*/
+
+
+
+        for (PersonDTO personEntry : personEntries) {
+            List<String> sports = new LinkedList<>();
+            for (SportDTO sport : personEntry.getSports()) {
+                sports.add(sport.getName());
+            }
+            persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
+                    personEntry.getAddress().getCity(),null,
+                   personEntry.getAddress().getZipCode(), null,  sports));
         }
 
         addSport(sportEntries);
@@ -121,19 +141,47 @@ public class Member extends HBox implements Initializable {
      * @param mouseEvent
      */
     public void clickItem(MouseEvent mouseEvent) {
+        PersonViewModel pr = (PersonViewModel) table.getSelectionModel().getSelectedItem();
+        PersonDTO entryDetails = new PersonDTO();
+        try {
+            entryDetails = personControllerInstance.getEntryDetails(pr.getId());
+            if (entryDetails.getResponse() != null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Loading failed");
+                alert.setContentText("Loading of member failed");
+                alert.showAndWait();
+                return;
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        firstName.setText(entryDetails.getFirstName());
+        lastName.setText(entryDetails.getLastName());
+        city.setText(entryDetails.getAddress().getCity());
+        street.setText(entryDetails.getAddress().getStreet());
+        zipCode.setText(entryDetails.getAddress().getZipCode());
+        phoneNumber.setText(entryDetails.getContact().getPhoneNumber());
+        emailAddress.setText(entryDetails.getContact().getEmailAddress());
+        dateOfBirth.setText(entryDetails.getDateOfBirth().toString());
+
+        vBoxSports.getChildren().clear();
+        setAllCheckboxesToUnselect();
+
+        for (SportDTO sport : entryDetails.getSports()) {
+            for (CheckBox sportCheck : sportChecks) {
+                if (sportCheck.getId().equals(sport.getName())) {
+                    sportCheck.setSelected(true);
+                }
+            }
+        }
+
+        for (CheckBox sportCheck : sportChecks) {
+            vBoxSports.getChildren().add(sportCheck);
+        }
 
         changeButton.setDisable(false);
         saveButton.setDisable(true);
-
-        PersonViewModel pr = (PersonViewModel) table.getSelectionModel().getSelectedItem();
-
-        firstName.setText(pr.getFirstName());
-        lastName.setText(pr.getLastName());
-        city.setText(pr.getCity());
-        street.setText(pr.getStreet());
-        zipCode.setText(pr.getZipCode());
-        phoneNumber.setText(pr.getPhoneNumber());
-
     }
 
     /**
@@ -142,17 +190,18 @@ public class Member extends HBox implements Initializable {
      * @param event
      */
     public void newMember(ActionEvent event) {
-
+        setAllCheckboxesToUnselect();
         saveButton.setDisable(false);
         changeButton.setDisable(true);
 
         firstName.setText("");
         lastName.setText("");
+        dateOfBirth.setText("");
         city.setText("");
         street.setText("");
         zipCode.setText("");
         phoneNumber.setText("");
-
+        emailAddress.setText("");
     }
 
     /**
@@ -182,8 +231,8 @@ public class Member extends HBox implements Initializable {
      * @param event
      */
     public void saveMember(ActionEvent event) {
-
-        PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText());
+        //TODO: Fix NullPointerException (Sports)
+        PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText(), null);
 
         if (!validation.isInvalid()) {
             saveData(null);
@@ -193,33 +242,36 @@ public class Member extends HBox implements Initializable {
     }
 
     public void searchMemberByFirstName() {
-
         String searchCriteria = searchInput.getText();
 
-        String searchPattern = "^" + searchCriteria + "\\gi";
-
-        List<PersonViewModel> filteredPersons = new LinkedList<>();
+        Pattern p = Pattern.compile("^" + searchCriteria, Pattern.CASE_INSENSITIVE);
+        Matcher m;
 
         if (searchCriteria.isEmpty()) {
             addMemberToTable(persons);
             return;
         }
 
-        for (PersonViewModel person : persons) {
-            if (person.getFirstName().matches(searchCriteria)) {
-                filteredPersons.add(person);
-            }
-        }
+        List<PersonViewModel> filteredPersons =
+                persons.stream()
+                        .filter(t -> p.matcher(t.getFirstName()).find()
+                                || p.matcher(t.getLastName()).find()
+                                || p.matcher(t.getZipCode()).find()
+                                || p.matcher(t.getCity()).find()
+                                || t.getSports().stream().allMatch(s -> p.matcher(s).find()))
+                        .collect(toList());
 
         addMemberToTable(filteredPersons);
     }
 
     private void saveData(String id) {
         IPersonController personController = DataProvider.get().getPersonControllerInstance();
+        List<SportDTO> sports = new LinkedList<>();
 
         AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
         ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
-        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO);
+        SportDTO sportDTO = new SportDTO();
+        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO, sports, null);
 
         ResponseMessageDTO response = null;
 
@@ -239,6 +291,7 @@ public class Member extends HBox implements Initializable {
     private void addSport(List<SportDTO> sports) {
         for (SportDTO sp : sports) {
             CheckBox checkBox = new CheckBox(sp.getName());
+            checkBox.setId(sp.getName());
             sportChecks.add(checkBox);
             vBoxSports.getChildren().add(checkBox);
         }
@@ -273,6 +326,12 @@ public class Member extends HBox implements Initializable {
             }
         }
         return selectedSports;
+    }
+
+    private void setAllCheckboxesToUnselect() {
+        for (CheckBox sportCheck : sportChecks) {
+            sportCheck.setSelected(false);
+        }
     }
 
     /**

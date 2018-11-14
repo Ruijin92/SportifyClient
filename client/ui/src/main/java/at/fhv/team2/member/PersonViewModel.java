@@ -19,9 +19,9 @@ public class PersonViewModel {
     private SimpleStringProperty zipCode;
     private SimpleStringProperty phoneNumber;
 
-    private List<String> sports = new ArrayList<>();
+    private List<String> sports;
 
-    public PersonViewModel(String id, String firstName, String lastName, String city, String street, String zipCode, String phoneNumber){
+    public PersonViewModel(String id, String firstName, String lastName, String city, String street, String zipCode, String phoneNumber, List<String> sports){
         this.id = new SimpleStringProperty(id);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
@@ -29,6 +29,7 @@ public class PersonViewModel {
         this.street = new SimpleStringProperty(street);
         this.zipCode = new SimpleStringProperty(zipCode);
         this.phoneNumber = new SimpleStringProperty(phoneNumber);
+        this.sports = sports;
     }
 
     public String getFirstName() {
@@ -112,5 +113,13 @@ public class PersonViewModel {
 
     public void setId(String id) {
         this.id.set(id);
+    }
+
+    public List<String> getSports() {
+        return sports;
+    }
+
+    public void setSports(List<String> sports) {
+        this.sports = sports;
     }
 }
