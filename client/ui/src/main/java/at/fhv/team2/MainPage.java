@@ -6,6 +6,7 @@ import at.fhv.team2.elements.Top;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
+import org.controlsfx.control.MasterDetailPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
