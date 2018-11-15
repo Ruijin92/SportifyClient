@@ -1,12 +1,12 @@
-package at.fhv.team2;
+package at.fhv.team2.mainpage;
 
-import at.fhv.team2.elements.Bottom;
-import at.fhv.team2.elements.MenuBar;
-import at.fhv.team2.elements.Top;
+import at.fhv.team2.PageProvider;
+import at.fhv.team2.mainpage.elements.Bottom;
+import at.fhv.team2.mainpage.elements.MenuBar;
+import at.fhv.team2.mainpage.elements.Top;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
-import org.controlsfx.control.MasterDetailPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;

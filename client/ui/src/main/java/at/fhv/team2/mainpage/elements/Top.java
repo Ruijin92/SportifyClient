@@ -1,4 +1,4 @@
-package at.fhv.team2.elements;
+package at.fhv.team2.mainpage.elements;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

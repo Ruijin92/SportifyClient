@@ -1,11 +1,9 @@
-package at.fhv.team2.elements;
+package at.fhv.team2.mainpage.elements;
 
 import at.fhv.team2.PageProvider;
-import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -28,6 +26,7 @@ public class MenuBar extends VBox implements Initializable {
     private Button dashboard;
     private Button member;
     private Button competition;
+    private Button teams;
 
     public MenuBar(PageProvider pageProvider) {
 
@@ -86,7 +85,15 @@ public class MenuBar extends VBox implements Initializable {
             pageProvider.switchCompetitions();
         });
 
-        vBox.getChildren().addAll(dashboard, member, competition);
+        teams = new Button("Mannschaft");
+        teams.setMinWidth(WIDTH);
+        teams.setMinHeight(HEIGHT);
+
+        teams.setOnMouseClicked(event -> {
+            pageProvider.switchTeams();
+        });
+
+        vBox.getChildren().addAll(dashboard, member, competition, teams);
 
     }
 

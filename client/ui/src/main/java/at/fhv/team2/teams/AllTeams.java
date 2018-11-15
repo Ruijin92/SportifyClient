@@ -1,4 +1,4 @@
-package at.fhv.team2.wettkampf;
+package at.fhv.team2.teams;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Uray Örnek on 11/6/2018.
  */
-public class AllCompetition extends HBox implements Initializable {
+public class AllTeams extends HBox implements Initializable {
 
     public HBox hBox;
 
@@ -23,11 +23,10 @@ public class AllCompetition extends HBox implements Initializable {
     public Button resultButton;
     public Button searchButton;
 
-    private ListView listCompetitions;
 
-    public AllCompetition() {
+    public AllTeams() {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllCompetitions.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllTeams.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
 
@@ -41,27 +40,18 @@ public class AllCompetition extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         changeButton.setDisable(true);
-        addCompetitions();
+        addTeams();
     }
 
-    public void changeCompetition(ActionEvent event) {
-
-        Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
-
-        if(selectedItem != null){
-
-        }
-    }
-
-    public void createCompetition(ActionEvent event) {
+    public void changeTeam(ActionEvent event) {
 
     }
 
-    public void enterResult(ActionEvent event) {
+    public void createTeam(ActionEvent event) {
 
     }
 
-    private void addCompetitions() {
+    private void addTeams() {
 
     }
 }

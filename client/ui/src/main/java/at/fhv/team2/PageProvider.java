@@ -1,12 +1,10 @@
 package at.fhv.team2;
 
 import at.fhv.team2.dashboard.Dashboard;
+import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.member.Member;
+import at.fhv.team2.teams.AllTeams;
 import at.fhv.team2.wettkampf.AllCompetition;
-import javafx.geometry.Side;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import org.controlsfx.control.MasterDetailPane;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -30,5 +28,9 @@ public class PageProvider {
 
     public void switchCompetitions() {
         mainPage.mainPane.setCenter(new AllCompetition());
+    }
+
+    public void switchTeams() {
+        mainPage.mainPane.setCenter(new AllTeams());
     }
 }

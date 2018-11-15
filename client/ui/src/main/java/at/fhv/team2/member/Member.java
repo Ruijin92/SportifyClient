@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -127,7 +128,7 @@ public class Member extends HBox implements Initializable {
 
         addSport(sportEntries);
         addMemberToTable(persons);
-*/
+
         saveButton.setDisable(true);
         changeButton.setDisable(true);
 
@@ -141,8 +142,10 @@ public class Member extends HBox implements Initializable {
      * @param mouseEvent
      */
     public void clickItem(MouseEvent mouseEvent) {
+
         PersonViewModel pr = (PersonViewModel) table.getSelectionModel().getSelectedItem();
         PersonDTO entryDetails = new PersonDTO();
+
         try {
             entryDetails = personControllerInstance.getEntryDetails(pr.getId());
             if (entryDetails.getResponse() != null) {
@@ -163,7 +166,7 @@ public class Member extends HBox implements Initializable {
         zipCode.setText(entryDetails.getAddress().getZipCode());
         phoneNumber.setText(entryDetails.getContact().getPhoneNumber());
         emailAddress.setText(entryDetails.getContact().getEmailAddress());
-        dateOfBirth.setText(entryDetails.getDateOfBirth().toString());
+        dateOfBirth.setValue(LocalDate.parse(entryDetails.getDateOfBirth().toString()));
 
         vBoxSports.getChildren().clear();
         setAllCheckboxesToUnselect();
@@ -196,7 +199,7 @@ public class Member extends HBox implements Initializable {
 
         firstName.setText("");
         lastName.setText("");
-        dateOfBirth.setText("");
+        dateOfBirth.setValue(LocalDate.of(2000, 1, 1));
         city.setText("");
         street.setText("");
         zipCode.setText("");
