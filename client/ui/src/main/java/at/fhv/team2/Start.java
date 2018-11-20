@@ -1,5 +1,7 @@
 package at.fhv.team2;
 
+import at.fhv.team2.roles.IRole;
+import at.fhv.team2.roles.Premission;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,9 +25,10 @@ public class Start extends Application {
         Registry registry = LocateRegistry.getRegistry(1099);
         DataProvider.setRegistry(registry);
 
-        Parent root = FXMLLoader.load(getClass().getResource("/MainPage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
         primaryStage.setTitle("Sportverwaltung");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
     }
 }

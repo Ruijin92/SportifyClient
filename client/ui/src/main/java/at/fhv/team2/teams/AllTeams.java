@@ -247,7 +247,7 @@ public class AllTeams extends HBox implements Initializable {
         t1.setTrainers(Collections.singletonList(p1));
         t2.setName("FC-Feldkirch");
         t2.setLeague(l2);
-        t2.setType("intern");
+        t2.setType("extern");
         t1.setMembers(Collections.singletonList(p2));
         t2.setTrainers(Collections.singletonList(p2));
 

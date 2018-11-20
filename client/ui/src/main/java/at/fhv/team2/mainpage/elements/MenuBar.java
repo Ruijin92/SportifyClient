@@ -1,9 +1,11 @@
 package at.fhv.team2.mainpage.elements;
 
 import at.fhv.team2.PageProvider;
+import at.fhv.team2.roles.Premission;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -56,7 +58,6 @@ public class MenuBar extends VBox implements Initializable {
         dashboard.setStyle("-fx-background-color:grey; -fx-text-fill: white");
         */
 
-
         dashboard.setOnMouseClicked(event -> {
             pageProvider.switchDashboard();
         });
@@ -94,10 +95,11 @@ public class MenuBar extends VBox implements Initializable {
         });
 
         vBox.getChildren().addAll(dashboard, member, competition, teams);
-
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
     }
+
 }

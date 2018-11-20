@@ -98,7 +98,6 @@ public class Member extends HBox implements Initializable {
         ArrayList<PersonDTO> personEntries = null;
         ArrayList<SportDTO> sportEntries = null;
 
-
         try {
             personEntries = personControllerInstance.getAllEntries();
             sportEntries = departmentController.getAllSportEntries();
@@ -113,8 +112,6 @@ public class Member extends HBox implements Initializable {
                     personEntry.getAddress().getCity(), personEntry.getAddress().getStreet(),
                     personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
         }*/
-
-
 
         for (PersonDTO personEntry : personEntries) {
             List<String> sports = new LinkedList<>();
