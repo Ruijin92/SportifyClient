@@ -208,7 +208,7 @@ public class Member extends HBox implements Initializable {
     }
 
     /**
-     * get's triggerd if someone prsses the CHANGE Button
+     * get's triggerd if someone presses the CHANGE Button
      *
      * @param event
      */

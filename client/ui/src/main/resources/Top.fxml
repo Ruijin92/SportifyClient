@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
 <fx:root fx:id="hBox" maxWidth="800.0" prefHeight="60.0" prefWidth="800.0" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label prefHeight="62.0" prefWidth="800.0" text="SPORTVERWALTUNG" HBox.hgrow="ALWAYS">

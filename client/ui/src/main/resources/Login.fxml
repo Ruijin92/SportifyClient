@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.roomix.ui.controller.LoginController">
+    <center>
+        <VBox alignment="CENTER" minHeight="150.0" minWidth="199.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #dedede;" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="418.0" text="SIGN IN">
+                    <font>
+                        <Font name="System Bold" size="21.0" />
+                    </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+                </Label>
+                <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="330.0" promptText="Username" VBox.vgrow="NEVER">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                    </VBox.margin>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </TextField>
+                <PasswordField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="330.0" promptText="Password" VBox.vgrow="NEVER">
+                    <VBox.margin>
+                        <Insets bottom="15.0" />
+                    </VBox.margin>
+                </PasswordField>
+                <Button id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginfunction" prefHeight="50.0" prefWidth="330.0" text="Login">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </Button>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="87.0" prefWidth="418.0" text="Loggin as Guest" underline="true">
+                    <font>
+                        <Font size="10.0" />
+                    </font>
+                </Label>
+            </children>
+         <BorderPane.margin>
+            <Insets bottom="300.0" left="600.0" right="600.0" />
+         </BorderPane.margin>
+        </VBox>
+    </center>
+    <top>
+        <VBox alignment="BOTTOM_CENTER" minHeight="250.0" minWidth="100.0" style="-fx-background-color: #ededed;" BorderPane.alignment="CENTER">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="400.0" text="Sportify" textAlignment="CENTER">
+                    <font>
+                        <Font size="55.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+</BorderPane>
