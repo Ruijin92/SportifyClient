@@ -14,11 +14,11 @@ public @Data class ParticipantDTO implements Serializable {
 
     public ParticipantDTO() { }
 
-    private static final long serialVersionUID = 111111198267757690L;
+    private static final long serialVersionUID = 111111198267757691L; // changed 20.11.2018
 
     private String id;
 
-    private TeamDTO team;
+    private String team;    // custom resolver
     private String teamName;
     private List<PersonDTO> participants;
     private ResponseMessageDTO response;
