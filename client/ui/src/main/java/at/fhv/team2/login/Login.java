@@ -38,7 +38,7 @@ public class Login implements Initializable {
 
     private PageProvider pageProvider = new PageProvider(new MainPage());
 
-    public void logginAsGuest(MouseEvent event) throws IOException {
+    public void logginAsGuest(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
@@ -57,7 +57,12 @@ public class Login implements Initializable {
             //dataProvider.authenticate(username.getText(), password.getText().toCharArray());
 
             if (dataProvider.authenticate(username.getText(), password.getText().toCharArray()).equals("")) {
-                pageProvider.switchDashboard();
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login failed");
