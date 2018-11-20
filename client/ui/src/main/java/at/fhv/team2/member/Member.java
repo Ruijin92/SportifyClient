@@ -2,11 +2,13 @@ package at.fhv.team2.member;
 
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.person.AddressDTO;
 import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.team2.DataProvider;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -23,6 +25,7 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -98,9 +101,10 @@ public class Member extends HBox implements Initializable {
         ArrayList<PersonDTO> personEntries = null;
         ArrayList<SportDTO> sportEntries = null;
 
-
+        SessionDTO session = DataProvider.get().getSession();
         try {
-            personEntries = personControllerInstance.getAllEntries();
+            ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(DataProvider.getSession());
+            personEntries = personControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
             sportEntries = departmentController.getAllSportEntries();
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -147,7 +151,7 @@ public class Member extends HBox implements Initializable {
         PersonDTO entryDetails = new PersonDTO();
 
         try {
-            entryDetails = personControllerInstance.getEntryDetails(pr.getId());
+            entryDetails = personControllerInstance.getEntryDetails(null, pr.getId());
             if (entryDetails.getResponse() != null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Loading failed");
@@ -279,7 +283,7 @@ public class Member extends HBox implements Initializable {
         ResponseMessageDTO response = null;
 
         try {
-            response = personController.saveOrUpdateEntry(personDTO);
+            response = personController.saveOrUpdateEntry(null, personDTO);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
