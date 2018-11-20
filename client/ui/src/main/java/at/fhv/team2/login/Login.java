@@ -3,6 +3,8 @@ package at.fhv.team2.login;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.team2.DataProvider;
+import at.fhv.team2.PageProvider;
+import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.roles.Permission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -20,6 +23,7 @@ import org.controlsfx.validation.Validator;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -32,6 +36,8 @@ public class Login implements Initializable {
 
     private ValidationSupport validationSupport = new ValidationSupport();
 
+    private PageProvider pageProvider = new PageProvider(new MainPage());
+
     public void logginAsGuest(MouseEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
         Parent root = fxmlLoader.load();
@@ -41,14 +47,26 @@ public class Login implements Initializable {
         stage.show();
     }
 
-    public void loginfunction(ActionEvent actionEvent) throws IOException {
+    public void loginfunction(ActionEvent actionEvent) throws IOException, NotBoundException {
 
         if (!validationSupport.isInvalid()) {
             String pw = "snoop@do.gg";
             //TODO: test if this would work
-            //DataProvider dataProvider = DataProvider.get();
+            DataProvider dataProvider = DataProvider.get();
             //dataProvider.authenticate(pw, pw.toCharArray()); //FIXME standart
-            //dataProvider.authenticate(password.getText(), password.getText().toCharArray());
+            //dataProvider.authenticate(username.getText(), password.getText().toCharArray());
+
+            if (dataProvider.authenticate(username.getText(), password.getText().toCharArray()).equals("")) {
+                pageProvider.switchDashboard();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Login failed");
+                alert.setContentText("Username or Password wrong - try again.");
+                alert.showAndWait();
+                username.setText("");
+                password.setText("");
+            }
+
 
             //TODO: A Factory for Permission or static, because we have to keep the information
             List<RoleDTO> roleList = new ArrayList<>();
