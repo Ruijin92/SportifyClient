@@ -14,7 +14,7 @@ public @Data class PersonDTO implements Serializable {
 
     public PersonDTO() {}
 
-    private static final long serialVersionUID = 5529685098267757690L;
+    private static final long serialVersionUID = 5529685098267757695L;
 
     private String id;
     private String firstName;
