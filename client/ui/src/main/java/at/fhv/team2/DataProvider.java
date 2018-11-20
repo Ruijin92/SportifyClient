@@ -101,7 +101,6 @@ public class DataProvider {
 
     public static String authenticate(String userId, char[] pw) throws RemoteException {
         if (session == null) {
-            IPersonController a = DataProvider.getPersonControllerInstance();
             IAuthenticationController authenticationController = DataProvider.getAuthenticationControllerInstance();
             session = authenticationController.authenticate(userId, pw);
             return "";
