@@ -1,5 +1,7 @@
 package at.fhv.team2;
 
+import at.fhv.team2.roles.IRole;
+import at.fhv.team2.roles.Premission;
 import at.fhv.sportsclub.controller.interfaces.IAuthenticationController;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.model.security.SessionDTO;
@@ -27,20 +29,15 @@ public class Start extends Application {
         Registry registry = LocateRegistry.getRegistry(1099);
         DataProvider.setRegistry(registry);
 
-       /* IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
-        IAuthenticationController authenticationController = controllerFactory.getAuthenticationController();
-
-        SessionDTO session = authenticationController.authenticate(pw, pw.toCharArray());
-        DataProvider.setSession(session);
-*/
         String pw = "snoop@do.gg";
 
         DataProvider dataProvider = DataProvider.get();
         dataProvider.authenticate("snoop@do.gg", pw.toCharArray());
-
-        Parent root = FXMLLoader.load(getClass().getResource("/MainPage.fxml"));
+      
+        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
         primaryStage.setTitle("Sportverwaltung");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
     }
 }

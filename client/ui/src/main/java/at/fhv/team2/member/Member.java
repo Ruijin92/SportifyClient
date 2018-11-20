@@ -101,7 +101,6 @@ public class Member extends HBox implements Initializable {
         ArrayList<PersonDTO> personEntries = null;
         ArrayList<SportDTO> sportEntries = null;
 
-        SessionDTO session = DataProvider.get().getSession();
         try {
             ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(DataProvider.getSession());
             personEntries = personControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
@@ -117,8 +116,6 @@ public class Member extends HBox implements Initializable {
                     personEntry.getAddress().getCity(), personEntry.getAddress().getStreet(),
                     personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
         }*/
-
-
 
         for (PersonDTO personEntry : personEntries) {
             List<String> sports = new LinkedList<>();
