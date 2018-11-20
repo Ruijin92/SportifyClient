@@ -1,10 +1,6 @@
-import at.fhv.sportsclub.controller.interfaces.IAuthenticationController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.factory.IControllerFactory;
-import at.fhv.sportsclub.model.dept.SportDTO;
-import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.sportsclub.model.security.SessionDTO;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
