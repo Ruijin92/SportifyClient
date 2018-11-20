@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.login.Login">
+<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.login.Login">
     <center>
         <VBox alignment="CENTER" minHeight="200.0" minWidth="300.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #dedede;" BorderPane.alignment="CENTER">
             <children>
@@ -21,7 +21,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
                 </Label>
-                <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Username" VBox.vgrow="NEVER">
+                <TextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Username" VBox.vgrow="NEVER">
                     <VBox.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                     </VBox.margin>
@@ -29,7 +29,7 @@
                         <Insets />
                     </opaqueInsets>
                 </TextField>
-                <PasswordField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Password" VBox.vgrow="NEVER">
+                <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Password" VBox.vgrow="NEVER">
                     <VBox.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" />
                     </VBox.margin>
@@ -39,7 +39,7 @@
                         <Insets left="20.0" right="20.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="418.0" text="Loggin as Guest" underline="true">
+                <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsGuest" prefHeight="70.0" prefWidth="418.0" text="Loggin as Guest" underline="true">
                     <font>
                         <Font size="10.0" />
                     </font>

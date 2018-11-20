@@ -10,6 +10,7 @@ import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.team2.DataProvider;
+import at.fhv.team2.roles.Permission;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,6 +81,9 @@ public class Member extends HBox implements Initializable {
     private IPersonController personControllerInstance;
     private IDepartmentController departmentController;
 
+    //TODO: Factory here auch
+    private Permission permission = new Permission();
+
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
         fxmlLoader.setController(this);
@@ -94,6 +98,9 @@ public class Member extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        //TODO so ca hätte ich des gedacht
+        saveButton.setVisible(permission.createMemberPermission());
 
         this.personControllerInstance = DataProvider.get().getPersonControllerInstance();
         this.departmentController = DataProvider.get().getDepartmentControllerInstance();
