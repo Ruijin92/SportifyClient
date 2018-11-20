@@ -13,6 +13,13 @@ public class ParticipantViewModel {
 
     private List<PersonViewModel> participants;
 
+    public ParticipantViewModel(String id, String team, String teamName, List<PersonViewModel> participants) {
+        this.id = new SimpleStringProperty(id);
+        this.team = new SimpleStringProperty(team);
+        this.teamName = new SimpleStringProperty(teamName);
+        this.participants = participants;
+    }
+
     //region Getter and Setter
     public String getId() {
         return id.get();

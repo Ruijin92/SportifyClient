@@ -15,6 +15,16 @@ public class CompetitionViewModel {
     private List<EncounterViewModel> encounters;
     private List<ParticipantViewModel> participants;
 
+    public CompetitionViewModel(String id, String name, String leagueName, String sportsName, String league,
+                                List<EncounterViewModel> encounters, List<ParticipantViewModel> participants) {
+        this.id = new SimpleStringProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.leagueName = new SimpleStringProperty(leagueName);
+        this.sportsName = new SimpleStringProperty(sportsName);
+        this.league = new SimpleStringProperty(league);
+        this.encounters = encounters;
+        this.participants = participants;
+    }
 
     //region Getter and Setter
     public String getId() {

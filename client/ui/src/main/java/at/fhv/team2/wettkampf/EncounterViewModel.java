@@ -1,5 +1,6 @@
 package at.fhv.team2.wettkampf;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class EncounterViewModel {
@@ -10,8 +11,19 @@ public class EncounterViewModel {
     private ParticipantViewModel homeTeam;
     private ParticipantViewModel guestTeam;
 
-    private SimpleStringProperty homePoints;
-    private SimpleStringProperty guestPoints;
+    private SimpleIntegerProperty homePoints;
+    private SimpleIntegerProperty guestPoints;
+
+    public EncounterViewModel(String id, String date, String time, ParticipantViewModel homeTeam, ParticipantViewModel guestTeam,
+                              int homePoints, int guestPoints) {
+        this.id = new SimpleStringProperty(id);
+        this.date = new SimpleStringProperty(date);
+        this.time = new SimpleStringProperty(time);
+        this.homeTeam = homeTeam;
+        this.guestTeam = guestTeam;
+        this.homePoints = new SimpleIntegerProperty(homePoints);
+        this.guestPoints = new SimpleIntegerProperty(guestPoints);
+    }
 
     //region Getter and Setter
     public String getId() {
@@ -66,28 +78,29 @@ public class EncounterViewModel {
         this.guestTeam = guestTeam;
     }
 
-    public String getHomePoints() {
+    public int getHomePoints() {
         return homePoints.get();
     }
 
-    public SimpleStringProperty homePointsProperty() {
+    public SimpleIntegerProperty homePointsProperty() {
         return homePoints;
     }
 
-    public void setHomePoints(String homePoints) {
+    public void setHomePoints(int homePoints) {
         this.homePoints.set(homePoints);
     }
 
-    public String getGuestPoints() {
+    public int getGuestPoints() {
         return guestPoints.get();
     }
 
-    public SimpleStringProperty guestPointsProperty() {
+    public SimpleIntegerProperty guestPointsProperty() {
         return guestPoints;
     }
 
-    public void setGuestPoints(String guestPoints) {
+    public void setGuestPoints(int guestPoints) {
         this.guestPoints.set(guestPoints);
     }
+
     //endregion
 }
