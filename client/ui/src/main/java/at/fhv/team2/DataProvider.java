@@ -1,8 +1,8 @@
 package at.fhv.team2;
 
-import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
-import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.factory.IControllerFactory;
+import at.fhv.sportsclub.model.security.SessionDTO;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -13,9 +13,13 @@ public class DataProvider {
     private static IControllerFactory controllerFactory = null;
     private static IPersonController personController = null;
     private static IDepartmentController departmentController = null;
+    private static ITeamController teamController = null;
+    private static ITournamentController tournamentController = null;
+    private static IAuthenticationController authenticationController = null;
 
     private static DataProvider instance = null;
     private static Registry registry;
+    private static SessionDTO session;
 
 
 
@@ -58,7 +62,58 @@ public class DataProvider {
         return departmentController;
     }
 
+    public static ITeamController getTeamControllerInstance() {
+        if (teamController == null) {
+            try {
+                return controllerFactory.getTeamController();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return teamController;
+    }
+
+    public static ITournamentController getTournamentControllerInstance() {
+        if (tournamentController == null) {
+            try {
+                return controllerFactory.getTournamentController();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return tournamentController;
+    }
+
+    public static IAuthenticationController getAuthenticationControllerInstance() {
+        if (authenticationController == null) {
+            try {
+                return controllerFactory.getAuthenticationController();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return authenticationController;
+    }
+
     public static void setRegistry(Registry registry) {
         DataProvider.registry = registry;
+    }
+
+    public static String authenticate(String userId, char[] pw) throws RemoteException {
+        if (session == null) {
+            IPersonController a = DataProvider.getPersonControllerInstance();
+            IAuthenticationController authenticationController = DataProvider.getAuthenticationControllerInstance();
+            session = authenticationController.authenticate(userId, pw);
+            return "";
+        }
+           return session.getResponseMessage().getInfoMessage();
+    }
+
+    public static SessionDTO getSession() {
+        return session;
+    }
+
+    public static void setSession(SessionDTO sessionDTO) {
+        session = sessionDTO;
     }
 }

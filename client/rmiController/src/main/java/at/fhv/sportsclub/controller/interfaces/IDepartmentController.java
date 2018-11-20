@@ -15,5 +15,6 @@ public interface IDepartmentController extends Remote {
     ResponseMessageDTO saveOrUpdateEntry(DepartmentDTO departmentDTO) throws RemoteException;
 
     ArrayList<SportDTO> getAllSportEntries() throws RemoteException;
+
 }
 

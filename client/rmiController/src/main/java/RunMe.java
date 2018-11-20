@@ -1,8 +1,10 @@
+import at.fhv.sportsclub.controller.interfaces.IAuthenticationController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -22,13 +24,19 @@ public class RunMe {
         IPersonController personController = controllerFactory.getPersonController();
         IDepartmentController departmentController = controllerFactory.getDepartmentController();
 
-        for (PersonDTO dto : personController.getAllEntries()) {
+        /*IAuthenticationController iAuthenticationController = controllerFactory.getAuthenticationController();
+
+        IAuthenticationController authenticationController = controllerFactory.getAuthenticationController();
+        String pw ="snoop@do.gg";
+        SessionDTO sessionDTO = authenticationController.authenticate("snoop@do.gg",pw.toCharArray());
+
+        for (PersonDTO dto : personController.getAllEntries(sessionDTO).getContents()) {
             System.out.println(dto.toString());
         }
 
         for (SportDTO sportDTO : departmentController.getAllSportEntries()) {
             System.out.println(sportDTO);
-        }
+        }*/
     }
 
 }
