@@ -110,7 +110,7 @@ public class Member extends HBox implements Initializable {
         try {
             ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(DataProvider.getSession());
             personEntries = personControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
-            //sportEntries = departmentController.getAllSportEntries(DataProvider.getSession()).getContents();
+            sportEntries = departmentController.getAllSportEntries(DataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -125,15 +125,17 @@ public class Member extends HBox implements Initializable {
 
         for (PersonDTO personEntry : personEntries) {
             List<String> sports = new LinkedList<>();
-            /*for (SportDTO sport : personEntry.getSports()) {
-                sports.add(sport.getName());
-            }*/
+            if (personEntry.getSports() != null) {
+                for (SportDTO sport : personEntry.getSports()) {
+                    sports.add(sport.getName());
+                }
+            }
             persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
                     personEntry.getAddress().getCity(),null,
-                   personEntry.getAddress().getZipCode(), null,  sports));
+                    personEntry.getAddress().getZipCode(), null,  sports));
         }
 
-       // addSport(sportEntries);
+        addSport(sportEntries);
         addMemberToTable(persons);
 
         saveButton.setDisable(true);
@@ -178,13 +180,13 @@ public class Member extends HBox implements Initializable {
         vBoxSports.getChildren().clear();
         setAllCheckboxesToUnselect();
 
-       /*for (SportDTO sport : entryDetails.getSports()) {
+       for (SportDTO sport : entryDetails.getSports()) {
             for (CheckBox sportCheck : sportChecks) {
                 if (sportCheck.getId().equals(sport.getName())) {
                     sportCheck.setSelected(true);
                 }
             }
-        }*/
+        }
 
         for (CheckBox sportCheck : sportChecks) {
             vBoxSports.getChildren().add(sportCheck);
@@ -281,7 +283,7 @@ public class Member extends HBox implements Initializable {
         AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
         ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
         SportDTO sportDTO = new SportDTO();
-        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO, sports, null);
+        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO, sports, null, null);
 
         ResponseMessageDTO response = null;
 
