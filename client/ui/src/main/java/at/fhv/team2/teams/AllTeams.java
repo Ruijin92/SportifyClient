@@ -3,6 +3,7 @@ package at.fhv.team2.teams;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
+import at.fhv.team2.roles.Permission;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +34,7 @@ public class AllTeams extends HBox implements Initializable {
     public Button newButton;
     public Button changeButton;
     public Button saveButton;
+    public Button addMember;
     //endregion
     //region Table
     public TableView table;
@@ -73,6 +75,11 @@ public class AllTeams extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        newButton.setVisible(Permission.getPermission().createTeamPermission());
+        changeButton.setVisible(Permission.getPermission().createTeamPermission());
+        saveButton.setVisible(Permission.getPermission().createMemberPermission());
+        addMember.setVisible(Permission.getPermission().createMemberPermission());
 
         ArrayList<TeamDTO> teamEntries = addTestData();
         this.teams = new ArrayList<>();

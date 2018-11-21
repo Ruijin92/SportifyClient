@@ -8,6 +8,7 @@ import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.member.PersonViewModel;
+import at.fhv.team2.roles.Permission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -56,6 +57,11 @@ public class AllCompetition extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        newButton.setVisible(Permission.getPermission().createCompetitionPermission());
+        resultButton.setVisible(Permission.getPermission().createCompetitionPermission());
+        changeButton.setVisible(Permission.getPermission().createCompetitionPermission());
+
         changeButton.setDisable(true);
         addCompetitions();
 

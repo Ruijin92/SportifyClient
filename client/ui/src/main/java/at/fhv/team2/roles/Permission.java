@@ -1,9 +1,9 @@
 package at.fhv.team2.roles;
 
+import at.fhv.sportsclub.model.security.AccessLevel;
 import at.fhv.sportsclub.model.security.PrivilegeDTO;
 import at.fhv.sportsclub.model.security.RoleDTO;
 
-import javax.management.relation.RoleInfo;
 import java.util.List;
 
 /**
@@ -11,7 +11,10 @@ import java.util.List;
  */
 public class Permission implements IRole {
 
+    private static Permission permission;
+
     List<RoleDTO> roleDTO;
+    private String username;
 
     //Domain Person
     private boolean createMember = false;
@@ -25,29 +28,53 @@ public class Permission implements IRole {
     private boolean viewCompetition = false;
     private boolean createCompetition = false;
 
-    public Permission(){
+    public Permission() {
 
     }
 
-    public void setRoles(List<RoleDTO> role){
+    public void setRoles(List<RoleDTO> role) {
         roleDTO = role;
     }
 
-    //TODO: Hässlich gelöst aber wir haben hier eh keine Performance Problems
-    public void checkPermission(){
-       for(RoleDTO role : roleDTO){
-           List<PrivilegeDTO> privileges = role.getPrivileges();
-           for(PrivilegeDTO privilegeDTO: privileges){
-               String domain = privilegeDTO.getDomain();
-               if(domain.equals("Person")){
+    public void checkPermission() {
 
-               }
-               if(domain.equals("test")){
+        for (RoleDTO role : roleDTO) {
+            List<PrivilegeDTO> privileges = role.getPrivileges();
+            for (PrivilegeDTO privilegeDTO : privileges) {
+                String domain = privilegeDTO.getDomain();
+                if (domain.equals("Person")) {
+                    if (privilegeDTO.getAccessLevels().contains(AccessLevel.READ)) {
+                        viewMember = true;
+                    }
+                    if (privilegeDTO.getAccessLevels().contains(AccessLevel.WRITE)) {
+                        createMember = true;
+                    }
+                }
+                if (domain.equals("Team")) {
+                    if (privilegeDTO.getAccessLevels().contains(AccessLevel.READ)) {
+                        viewTeam = true;
+                    }
+                    if (privilegeDTO.getAccessLevels().contains(AccessLevel.WRITE)) {
+                        createTeam = true;
+                    }
+                }
+                if (domain.equals("Tournament")) {
+                    if (privilegeDTO.getAccessLevels().contains(AccessLevel.READ)) {
+                        viewCompetition = true;
+                    }
+                    if (privilegeDTO.getAccessLevels().contains(AccessLevel.WRITE)) {
+                        createCompetition = true;
+                    }
+                }
+            }
+        }
+    }
 
-               }
-           }
-       }
-
+    public static Permission getPermission() {
+        if (permission == null) {
+            permission = new Permission();
+        }
+        return permission;
     }
 
     @Override
@@ -78,5 +105,39 @@ public class Permission implements IRole {
     @Override
     public boolean viewTeamPermission() {
         return viewTeam;
+    }
+
+    public void loadGuest() {
+        //Domain Person
+        createMember = false;
+        viewMember = true;
+
+        //Domain Team
+        createTeam = false;
+        viewTeam = true;
+
+        //Domain Competition
+        createCompetition = false;
+        viewCompetition = true;
+
+        username = "Guest";
+    }
+
+    public void loadAdmin() {
+        //Domain Person
+        createMember = true;
+        viewMember = true;
+
+        //Domain Team
+        createTeam = true;
+        viewTeam = true;
+
+        //Domain Competition
+        createCompetition = true;
+        viewCompetition = true;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

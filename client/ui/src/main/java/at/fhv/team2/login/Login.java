@@ -36,33 +36,37 @@ public class Login implements Initializable {
 
     private ValidationSupport validationSupport = new ValidationSupport();
 
-    private PageProvider pageProvider = new PageProvider(new MainPage());
 
-    public void logginAsGuest(ActionEvent event) throws IOException {
+    public void logginAsGuest(MouseEvent event) throws IOException {
+        Permission.getPermission().loadGuest();
+
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+
     }
 
     public void loginfunction(ActionEvent actionEvent) throws IOException, NotBoundException {
 
         if (!validationSupport.isInvalid()) {
-            String pw = "snoop@do.gg";
-            //TODO: test if this would work
             DataProvider dataProvider = DataProvider.get();
-            //dataProvider.authenticate(pw, pw.toCharArray()); //FIXME standart
-            //dataProvider.authenticate(username.getText(), password.getText().toCharArray());
 
             if (dataProvider.authenticate(username.getText(), password.getText().toCharArray()).equals("")) {
+
+                Permission.getPermission().setRoles(DataProvider.getSession().getRoles());
+
+
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
+
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login failed");
@@ -71,14 +75,6 @@ public class Login implements Initializable {
                 username.setText("");
                 password.setText("");
             }
-
-
-            //TODO: A Factory for Permission or static, because we have to keep the information
-            List<RoleDTO> roleList = new ArrayList<>();
-            Permission permission = new Permission();
-            permission.setRoles(roleList);
-            permission.checkPermission();
-
         } else {
             Notifications.create().graphic(pane).text(validationSupport.getValidationResult().getMessages().toString()).showWarning();
         }

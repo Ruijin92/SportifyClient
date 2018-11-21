@@ -82,7 +82,6 @@ public class Member extends HBox implements Initializable {
     private IDepartmentController departmentController;
 
     //TODO: Factory here auch
-    private Permission permission = new Permission();
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -99,8 +98,8 @@ public class Member extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //TODO so ca hätte ich des gedacht
-        saveButton.setVisible(permission.createMemberPermission());
+        saveButton.setVisible(Permission.getPermission().createMemberPermission());
+        changeButton.setVisible(Permission.getPermission().createMemberPermission());
 
         this.personControllerInstance = DataProvider.get().getPersonControllerInstance();
         this.departmentController = DataProvider.get().getDepartmentControllerInstance();
