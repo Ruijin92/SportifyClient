@@ -22,8 +22,13 @@ public class Start extends Application {
 
         Registry registry = LocateRegistry.getRegistry(1099);
         DataProvider.setRegistry(registry);
-      
-        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+
+
+        DataProvider dataProvider = DataProvider.get();
+        String pw = "snoop@do.gg";
+        dataProvider.authenticate(pw, pw.toCharArray()); //FIXME standart
+
+        Parent root = FXMLLoader.load(getClass().getResource("/MainPage.fxml"));
         primaryStage.setTitle("Sportverwaltung");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

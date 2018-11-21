@@ -110,7 +110,7 @@ public class Member extends HBox implements Initializable {
         try {
             ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(DataProvider.getSession());
             personEntries = personControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
-            sportEntries = departmentController.getAllSportEntries();
+            //sportEntries = departmentController.getAllSportEntries(DataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -125,15 +125,15 @@ public class Member extends HBox implements Initializable {
 
         for (PersonDTO personEntry : personEntries) {
             List<String> sports = new LinkedList<>();
-            for (SportDTO sport : personEntry.getSports()) {
+            /*for (SportDTO sport : personEntry.getSports()) {
                 sports.add(sport.getName());
-            }
+            }*/
             persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
                     personEntry.getAddress().getCity(),null,
                    personEntry.getAddress().getZipCode(), null,  sports));
         }
 
-        addSport(sportEntries);
+       // addSport(sportEntries);
         addMemberToTable(persons);
 
         saveButton.setDisable(true);
@@ -154,7 +154,7 @@ public class Member extends HBox implements Initializable {
         PersonDTO entryDetails = new PersonDTO();
 
         try {
-            entryDetails = personControllerInstance.getEntryDetails(null, pr.getId());
+            entryDetails = personControllerInstance.getEntryDetails(DataProvider.getSession(), pr.getId());
             if (entryDetails.getResponse() != null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Loading failed");
@@ -178,13 +178,13 @@ public class Member extends HBox implements Initializable {
         vBoxSports.getChildren().clear();
         setAllCheckboxesToUnselect();
 
-        for (SportDTO sport : entryDetails.getSports()) {
+       /*for (SportDTO sport : entryDetails.getSports()) {
             for (CheckBox sportCheck : sportChecks) {
                 if (sportCheck.getId().equals(sport.getName())) {
                     sportCheck.setSelected(true);
                 }
             }
-        }
+        }*/
 
         for (CheckBox sportCheck : sportChecks) {
             vBoxSports.getChildren().add(sportCheck);

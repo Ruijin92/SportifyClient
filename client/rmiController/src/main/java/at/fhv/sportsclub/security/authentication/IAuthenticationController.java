@@ -1,4 +1,4 @@
-package at.fhv.sportsclub.controller.interfaces;
+package at.fhv.sportsclub.security.authentication;
 
 import at.fhv.sportsclub.model.security.SessionDTO;
 
