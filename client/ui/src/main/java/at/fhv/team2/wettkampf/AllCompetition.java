@@ -63,11 +63,11 @@ public class AllCompetition extends HBox implements Initializable {
 
         ArrayList<TournamentDTO> tournamentEntries = null;
 
-        try {
+        /*try {
             tournamentEntries = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
-        }
+        }*/
 
         tournaments = new ArrayList<>();
 
