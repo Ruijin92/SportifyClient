@@ -34,17 +34,6 @@ public class Bottom extends HBox implements Initializable {
         }
     }
 
-
-    public void logout(ActionEvent event) throws IOException {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
