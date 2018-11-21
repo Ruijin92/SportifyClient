@@ -38,9 +38,6 @@ public class AllCompetition extends HBox implements Initializable {
     private ListView listCompetitions;
 
     private List<CompetitionViewModel> tournaments;
-    private List<ParticipantViewModel> teams;
-    private List<EncounterViewModel> encounters;
-    private List<PersonViewModel> participants;
 
     private ITournamentController tournamentControllerInstance;
 
@@ -75,39 +72,15 @@ public class AllCompetition extends HBox implements Initializable {
         tournaments = new ArrayList<>();
 
         for (TournamentDTO tournament: tournamentEntries) {
+            List<ParticipantViewModel> teams = null;
             for (ParticipantDTO participant: tournament.getTeams()) {
-                for (PersonDTO personEntry: participant.getParticipants()) {
-                    List<String> sports = new LinkedList<>();
-                    for (SportDTO sportEntry: personEntry.getSports()) {
-                        sports.add(sportEntry.getName());
-                    }
-                    participants.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
-                            personEntry.getAddress().getCity(),personEntry.getAddress().getStreet(),
-                            personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber(), sports));
-                }
+                List<PersonViewModel> participants = createParticipants(participant.getParticipants());
                 teams.add(new ParticipantViewModel(participant.getId(), participant.getTeam(), participant.getTeamName(), participants));
             }
+            List<EncounterViewModel> encounters = null;
             for (EncounterDTO encounterEntry: tournament.getEncounters()) {
-                List<PersonViewModel> homeTeamPersons = new LinkedList<>();
-                List<PersonViewModel> guestTeamPersons = new LinkedList<>();
-                for (PersonDTO personEntry: encounterEntry.getHomeTeam().getParticipants()) {
-                    List<String> sports = new LinkedList<>();
-                    for (SportDTO sportEntry: personEntry.getSports()) {
-                        sports.add(sportEntry.getName());
-                    }
-                    homeTeamPersons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
-                            personEntry.getAddress().getCity(),personEntry.getAddress().getStreet(),
-                            personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber(), sports));
-                }
-                for (PersonDTO personEntry: encounterEntry.getGuestTeam().getParticipants()) {
-                    List<String> sports = new LinkedList<>();
-                    for (SportDTO sportEntry: personEntry.getSports()) {
-                        sports.add(sportEntry.getName());
-                    }
-                    guestTeamPersons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
-                            personEntry.getAddress().getCity(),personEntry.getAddress().getStreet(),
-                            personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber(), sports));
-                }
+                List<PersonViewModel> homeTeamPersons = createParticipants(encounterEntry.getHomeTeam().getParticipants());
+                List<PersonViewModel> guestTeamPersons = createParticipants(encounterEntry.getGuestTeam().getParticipants());
                 ParticipantViewModel homeTeam = new ParticipantViewModel(encounterEntry.getHomeTeam().getId(), encounterEntry.getHomeTeam().getTeam(), encounterEntry.getHomeTeam().getTeamName(), homeTeamPersons);
                 ParticipantViewModel guestTeam = new ParticipantViewModel(encounterEntry.getGuestTeam().getId(), encounterEntry.getGuestTeam().getTeam(), encounterEntry.getGuestTeam().getTeamName(), guestTeamPersons);
                 encounters.add(new EncounterViewModel(encounterEntry.getId(), encounterEntry.getDate().toString(), encounterEntry.getTime().toString(), homeTeam, guestTeam, encounterEntry.getHomePoints(), encounterEntry.getGuestPoints()));
@@ -135,5 +108,19 @@ public class AllCompetition extends HBox implements Initializable {
 
     private void addCompetitions() {
 
+    }
+
+    private List<PersonViewModel> createParticipants(List<PersonDTO> participantsDTO) {
+        List<PersonViewModel> participants = new LinkedList<>();
+        for (PersonDTO personEntry: participantsDTO) {
+            List<String> sports = new LinkedList<>();
+            for (SportDTO sportEntry: personEntry.getSports()) {
+                sports.add(sportEntry.getName());
+            }
+            participants.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
+                    personEntry.getAddress().getCity(),personEntry.getAddress().getStreet(),
+                    personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber(), sports));
+        }
+        return participants;
     }
 }
