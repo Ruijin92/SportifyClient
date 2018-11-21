@@ -24,14 +24,9 @@ public class Start extends Application {
         DataProvider.setRegistry(registry);
 
 
-        DataProvider dataProvider = DataProvider.get();
-        String pw = "snoop@do.gg";
-        dataProvider.authenticate(pw, pw.toCharArray()); //FIXME standart
-
-        Parent root = FXMLLoader.load(getClass().getResource("/MainPage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
         primaryStage.setTitle("Sportverwaltung");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-
     }
 }
