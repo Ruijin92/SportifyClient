@@ -135,7 +135,7 @@ public class Member extends HBox implements Initializable {
                     personEntry.getAddress().getZipCode(), null,  sports));
         }
 
-        //addSport(sportEntries);
+        addSport(sportEntries);
         addMemberToTable(persons);
 
         saveButton.setDisable(true);
