@@ -36,7 +36,7 @@
                  <Insets left="5.0" />
              </HBox.margin>
          </Button>
-         <Button mnemonicParsing="false" text="Mitglieder hinzufügen">
+         <Button fx:id="addMember" mnemonicParsing="false" text="Mitglieder hinzufügen">
             <HBox.margin>
                <Insets left="5.0" />
             </HBox.margin>

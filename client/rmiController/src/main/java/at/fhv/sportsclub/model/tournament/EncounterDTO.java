@@ -13,13 +13,15 @@ public @Data class EncounterDTO implements Serializable {
 
     public EncounterDTO() { }
 
-    private static final long serialVersionUID = 1111111098267757690L;
+    private static final long serialVersionUID = 1111111098267757691L;
 
     private String id;
 
     private LocalDate date;
-    private LocalTime time;
-    private ResultDTO homeTeam;
-    private ResultDTO guestTeam;
+    private int time;
+    private ParticipantDTO homeTeam;
+    private ParticipantDTO guestTeam;
+    private int homePoints;
+    private int guestPoints;
     private ResponseMessageDTO response;
 }

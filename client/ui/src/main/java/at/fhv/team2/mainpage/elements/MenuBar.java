@@ -1,11 +1,10 @@
 package at.fhv.team2.mainpage.elements;
 
 import at.fhv.team2.PageProvider;
-import at.fhv.team2.roles.Premission;
+import at.fhv.team2.roles.Permission;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -94,7 +93,18 @@ public class MenuBar extends VBox implements Initializable {
             pageProvider.switchTeams();
         });
 
-        vBox.getChildren().addAll(dashboard, member, competition, teams);
+
+        vBox.getChildren().add(dashboard);
+
+        if(Permission.getPermission().viewMemberPermission()){
+            vBox.getChildren().add(member);
+        }
+        if(Permission.getPermission().viewCompetitionPermission()){
+            vBox.getChildren().add(competition);
+        }
+        if(Permission.getPermission().viewTeamPermission()){
+            vBox.getChildren().add(teams);
+        }
     }
 
     @Override

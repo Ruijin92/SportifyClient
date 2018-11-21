@@ -1,4 +1,4 @@
-package at.fhv.sportsclub.controller.interfaces;
+package at.fhv.sportsclub.security.authentication;
 
 import at.fhv.sportsclub.model.security.SessionDTO;
 
@@ -12,4 +12,5 @@ import java.rmi.RemoteException;
 */
 public interface IAuthenticationController extends Remote {
     SessionDTO authenticate(String userId, char[] password) throws RemoteException;
+    void logout(SessionDTO session) throws RemoteException;
 }

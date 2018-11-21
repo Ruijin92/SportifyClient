@@ -3,6 +3,7 @@ package at.fhv.team2;
 import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.model.security.SessionDTO;
+import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -84,24 +85,13 @@ public class DataProvider {
         return tournamentController;
     }
 
-    public static IAuthenticationController getAuthenticationControllerInstance() {
-        if (authenticationController == null) {
-            try {
-                return controllerFactory.getAuthenticationController();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-        return authenticationController;
-    }
-
     public static void setRegistry(Registry registry) {
         DataProvider.registry = registry;
     }
 
-    public static String authenticate(String userId, char[] pw) throws RemoteException {
+    public static String authenticate(String userId, char[] pw) throws RemoteException, NotBoundException {
         if (session == null) {
-            IAuthenticationController authenticationController = DataProvider.getAuthenticationControllerInstance();
+            IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
             session = authenticationController.authenticate(userId, pw);
             return "";
         }
@@ -110,9 +100,5 @@ public class DataProvider {
 
     public static SessionDTO getSession() {
         return session;
-    }
-
-    public static void setSession(SessionDTO sessionDTO) {
-        session = sessionDTO;
     }
 }

@@ -9,15 +9,15 @@ public interface IRole {
         READ, WRITE, SPECIAL, NONE;
     }
 
-    boolean createMemberPremission();
+    boolean createMemberPermission();
 
-    boolean createCompetitionPremission();
+    boolean createCompetitionPermission();
 
-    boolean createTeamPremission();
+    boolean createTeamPermission();
 
-    boolean viewMemberPremission();
+    boolean viewMemberPermission();
 
-    boolean viewCompetionPremission();
+    boolean viewCompetitionPermission();
 
-    boolean viewTeamPremission();
+    boolean viewTeamPermission();
 }

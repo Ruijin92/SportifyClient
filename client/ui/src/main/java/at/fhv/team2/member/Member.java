@@ -10,6 +10,7 @@ import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.team2.DataProvider;
+import at.fhv.team2.roles.Permission;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,6 +81,8 @@ public class Member extends HBox implements Initializable {
     private IPersonController personControllerInstance;
     private IDepartmentController departmentController;
 
+    //TODO: Factory here auch
+
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
         fxmlLoader.setController(this);
@@ -95,6 +98,9 @@ public class Member extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        saveButton.setVisible(Permission.getPermission().createMemberPermission());
+        changeButton.setVisible(Permission.getPermission().createMemberPermission());
+
         this.personControllerInstance = DataProvider.get().getPersonControllerInstance();
         this.departmentController = DataProvider.get().getDepartmentControllerInstance();
 
@@ -104,7 +110,7 @@ public class Member extends HBox implements Initializable {
         try {
             ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(DataProvider.getSession());
             personEntries = personControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
-          //  sportEntries = departmentController.getAllSportEntries();
+            sportEntries = departmentController.getAllSportEntries(DataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -119,12 +125,14 @@ public class Member extends HBox implements Initializable {
 
         for (PersonDTO personEntry : personEntries) {
             List<String> sports = new LinkedList<>();
-            /*for (SportDTO sport : personEntry.getSports()) {
-                sports.add(sport.getName());
-            }*/
+            if (personEntry.getSports() != null) {
+                for (SportDTO sport : personEntry.getSports()) {
+                    sports.add(sport.getName());
+                }
+            }
             persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
                     personEntry.getAddress().getCity(),null,
-                   personEntry.getAddress().getZipCode(), null,  sports));
+                    personEntry.getAddress().getZipCode(), null,  sports));
         }
 
         //addSport(sportEntries);
@@ -172,7 +180,7 @@ public class Member extends HBox implements Initializable {
         vBoxSports.getChildren().clear();
         setAllCheckboxesToUnselect();
 
-        for (SportDTO sport : entryDetails.getSports()) {
+       for (SportDTO sport : entryDetails.getSports()) {
             for (CheckBox sportCheck : sportChecks) {
                 if (sportCheck.getId().equals(sport.getName())) {
                     sportCheck.setSelected(true);
@@ -275,7 +283,7 @@ public class Member extends HBox implements Initializable {
         AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
         ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
         SportDTO sportDTO = new SportDTO();
-        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO, sports, null);
+        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO, sports, null, null);
 
         ResponseMessageDTO response = null;
 
