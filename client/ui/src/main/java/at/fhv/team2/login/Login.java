@@ -58,7 +58,7 @@ public class Login implements Initializable {
             if (dataProvider.authenticate(username.getText(), password.getText().toCharArray()).equals("")) {
 
                 Permission.getPermission().setRoles(DataProvider.getSession().getRoles());
-
+                Permission.getPermission().checkPermission();
 
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
                 Parent root = fxmlLoader.load();
