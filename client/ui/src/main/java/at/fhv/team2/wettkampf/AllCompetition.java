@@ -46,7 +46,6 @@ public class AllCompetition extends HBox implements Initializable {
 
     private List<CompetitionViewModel> tournaments;
     private CompetitionViewModel tournamentDetails;
-
     private ITournamentController tournamentControllerInstance;
 
     private ObservableList<CompetitionViewModel> competitionTableList;
