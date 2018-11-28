@@ -7,6 +7,7 @@ import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
+import at.fhv.team2.PageProvider;
 import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.roles.Permission;
 import javafx.collections.FXCollections;
@@ -52,16 +53,16 @@ public class AllCompetition extends HBox implements Initializable {
 
     public AllCompetition() {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllCompetitions.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllCompetitions.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
 
         try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        fxmlLoader.load();
+    } catch (IOException e) {
+        throw new RuntimeException(e);
     }
+}
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -101,7 +102,7 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void createCompetition(ActionEvent event) {
-
+        PageProvider.getPageProvider().switchNewComp();
     }
 
     public void enterResult(ActionEvent event) {
