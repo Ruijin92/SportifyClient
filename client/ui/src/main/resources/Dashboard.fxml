@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -13,7 +12,6 @@
             <VBox HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Heutige Veranstaltungen" />
-                  <ListView prefHeight="200.0" prefWidth="200.0" />
                </children>
                <HBox.margin>
                   <Insets right="5.0" />
@@ -22,7 +20,6 @@
             <VBox HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Letztes Match" />
-                  <ListView prefHeight="200.0" prefWidth="200.0" />
                </children>
             </VBox>
          </children>

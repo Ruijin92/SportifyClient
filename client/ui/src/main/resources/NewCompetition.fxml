@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.ListSelectionView?>
 
 <fx:root fx:id="hBox" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -15,56 +16,94 @@
         <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </HBox.margin>
-        <HBox alignment="CENTER_LEFT" maxHeight="25.0" VBox.vgrow="ALWAYS">
-            <ComboBox fx:id="sportsCombo" prefWidth="150.0" promptText="Sportart">
-                <HBox.margin>
-                    <Insets bottom="2.0" right="5.0" />
-                </HBox.margin>
-            </ComboBox>
-            <ComboBox fx:id="leagueCombo" prefWidth="150.0" promptText="Liga">
-                <HBox.margin>
-                    <Insets bottom="2.0" right="5.0" />
-                </HBox.margin>
-            </ComboBox>
-            <Label text="Datum">
-                <HBox.margin>
-                    <Insets bottom="2.0" right="5.0" />
-                </HBox.margin>
-            </Label>
-            <DatePicker fx:id="datePick" prefHeight="25.0" prefWidth="111.0">
-                <HBox.margin>
-                    <Insets bottom="2.0" right="5.0" />
-                </HBox.margin>
-            </DatePicker>
-            <Label text="Uhrzeit">
-                <HBox.margin>
-                    <Insets bottom="2.0" right="5.0" />
-                </HBox.margin>
-            </Label>
-            <TextField fx:id="time" prefHeight="25.0" prefWidth="112.0">
-                <HBox.margin>
-                    <Insets bottom="2.0" />
-                </HBox.margin>
-            </TextField>
-        </HBox>
-      <ListSelectionView fx:id="listView" />
+      <HBox>
+         <children>
+            <VBox>
+               <children>
+                  <Label text="1. Sportart und Liga auswählen">
+                     <VBox.margin>
+                        <Insets bottom="2.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                    <HBox alignment="CENTER_LEFT" maxHeight="25.0">
+                        <ComboBox fx:id="sportsCombo" prefWidth="150.0" promptText="Sportart">
+                            <HBox.margin>
+                                <Insets bottom="2.0" right="5.0" />
+                            </HBox.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="leagueCombo" prefWidth="150.0" promptText="Liga">
+                            <HBox.margin>
+                                <Insets bottom="2.0" right="5.0" />
+                            </HBox.margin>
+                        </ComboBox>
+                    </HBox>
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label text="2. Datum und Uhrzeit auswählen">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="2.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                           <Label text="Datum">
+                               <HBox.margin>
+                                   <Insets bottom="2.0" right="5.0" />
+                               </HBox.margin>
+                           </Label>
+                           <DatePicker fx:id="datePick" prefHeight="25.0" prefWidth="111.0">
+                               <HBox.margin>
+                                   <Insets bottom="2.0" right="5.0" />
+                               </HBox.margin>
+                           </DatePicker>
+                           <Label text="Uhrzeit">
+                               <HBox.margin>
+                                   <Insets bottom="2.0" right="5.0" />
+                               </HBox.margin>
+                           </Label>
+                           <TextField fx:id="time" prefHeight="25.0" prefWidth="112.0">
+                               <HBox.margin>
+                                   <Insets bottom="2.0" />
+                               </HBox.margin>
+                           </TextField>
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+      <ListSelectionView fx:id="listView" VBox.vgrow="ALWAYS" />
         <HBox alignment="CENTER_LEFT" maxHeight="25.0" VBox.vgrow="ALWAYS">
             <VBox.margin>
-                <Insets bottom="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" right="5.0" />
             </VBox.margin>
-         <children>
             <Label text="Externe Mannschaft">
-               <HBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </HBox.margin>
+                <HBox.margin>
+                    <Insets left="5.0" right="5.0" />
+                </HBox.margin>
             </Label>
             <TextField fx:id="teamName" promptText="Name der Mannschaft">
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin>
+                <HBox.margin>
+                    <Insets right="5.0" />
+                </HBox.margin>
             </TextField>
             <Button mnemonicParsing="false" onAction="#addExternTeam" text="Hinzufügen" />
-         </children>
         </HBox>
+      <HBox alignment="BOTTOM_RIGHT" maxHeight="25.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#saveComp" text="Speichern" />
+         </children>
+      </HBox>
     </VBox>
 </fx:root>

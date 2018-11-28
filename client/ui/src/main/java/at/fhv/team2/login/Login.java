@@ -30,7 +30,12 @@ public class Login implements Initializable {
 
     private ValidationSupport validationSupport = new ValidationSupport();
 
-
+    /**
+     * Just for Developing purpose
+     *
+     * @param event
+     * @throws IOException
+     */
     public void logginAsGuest(MouseEvent event) throws IOException {
         Permission.getPermission().loadGuest();
 
@@ -41,6 +46,23 @@ public class Login implements Initializable {
         stage.setScene(scene);
         stage.show();
 
+    }
+
+    /**
+     * Just for Developing purpose
+     *
+     * @param event
+     * @throws IOException
+     */
+    public void logginAsAdmin(MouseEvent event) throws IOException {
+        Permission.getPermission().loadAdmin();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void loginfunction(ActionEvent actionEvent) throws IOException, NotBoundException {
