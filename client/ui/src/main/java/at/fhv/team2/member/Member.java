@@ -65,6 +65,7 @@ public class Member extends HBox implements Initializable {
     //region UI-Button
     public Button saveButton;
     public Button changeButton;
+    public Button newMemeberButton;
     //endregion
     //region UI-DatePicker
     public DatePicker dateOfBirth;
@@ -80,8 +81,6 @@ public class Member extends HBox implements Initializable {
 
     private IPersonController personControllerInstance;
     private IDepartmentController departmentController;
-
-    //TODO: Factory here auch
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -100,6 +99,7 @@ public class Member extends HBox implements Initializable {
 
         saveButton.setVisible(Permission.getPermission().createMemberPermission());
         changeButton.setVisible(Permission.getPermission().createMemberPermission());
+        newMemeberButton.setVisible(Permission.getPermission().createMemberPermission());
 
         this.personControllerInstance = DataProvider.get().getPersonControllerInstance();
         this.departmentController = DataProvider.get().getDepartmentControllerInstance();

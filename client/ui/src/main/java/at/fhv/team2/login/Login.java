@@ -1,10 +1,6 @@
 package at.fhv.team2.login;
 
-import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.team2.DataProvider;
-import at.fhv.team2.PageProvider;
-import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.roles.Permission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -24,8 +20,6 @@ import org.controlsfx.validation.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
@@ -39,7 +33,6 @@ public class Login implements Initializable {
 
     public void logginAsGuest(MouseEvent event) throws IOException {
         Permission.getPermission().loadGuest();
-
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
         Parent root = fxmlLoader.load();
