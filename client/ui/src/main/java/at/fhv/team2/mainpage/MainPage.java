@@ -1,7 +1,9 @@
-package at.fhv.team2;
+package at.fhv.team2.mainpage;
 
-import at.fhv.team2.elements.MenuBar;
-import at.fhv.team2.elements.Top;
+import at.fhv.team2.PageProvider;
+import at.fhv.team2.mainpage.elements.Bottom;
+import at.fhv.team2.mainpage.elements.MenuBar;
+import at.fhv.team2.mainpage.elements.Top;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
@@ -15,20 +17,23 @@ import java.util.ResourceBundle;
 public class MainPage implements Initializable {
 
     @FXML
-    public BorderPane anchorPane;
+    public BorderPane mainPane;
+
     private PageProvider pageProvider = new PageProvider(this);
 
     public void initialize(URL location, ResourceBundle resources) {
-
         setMainPageUp();
-
     }
 
     private void setMainPageUp() {
         MenuBar menubar = new MenuBar(pageProvider);
-        anchorPane.setLeft(menubar);
-        anchorPane.setTop(new Top());
-        anchorPane.setBottom(new Top());
-    }
+        menubar.addingButtons();
 
+        //Dashboard as standard
+        pageProvider.switchDashboard();
+
+        mainPane.setLeft(menubar);
+        mainPane.setTop(new Top());
+        mainPane.setBottom(new Bottom());
+    }
 }

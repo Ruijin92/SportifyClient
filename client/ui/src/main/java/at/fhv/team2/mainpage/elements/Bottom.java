@@ -1,19 +1,29 @@
-package at.fhv.team2.mitglieder;
+package at.fhv.team2.mainpage.elements;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Uray Örnek on 11/6/2018.
+ * Created by Uray Örnek on 11/8/2018.
  */
-public class Mitglieder extends HBox implements Initializable {
+public class Bottom extends HBox implements Initializable {
 
-    public Mitglieder() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Mitglieder.fxml"));
+
+    public Bottom() {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Bottom.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
 
@@ -26,6 +36,6 @@ public class Mitglieder extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 }
+
