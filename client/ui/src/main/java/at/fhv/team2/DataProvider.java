@@ -90,12 +90,19 @@ public class DataProvider {
     }
 
     public static String authenticate(String userId, char[] pw) throws RemoteException, NotBoundException {
-        if (session == null) {
-            IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
-            session = authenticationController.authenticate(userId, pw);
+        IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
+        session = authenticationController.authenticate(userId, pw);
+        if (session.getResponseMessage() == null) {
             return "";
+        } else {
+            return session.getResponseMessage().getInfoMessage();
         }
-           return session.getResponseMessage().getInfoMessage();
+    }
+
+    public static void logout() throws RemoteException, NotBoundException {
+        IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
+        authenticationController.logout(session);
+        session = null;
     }
 
     public static SessionDTO getSession() {

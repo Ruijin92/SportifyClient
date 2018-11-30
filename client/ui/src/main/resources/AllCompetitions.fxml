@@ -39,7 +39,7 @@
                         <Insets bottom="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </HBox>
-                <ListView fx:id="listCompetitions" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="listCompetitions" onMouseClicked="#clickItem" VBox.vgrow="ALWAYS" />
             </children>
             <HBox.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

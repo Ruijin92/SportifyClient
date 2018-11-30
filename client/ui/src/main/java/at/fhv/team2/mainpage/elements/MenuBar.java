@@ -29,9 +29,9 @@ public class MenuBar extends VBox implements Initializable {
     private Button competition;
     private Button teams;
 
-    public MenuBar(PageProvider pageProvider) {
+    public MenuBar() {
 
-        this.pageProvider = pageProvider;
+        this.pageProvider = PageProvider.getPageProvider();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MenuBar.fxml"));
         fxmlLoader.setController(this);
@@ -84,7 +84,7 @@ public class MenuBar extends VBox implements Initializable {
         competition.setOnMouseClicked(event -> {
             pageProvider.switchCompetitions();
         });
-
+/*
         teams = new Button("Mannschaft");
         teams.setMinWidth(WIDTH);
         teams.setMinHeight(HEIGHT);
@@ -93,7 +93,7 @@ public class MenuBar extends VBox implements Initializable {
             pageProvider.switchTeams();
         });
 
-
+*/
         vBox.getChildren().add(dashboard);
 
         if(Permission.getPermission().viewMemberPermission()){
@@ -102,9 +102,11 @@ public class MenuBar extends VBox implements Initializable {
         if(Permission.getPermission().viewCompetitionPermission()){
             vBox.getChildren().add(competition);
         }
+        /*
         if(Permission.getPermission().viewTeamPermission()){
             vBox.getChildren().add(teams);
         }
+        */
     }
 
     @Override
