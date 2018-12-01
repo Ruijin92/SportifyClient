@@ -6,26 +6,20 @@
 <?import javafx.scene.layout.VBox?>
 
 <fx:root fx:id="vBox" type="VBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox VBox.vgrow="ALWAYS">
+   <HBox VBox.vgrow="ALWAYS">
+      <VBox.margin>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+      </VBox.margin>
+      <VBox HBox.hgrow="ALWAYS">
+         <HBox.margin>
+            <Insets right="5.0"/>
+         </HBox.margin>
+         <Label text="Heutige Veranstaltungen"/>
+      </VBox>
+      <VBox HBox.hgrow="ALWAYS">
          <children>
-            <VBox HBox.hgrow="ALWAYS">
-               <children>
-                  <Label text="Heutige Veranstaltungen" />
-               </children>
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox HBox.hgrow="ALWAYS">
-               <children>
-                  <Label text="Letztes Match" />
-               </children>
-            </VBox>
+            <Label text="Letztes Match"/>
          </children>
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </VBox.margin>
-      </HBox>
-   </children>
+      </VBox>
+   </HBox>
 </fx:root>
