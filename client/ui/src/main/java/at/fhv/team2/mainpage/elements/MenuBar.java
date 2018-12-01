@@ -52,10 +52,6 @@ public class MenuBar extends VBox implements Initializable {
         dashboard = new Button("Dashboard");
         dashboard.setMinWidth(WIDTH);
         dashboard.setMinHeight(HEIGHT);
-        /*
-        dashboard.setButtonType(JFXButton.ButtonType.FLAT);
-        dashboard.setStyle("-fx-background-color:grey; -fx-text-fill: white");
-        */
 
         dashboard.setOnMouseClicked(event -> {
             pageProvider.switchDashboard();
@@ -64,10 +60,6 @@ public class MenuBar extends VBox implements Initializable {
         member = new Button("Member");
         member.setMinWidth(WIDTH);
         member.setMinHeight(HEIGHT);
-        /*
-        member.setButtonType(JFXButton.ButtonType.FLAT);
-        member.setStyle("-fx-background-color:grey; -fx-text-fill: white");
-        */
 
         member.setOnMouseClicked(event -> {
             pageProvider.switchMember();
@@ -76,15 +68,12 @@ public class MenuBar extends VBox implements Initializable {
         competition = new Button("Wettkampf");
         competition.setMinWidth(WIDTH);
         competition.setMinHeight(HEIGHT);
-        /*
-        competition.setButtonType(JFXButton.ButtonType.FLAT);
-        competition.setStyle("-fx-background-color:grey; -fx-text-fill: white");
-        */
+
 
         competition.setOnMouseClicked(event -> {
             pageProvider.switchCompetitions();
         });
-/*
+
         teams = new Button("Mannschaft");
         teams.setMinWidth(WIDTH);
         teams.setMinHeight(HEIGHT);
@@ -93,7 +82,6 @@ public class MenuBar extends VBox implements Initializable {
             pageProvider.switchTeams();
         });
 
-*/
         vBox.getChildren().add(dashboard);
 
         if(Permission.getPermission().viewMemberPermission()){
@@ -102,11 +90,9 @@ public class MenuBar extends VBox implements Initializable {
         if(Permission.getPermission().viewCompetitionPermission()){
             vBox.getChildren().add(competition);
         }
-        /*
         if(Permission.getPermission().viewTeamPermission()){
             vBox.getChildren().add(teams);
         }
-        */
     }
 
     @Override

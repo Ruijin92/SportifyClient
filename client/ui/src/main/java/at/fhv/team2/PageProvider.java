@@ -4,6 +4,8 @@ import at.fhv.team2.dashboard.Dashboard;
 import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.member.Member;
 import at.fhv.team2.teams.AllTeams;
+import at.fhv.team2.teams.TeamSquad;
+import at.fhv.team2.teams.TeamViewModel;
 import at.fhv.team2.wettkampf.AllCompetition;
 import at.fhv.team2.wettkampf.NewCompetition;
 import javafx.scene.layout.BorderPane;
@@ -48,5 +50,9 @@ public class PageProvider {
 
     public void switchNewComp(){
         mainPage.mainPane.setCenter(new NewCompetition());
+    }
+
+    public void switchTeamSquad(TeamViewModel team) {
+        mainPage.mainPane.setCenter(new TeamSquad(team));
     }
 }

@@ -3,6 +3,7 @@ package at.fhv.team2.teams;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
+import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,36 +30,8 @@ import java.util.ResourceBundle;
  */
 public class AllTeams extends HBox implements Initializable {
 
-    //region UI-Buttons
-    public Button searchButton;
-    public Button newButton;
-    public Button changeButton;
-    public Button saveButton;
-    public Button addMember;
-    //endregion
-    //region Table
     public TableView table;
-    public TableColumn nameTable;
-    public TableColumn leagueTable;
-    public TableColumn typeTable;
-
-    private List<TeamViewModel> teams;
-    private ObservableList<TeamViewModel> teamsTableList;
-    //endregion
-    //region Detail
-    public VBox memberDetailBox;
-    public RadioButton internRadio;
-    public RadioButton externRadio;
-    public TextField nameField;
-    public ComboBox sportBox;
-    public ComboBox leagueBox;
-    public HBox trainerBox;
-    public ComboBox trainerCombo;
-    public VBox trainerComboVBox;
-    public Label sportNameLabel;
-    public Label ligaNameLabel;
-    private ArrayList<ComboBox> trainerList = null;
-    //endregion
+    public Button teamSquadButton;
 
     public AllTeams() {
 
@@ -76,156 +49,30 @@ public class AllTeams extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        newButton.setVisible(Permission.getPermission().createTeamPermission());
-        changeButton.setVisible(Permission.getPermission().createTeamPermission());
-        saveButton.setVisible(Permission.getPermission().createMemberPermission());
-        addMember.setVisible(Permission.getPermission().createMemberPermission());
 
-        ArrayList<TeamDTO> teamEntries = addTestData();
-        this.teams = new ArrayList<>();
-
-        memberDetailBox.setDisable(true);
-
-        for (TeamDTO teams : teamEntries) {
-            List<PersonDTO> trainers = teams.getTrainers();
-            this.teams.add(new TeamViewModel(teams.getName(), null, trainers, teams.getLeague().getName(), teams.getType()));
-        }
-
-        saveButton.setDisable(true);
-        changeButton.setDisable(true);
-
-        addTeams();
     }
 
     public void clickItem(MouseEvent event) {
-
-        trainerList = new ArrayList<>();
-
-        memberDetailBox.setDisable(false);
-        TeamViewModel teamViewModel = (TeamViewModel) table.getSelectionModel().getSelectedItem();
-
-        changeButton.setDisable(false);
-        leagueBox.setDisable(false);
-
-        nameField.setText(teamViewModel.getName());
-        String type = teamViewModel.getType();
-
-        if (type.equals("intern")) {
-            internRadio.setSelected(true);
-            externDetailState(true);
-            getTrainerForTeam();
-        } else {
-            externRadio.setSelected(true);
-            externDetailState(false);
-        }
-    }
-
-    public void createTeam(ActionEvent event) {
-
-        trainerList = new ArrayList<>();
-
-        memberDetailBox.setDisable(false);
-
-        internRadio.setSelected(true);
-
-        saveButton.setDisable(false);
-        changeButton.setDisable(true);
-
-        nameField.setText("");
-        sportBox.setValue(null);
-        leagueBox.setValue(null);
-        leagueBox.setDisable(true);
-
-        //only fix to clear ComboBox
-        trainerComboVBox.getChildren().removeAll(trainerCombo);
-        trainerCombo = new ComboBox();
-        trainerCombo.setPrefWidth(107);
-        trainerComboVBox.getChildren().add(0,trainerCombo);
-    }
-
-    /**
-     * get's triggerd if someone presses the CHANGE Button
-     *
-     * @param event
-     */
-    public void changeTeam(ActionEvent event) {
-        TeamViewModel teamViewModel = (TeamViewModel) table.getSelectionModel().getSelectedItem();
-    }
-
-    public void addComboBox(ActionEvent event) {
-        int size = trainerComboVBox.getChildren().size();
-
-        ComboBox comboBox = new ComboBox();
-        comboBox.setMaxWidth(107);
-        comboBox.setPrefWidth(107);
-
-        trainerComboVBox.getChildren().add(size-1,comboBox);
-        trainerList.add(comboBox);
-        fillComboBoxWithData(comboBox);
-    }
-
-    public void deleteComboBox(ActionEvent event) {
-        int size = trainerComboVBox.getChildren().size();
-        if(size>2){
-            trainerComboVBox.getChildren().remove(trainerComboVBox.getChildren().get(size-2));
-        }
+        teamSquadButton.setDisable(false);
     }
 
     private void addTeams() {
 
-        teamsTableList = FXCollections.observableArrayList(teams);
-
-        nameTable.setCellValueFactory(new PropertyValueFactory<>("name"));
-        leagueTable.setCellValueFactory(new PropertyValueFactory<>("league"));
-        typeTable.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        table.setItems(teamsTableList);
     }
 
-    private void getTrainerForTeam() {
+    /**
+     * get's triggerd if MannschaftsKader is pressed
+     * @param event
+     */
+    public void teamSquad(ActionEvent event) {
 
-        TeamViewModel teamViewModel = (TeamViewModel) table.getSelectionModel().getSelectedItem();
-        List<PersonDTO> trainers = teamViewModel.getTrainers();
-
-        ObservableList<PersonDTO> trainerComboList = FXCollections.observableArrayList(trainers);
-
-        trainerCombo.setItems(trainerComboList);
-        trainerCombo.setValue(trainerComboList.get(0).getFirstName() + " " + trainerComboList.get(0).getLastName());
-
-        trainerCombo.setConverter(new StringConverter<PersonDTO>() {
-
-            @Override
-            public String toString(PersonDTO object) {
-                return object.getFirstName() + " " + object.getLastName();
-            }
-
-            @Override
-            public PersonDTO fromString(String string) {
-                return null;
-            }
-        });
+        //TODO: sind ja eigendlich Wettlkämpfer die er da sieht -> muss die richtige mannschaft dazu gesucht werden
+        //TODO: oder es zeigt seine mannschaften an die als zusatz haben in welchen Wettkampf ka?
+        //TODO: TeamViewModel ist das alte Model das neue ist Participant
+        TeamViewModel selectedItem =  (TeamViewModel)table.getSelectionModel().getSelectedItem();
+        PageProvider.getPageProvider().switchTeamSquad(selectedItem);
     }
 
-    private void externDetailState(boolean state) {
-        if (state) {
-            sportNameLabel.setVisible(true);
-            ligaNameLabel.setVisible(true);
-            sportBox.setVisible(true);
-            leagueBox.setVisible(true);
-            trainerBox.setVisible(true);
-        } else {
-            trainerList.clear();
-            sportNameLabel.setVisible(false);
-            ligaNameLabel.setVisible(false);
-            sportBox.setVisible(false);
-            leagueBox.setVisible(false);
-            trainerBox.setVisible(false);
-        }
-    }
-
-    private void fillComboBoxWithData(ComboBox comboBox) {
-
-    }
 
     private ArrayList<TeamDTO> addTestData() {
 
