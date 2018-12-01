@@ -12,18 +12,32 @@ import java.util.List;
  */
 public class TeamViewModel {
 
+    private SimpleStringProperty id;
     private SimpleStringProperty name;
     private List<PersonDTO> members;
     private List<PersonDTO> trainers;
     private SimpleStringProperty league;
     private SimpleStringProperty type;
 
-    public TeamViewModel(String name, List<PersonDTO> members, List<PersonDTO> trainers, String league, String type) {
+    public TeamViewModel(String id, String name, List<PersonDTO> members, List<PersonDTO> trainers, String league, String type) {
+        this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.members = members;
         this.trainers = trainers;
         this.league = new SimpleStringProperty(league);
         this.type = new SimpleStringProperty(type);
+    }
+
+    public String getId() {
+        return id.get();
+    }
+
+    public SimpleStringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
     }
 
     public String getName() {

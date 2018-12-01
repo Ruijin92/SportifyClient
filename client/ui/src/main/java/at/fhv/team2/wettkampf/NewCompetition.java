@@ -1,5 +1,9 @@
 package at.fhv.team2.wettkampf;
 
+import at.fhv.sportsclub.controller.interfaces.ITeamController;
+import at.fhv.sportsclub.model.team.TeamDTO;
+import at.fhv.team2.DataProvider;
+import at.fhv.team2.teams.TeamViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +17,9 @@ import javafx.scene.layout.HBox;
 import org.controlsfx.control.ListSelectionView;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -29,6 +35,10 @@ public class NewCompetition extends HBox implements Initializable {
     public TextField teamName;
 
     private  ObservableList<ParticipantViewModel> participants;
+
+    private ArrayList<TeamViewModel> teamViewModels;
+
+    private ITeamController teamControllerInstance;
 
     public NewCompetition(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NewCompetition.fxml"));
@@ -95,5 +105,20 @@ public class NewCompetition extends HBox implements Initializable {
         List<ParticipantViewModel> list = new ArrayList<>();
         list.add(new ParticipantViewModel("22","FC-Dornbirn","FC",null));
         return list;
+    }
+
+    private void addTeamsFromLeagueToAvailableList(ActionEvent event) throws RemoteException {
+        //TODO: Den Eintrag (Liga) holen, der ausgewählt wurde --> ID wird benötigt.
+
+        this.teamControllerInstance = DataProvider.getTeamControllerInstance();
+        ArrayList<TeamDTO> teams = new ArrayList<>();
+        //teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(), "1"); Methode im Backend fehlt noch, es sollt eine Liste an Teams zurückgeliefert werden, welche die LeagueID haben.
+
+        teamViewModels = new ArrayList<>();
+        for (TeamDTO team: teams) {
+            teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
+        }
+
+        //TODO: Die teamViewModels auf die Liste der zur Verfügung stehenden Mannschaften binden.
     }
 }
