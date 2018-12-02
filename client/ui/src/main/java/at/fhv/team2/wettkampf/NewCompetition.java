@@ -17,6 +17,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.util.StringConverter;
 import org.controlsfx.control.ListSelectionView;
 
 import javax.xml.crypto.Data;
@@ -68,24 +69,6 @@ public class NewCompetition extends HBox implements Initializable {
 
         this.departmentController = DataProvider.getDepartmentControllerInstance();
 
-        ArrayList<SportDTO> sports = null;
-
-        try {
-            sports = this.departmentController.getAllSportEntriesFull(DataProvider.getSession()).getContents();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        this.allSports = null;
-
-        for (SportDTO sport: sports) {
-            ArrayList<LeagueViewModel> leagues = null;
-            for (LeagueDTO league: sport.getLeagues()) {
-                leagues.add(new LeagueViewModel(league.getId(), league.getName()));
-            }
-            this.allSports.add(new SportViewModel(sport.getId(), sport.getName(), leagues));
-        }
-
         addSports();
 
         sportsCombo.valueProperty().addListener(event ->  {
@@ -116,14 +99,60 @@ public class NewCompetition extends HBox implements Initializable {
     }
 
     private void addSports(){
-        ObservableList<String> allItems = FXCollections.observableArrayList("One", "Two", "Three", "Four", "Five");
+
+        ArrayList<SportDTO> sports = null;
+
+        try {
+            sports = this.departmentController.getAllSportEntriesFull(DataProvider.getSession()).getContents();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        this.allSports = null;
+
+        for (SportDTO sport: sports) {
+            ArrayList<LeagueViewModel> leagues = null;
+            for (LeagueDTO league: sport.getLeagues()) {
+                leagues.add(new LeagueViewModel(league.getId(), league.getName()));
+            }
+            this.allSports.add(new SportViewModel(sport.getId(), sport.getName(), leagues));
+        }
+
+        ObservableList<SportViewModel> allItems = FXCollections.observableArrayList(this.allSports);
         sportsCombo.setItems(allItems);
+        sportsCombo.setConverter(new StringConverter<SportViewModel>() {
+            @Override
+            public String toString(SportViewModel object) {
+                return object.getName();
+            }
+
+            @Override
+            public SportViewModel fromString(String string) {
+                return null;
+            }
+        });
     }
 
     private void addLeague(){
-        ObservableList<String> allItems = FXCollections.observableArrayList("One", "Two", "Three", "Four", "Five");
+
+        SportViewModel sport = (SportViewModel) sportsCombo.getSelectionModel().getSelectedItem();
+        ArrayList<LeagueViewModel> leagues = sport.getLeagues();
+
+        ObservableList<LeagueViewModel> allItems = FXCollections.observableArrayList(leagues);
         leagueCombo.setItems(allItems);
+        leagueCombo.setConverter(new StringConverter<LeagueViewModel>() {
+            @Override
+            public String toString(LeagueViewModel object) {
+                return object.getName();
+            }
+
+            @Override
+            public LeagueViewModel fromString(String string) {
+                return null;
+            }
+        });
     }
+
 
     //FIXME: only for testing
     private List<ParticipantViewModel> addTestData(){
