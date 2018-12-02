@@ -80,6 +80,18 @@ public class AllCompetition extends HBox implements Initializable {
             tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
         }
         addCompetitionsToList(tournaments);
+
+        listCompetitions.setCellFactory(lv -> new ListCell<CompetitionViewModel>() {
+            @Override
+            public void updateItem(CompetitionViewModel item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 
     public void changeCompetition(ActionEvent event) {

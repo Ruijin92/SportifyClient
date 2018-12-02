@@ -12,11 +12,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.controlsfx.control.ListSelectionView;
 
@@ -39,7 +37,7 @@ public class NewCompetition extends HBox implements Initializable {
     public ListSelectionView listView;
     public TextField teamName;
 
-    private  ObservableList<ParticipantViewModel> participants;
+    private ObservableList<ParticipantViewModel> participants;
 
     private ArrayList<TeamViewModel> teamViewModels;
     private ArrayList<SportViewModel> allSports;
@@ -47,7 +45,7 @@ public class NewCompetition extends HBox implements Initializable {
     private ITeamController teamControllerInstance;
     private IDepartmentController departmentController;
 
-    public NewCompetition(){
+    public NewCompetition() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NewCompetition.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
@@ -71,7 +69,7 @@ public class NewCompetition extends HBox implements Initializable {
 
         addSports();
 
-        sportsCombo.valueProperty().addListener(event ->  {
+        sportsCombo.valueProperty().addListener(event -> {
             leagueCombo.setDisable(false);
             addLeague();
             listView.getSourceItems().clear();
@@ -87,18 +85,19 @@ public class NewCompetition extends HBox implements Initializable {
     }
 
     public void addExternTeam(ActionEvent event) {
-        listView.getSourceItems().add(new ParticipantViewModel(null,teamName.getText(),null,null));
+        listView.getSourceItems().add(new ParticipantViewModel(null, teamName.getText(), null, null));
     }
-    public void saveComp(ActionEvent event){
+
+    public void saveComp(ActionEvent event) {
 
     }
 
-    private void addParticipantsToList(){
+    private void addParticipantsToList() {
         participants = FXCollections.observableArrayList(addTestData());
         listView.getSourceItems().add(participants);
     }
 
-    private void addSports(){
+    private void addSports() {
 
         ArrayList<SportDTO> sports = null;
 
@@ -110,9 +109,9 @@ public class NewCompetition extends HBox implements Initializable {
 
         this.allSports = new ArrayList<>();
 
-        for (SportDTO sport: sports) {
+        for (SportDTO sport : sports) {
             ArrayList<LeagueViewModel> leagues = new ArrayList<>();
-            for (LeagueDTO league: sport.getLeagues()) {
+            for (LeagueDTO league : sport.getLeagues()) {
                 leagues.add(new LeagueViewModel(league.getId(), league.getName()));
             }
             this.allSports.add(new SportViewModel(sport.getId(), sport.getName(), leagues));
@@ -133,7 +132,7 @@ public class NewCompetition extends HBox implements Initializable {
         });
     }
 
-    private void addLeague(){
+    private void addLeague() {
 
         SportViewModel sport = (SportViewModel) sportsCombo.getSelectionModel().getSelectedItem();
         ArrayList<LeagueViewModel> leagues = sport.getLeagues();
@@ -155,10 +154,10 @@ public class NewCompetition extends HBox implements Initializable {
 
 
     //FIXME: only for testing
-    private List<ParticipantViewModel> addTestData(){
+    private List<ParticipantViewModel> addTestData() {
 
         List<ParticipantViewModel> list = new ArrayList<>();
-        list.add(new ParticipantViewModel("22","FC-Dornbirn","FC",null));
+        list.add(new ParticipantViewModel("22", "FC-Dornbirn", "FC", null));
         return list;
     }
 
@@ -170,10 +169,20 @@ public class NewCompetition extends HBox implements Initializable {
         //teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(), "1"); Methode im Backend fehlt noch, es sollt eine Liste an Teams zurückgeliefert werden, welche die LeagueID haben.
 
         teamViewModels = new ArrayList<>();
-        for (TeamDTO team: teams) {
+        for (TeamDTO team : teams) {
             teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
         }
 
-        //TODO: Die teamViewModels auf die Liste der zur Verfügung stehenden Mannschaften binden.
+        listView.setCellFactory(lv -> new ListCell<TeamViewModel>() {
+            @Override
+            public void updateItem(TeamViewModel item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 }
