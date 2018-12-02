@@ -108,10 +108,10 @@ public class NewCompetition extends HBox implements Initializable {
             e.printStackTrace();
         }
 
-        this.allSports = null;
+        this.allSports = new ArrayList<>();
 
         for (SportDTO sport: sports) {
-            ArrayList<LeagueViewModel> leagues = null;
+            ArrayList<LeagueViewModel> leagues = new ArrayList<>();
             for (LeagueDTO league: sport.getLeagues()) {
                 leagues.add(new LeagueViewModel(league.getId(), league.getName()));
             }
