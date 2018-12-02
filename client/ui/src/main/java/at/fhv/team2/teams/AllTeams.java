@@ -49,6 +49,8 @@ public class AllTeams extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        //TODO: Anhand der User ID alle bevorstehenden Wettkämpfe laden
+
 
     }
 

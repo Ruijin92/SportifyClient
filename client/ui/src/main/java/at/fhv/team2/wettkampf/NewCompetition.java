@@ -1,6 +1,9 @@
 package at.fhv.team2.wettkampf;
 
+import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
+import at.fhv.sportsclub.model.dept.LeagueDTO;
+import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.teams.TeamViewModel;
@@ -16,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import org.controlsfx.control.ListSelectionView;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
@@ -37,8 +41,10 @@ public class NewCompetition extends HBox implements Initializable {
     private  ObservableList<ParticipantViewModel> participants;
 
     private ArrayList<TeamViewModel> teamViewModels;
+    private ArrayList<SportViewModel> allSports;
 
     private ITeamController teamControllerInstance;
+    private IDepartmentController departmentController;
 
     public NewCompetition(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NewCompetition.fxml"));
@@ -59,6 +65,26 @@ public class NewCompetition extends HBox implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         leagueCombo.setDisable(true);
+
+        this.departmentController = DataProvider.getDepartmentControllerInstance();
+
+        ArrayList<SportDTO> sports = null;
+
+        try {
+            sports = this.departmentController.getAllSportEntriesFull(DataProvider.getSession()).getContents();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        this.allSports = null;
+
+        for (SportDTO sport: sports) {
+            ArrayList<LeagueViewModel> leagues = null;
+            for (LeagueDTO league: sport.getLeagues()) {
+                leagues.add(new LeagueViewModel(league.getId(), league.getName()));
+            }
+            this.allSports.add(new SportViewModel(sport.getId(), sport.getName(), leagues));
+        }
 
         addSports();
 
