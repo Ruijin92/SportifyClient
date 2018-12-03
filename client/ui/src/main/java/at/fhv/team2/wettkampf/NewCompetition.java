@@ -10,6 +10,7 @@ import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
+import at.fhv.team2.PageProvider;
 import at.fhv.team2.teams.TeamViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,18 +19,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.controlsfx.control.ListSelectionView;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class NewCompetition extends HBox implements Initializable {
 
@@ -39,12 +38,12 @@ public class NewCompetition extends HBox implements Initializable {
     public DatePicker datePick;
     public ListSelectionView listView;
     public TextField teamName;
+    public TextField tournamentName;
 
-    private ObservableList<TeamViewModel> participants;
+    private ObservableList<TeamViewModel> teams;
 
-    private ArrayList<TeamViewModel> teamViewModels;
+    private ArrayList<TeamViewModel> teamViewModels = new ArrayList<>();
     private ArrayList<SportViewModel> allSports;
-
     private ITeamController teamControllerInstance;
     private IDepartmentController departmentController;
     private ITournamentController tournamentController;
@@ -72,8 +71,6 @@ public class NewCompetition extends HBox implements Initializable {
         this.departmentController = DataProvider.getDepartmentControllerInstance();
         this.teamControllerInstance = DataProvider.getTeamControllerInstance();
 
-        teamViewModels = new ArrayList<>();
-
         addSports();
 
         sportsCombo.valueProperty().addListener(event -> {
@@ -81,11 +78,12 @@ public class NewCompetition extends HBox implements Initializable {
             addLeague();
             listView.getSourceItems().clear();
             listView.getTargetItems().clear();
-            try {
+            /*try {
                 addTeamsBySportToAvailableList();
+                listView.getSourceItems().add(teams);
             } catch (RemoteException e) {
                 e.printStackTrace();
-            }
+            }*/
         });
 
         leagueCombo.valueProperty().addListener(event -> {
@@ -93,6 +91,7 @@ public class NewCompetition extends HBox implements Initializable {
             listView.getSourceItems().clear();
             try {
                 addTeamsByLeagueToAvailableList();
+                listView.getSourceItems().add(teams);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -105,42 +104,27 @@ public class NewCompetition extends HBox implements Initializable {
 
     public void saveComp(ActionEvent event) throws RemoteException {
         ArrayList<TeamViewModel> teams = new ArrayList<>();
-        teams.addAll(listView.getTargetItems());
+        //teams.addAll(listView.getTargetItems());
+        ObservableList targetItems = listView.getTargetItems();
+        List<TeamViewModel> list = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
+
 
         ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
+
         for (TeamViewModel team: teams) {
             participantTeams.add(new ParticipantDTO(null, team.getId(), null, null, null, ModificationType.MODIFIED));
         }
 
         //TODO: Input Feld für Name des Tuniers einbauen. Beim speichern geben wir den Namen des Tuniers an 2. Attribut bei TournamentDTO.
         LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
-        TournamentDTO tournament = new TournamentDTO(null, "", selectedLeague.getId(), null, null, null, participantTeams, null, ModificationType.MODIFIED);
+        TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), selectedLeague.getId(), null, null, null, participantTeams, null, ModificationType.MODIFIED);
 
         this.tournamentController = DataProvider.getTournamentControllerInstance();
         //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
         TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
-    }
 
-    //Methode kann gelöscht werden --> die beiden letzten Methoden übernehmen nun die Funktionalität dieser Methode. CellFactory Funktionalität muss
-    //jedoch noch umgelagert werden.
-    private void addParticipantsToList() {
-        TeamViewModel selectedTeam = (TeamViewModel) leagueCombo.getSelectionModel().getSelectedItem();
-
-
-        //participants = FXCollections.observableArrayList(addTestData());
-        listView.getSourceItems().add(participants);
-
-        listView.setCellFactory(lv -> new ListCell<TeamViewModel>() {
-            @Override
-            public void updateItem(TeamViewModel item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
-            }
-        });
+        //Encoutner
+        PageProvider.getPageProvider().switchCompetitions();
     }
 
     private void addSports() {
@@ -198,33 +182,25 @@ public class NewCompetition extends HBox implements Initializable {
         });
     }
 
-
-    //FIXME: only for testing
-    private List<TeamViewModel> addTestData() {
-        List<TeamViewModel> list = new ArrayList<>();
-        list.add(new TeamViewModel(null, "Fc Dornbinr", null, null, null, null));
-        return list;
-    }
-
     private void addTeamsByLeagueToAvailableList() throws RemoteException {
         //"5c04554448a886e2bbad15c2" --> Test LeagueID bei welcher ein Team hinterlegt ist.
         LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
 
-        ArrayList<TeamDTO> teams = new ArrayList<>();
-        teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(),selectedLeague.getId()).getContents();
+        ArrayList<TeamDTO> teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(),"5c04e93a9b1ba6a0795fc7a1").getContents();
 
         teamViewModels.clear();
         if (teams != null) {
             for (TeamDTO team : teams) {
-                teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
+                teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, null));
             }
         }
+        this.teams = FXCollections.observableArrayList(teamViewModels);
     }
 
     private void addTeamsBySportToAvailableList() throws RemoteException {
         SportViewModel selectedSport = (SportViewModel) sportsCombo.getSelectionModel().getSelectedItem();
 
-        ArrayList<TeamDTO> teams = new ArrayList<>();
+        ArrayList<TeamDTO> teams;
         teams = this.teamControllerInstance.getBySport(DataProvider.getSession(), selectedSport.getId()).getContents();
 
         teamViewModels.clear();
@@ -233,5 +209,6 @@ public class NewCompetition extends HBox implements Initializable {
                 teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
             }
         }
+        this.teams = FXCollections.observableArrayList(teamViewModels);
     }
 }
