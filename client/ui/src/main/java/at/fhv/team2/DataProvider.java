@@ -4,6 +4,8 @@ import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
+import javafx.beans.property.StringProperty;
+import lombok.Getter;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,7 +25,7 @@ public class DataProvider {
     private static Registry registry;
     private static SessionDTO session;
 
-
+    @Getter private static StringProperty messageStatus;
 
     private DataProvider(){
         if (controllerFactory == null) {
@@ -119,5 +121,9 @@ public class DataProvider {
 
     public static SessionDTO getSession() {
         return session;
+    }
+
+    public static void setMessageStatus(String newMessageStatus) {
+        messageStatus.set(newMessageStatus);
     }
 }

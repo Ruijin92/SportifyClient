@@ -3,6 +3,7 @@ package at.fhv.team2.mainpage.elements;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +30,6 @@ public class Top extends HBox implements Initializable {
     public Label username;
     public Label siteName;
     public Button messageButton;
-    private int messageCounter;
 
     public Top() {
 
@@ -56,7 +58,7 @@ public class Top extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         username.setText(Permission.getPermission().getUsername());
-
+        messageButton.textProperty().bind(DataProvider.getMessageStatus());
     }
 
     public void setSiteName(String name){
@@ -65,10 +67,5 @@ public class Top extends HBox implements Initializable {
 
     public void switchMessage(ActionEvent event) {
         PageProvider.getPageProvider().switchMessages();
-    }
-
-    public void setMessageCount(int count){
-        messageCounter = messageCounter + count;
-        messageButton.setText(messageCounter + "new Messages");
     }
 }
