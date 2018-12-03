@@ -65,4 +65,8 @@ public class PageProvider {
     public void switchMessages(){
         mainPage.mainPane.setCenter(new MessageModel());
     }
+
+    public void switchChangeCompetitions(String tournamentId) {
+        mainPage.mainPane.setCenter(new NewCompetition(tournamentId));
+    }
 }

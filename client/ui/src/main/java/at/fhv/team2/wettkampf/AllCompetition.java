@@ -94,12 +94,8 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void changeCompetition(ActionEvent event) {
-
-        Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
-
-        if (selectedItem != null) {
-
-        }
+        String tournamentId = "adksda";
+        PageProvider.getPageProvider().switchChangeCompetitions(tournamentId);
     }
 
     public void createCompetition(ActionEvent event) {
