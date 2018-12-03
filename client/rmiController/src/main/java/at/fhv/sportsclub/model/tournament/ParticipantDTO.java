@@ -15,7 +15,7 @@ public @Data class ParticipantDTO implements Serializable {
 
     public ParticipantDTO() { }
 
-    private static final long serialVersionUID = 111111198267757691L; // changed 20.11.2018
+    private static final long serialVersionUID = 111111198267757692L; // changed 26.11.2018
 
     private String id;
 
