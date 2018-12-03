@@ -1,5 +1,6 @@
 package at.fhv.team2.teams;
 
+import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
@@ -33,6 +34,8 @@ public class AllTeams extends HBox implements Initializable {
     public TableView table;
     public Button teamSquadButton;
 
+    private ITournamentController tournamentController;
+
     public AllTeams() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AllTeams.fxml"));
@@ -50,8 +53,6 @@ public class AllTeams extends HBox implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         //TODO: Anhand der User ID alle bevorstehenden Wettkämpfe laden
-
-
     }
 
     public void clickItem(MouseEvent event) {
