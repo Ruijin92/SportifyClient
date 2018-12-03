@@ -17,6 +17,7 @@ public class DataProvider {
     private static ITeamController teamController = null;
     private static ITournamentController tournamentController = null;
     private static IAuthenticationController authenticationController = null;
+    private static IMessageController messageController = null;
 
     private static DataProvider instance = null;
     private static Registry registry;
@@ -83,6 +84,17 @@ public class DataProvider {
             }
         }
         return tournamentController;
+    }
+
+    public static IMessageController getMessageControllerInstance() {
+        if (messageController == null) {
+            try {
+                return controllerFactory.getMessageController();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return messageController;
     }
 
     public static void setRegistry(Registry registry) {
