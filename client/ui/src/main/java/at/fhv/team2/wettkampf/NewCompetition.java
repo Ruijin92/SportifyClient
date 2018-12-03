@@ -37,7 +37,6 @@ public class NewCompetition extends HBox implements Initializable {
     public ComboBox sportsCombo;
     public ComboBox leagueCombo;
     public DatePicker datePick;
-    public TextField time;
     public ListSelectionView listView;
     public TextField teamName;
 

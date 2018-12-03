@@ -181,7 +181,7 @@ public class AllCompetition extends HBox implements Initializable {
     //FIXME: wird nur zu test zwecken benutzt
     private ArrayList<TournamentDTO> addTestData() {
         ArrayList<TournamentDTO> list = new ArrayList<>();
-        list.add(new TournamentDTO("3", "FC-Dornbirn", null, null, null, null, null, null));
+        list.add(new TournamentDTO("3", "FC-Dornbirn", null, null, null, null, null, null,null));
         return list;
     }
 }
