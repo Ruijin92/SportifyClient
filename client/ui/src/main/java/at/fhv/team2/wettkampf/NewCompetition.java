@@ -3,6 +3,7 @@ package at.fhv.team2.wettkampf;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
@@ -109,12 +110,12 @@ public class NewCompetition extends HBox implements Initializable {
 
         ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
         for (TeamViewModel team: teams) {
-            participantTeams.add(new ParticipantDTO(null, team.getId(), null, null, null));
+            participantTeams.add(new ParticipantDTO(null, team.getId(), null, null, null, ModificationType.MODIFIED));
         }
 
         //TODO: Input Feld für Name des Tuniers einbauen. Beim speichern geben wir den Namen des Tuniers an 2. Attribut bei TournamentDTO.
         LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
-        TournamentDTO tournament = new TournamentDTO(null, "", selectedLeague.getId(), null, null, null, participantTeams, null);
+        TournamentDTO tournament = new TournamentDTO(null, "", selectedLeague.getId(), null, null, null, participantTeams, null, ModificationType.MODIFIED);
 
         this.tournamentController = DataProvider.getTournamentControllerInstance();
         //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
