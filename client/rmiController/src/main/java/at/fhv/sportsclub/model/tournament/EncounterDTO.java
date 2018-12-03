@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.model.tournament;
 
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,6 @@ public @Data class EncounterDTO implements Serializable {
     private int homePoints;
     private int guestPoints;
     private ResponseMessageDTO response;
+
+    private ModificationType modificationType;
 }

@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.model.tournament;
 
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import lombok.AllArgsConstructor;
@@ -24,4 +25,5 @@ public @Data class TournamentDTO implements Serializable {
     private List<EncounterDTO> encounters;
     private List<ParticipantDTO> teams;
     private ResponseMessageDTO response;
+    private ModificationType modificationType;
 }
