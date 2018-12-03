@@ -23,8 +23,6 @@ public class DataProvider {
     private static Registry registry;
     private static SessionDTO session;
 
-
-
     private DataProvider(){
         if (controllerFactory == null) {
             try {

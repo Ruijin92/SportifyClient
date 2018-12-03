@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
+import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
@@ -25,7 +26,8 @@ import java.util.ResourceBundle;
 
 public class Login implements Initializable {
 
-    @FXML
+    public TextField ipBox;
+
     public TextField username;
     public TextField password;
     public BorderPane pane;
@@ -114,6 +116,7 @@ public class Login implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        validationSupport.registerValidator(ipBox, Validator.createRegexValidator("IP - Adress is not valid","^$|^\\d+(.\\d{1,4}){3}$", Severity.ERROR));
         validationSupport.registerValidator(username, Validator.createEmptyValidator("Username - Has to be filled"));
         validationSupport.registerValidator(password, Validator.createEmptyValidator("Password - Has to be filled"));
     }
