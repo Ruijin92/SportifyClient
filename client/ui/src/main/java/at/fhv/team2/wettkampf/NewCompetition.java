@@ -67,7 +67,23 @@ public class NewCompetition extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        listView.setCellFactory(view -> {
+            ListCell<TeamViewModel> cell = new ListCell<TeamViewModel>() {
 
+                @Override
+                public void updateItem(TeamViewModel item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item.getName());
+                        setGraphic(null);
+                    }
+                }
+            };
+            return cell;
+        });
         leagueCombo.setDisable(true);
 
         this.departmentController = DataProvider.getDepartmentControllerInstance();
@@ -80,12 +96,12 @@ public class NewCompetition extends HBox implements Initializable {
             addLeague();
             listView.getSourceItems().clear();
             listView.getTargetItems().clear();
-            /*try {
+            try {
                 addTeamsBySportToAvailableList();
-                listView.getSourceItems().add(teams);
+                listView.getSourceItems().addAll(teams);
             } catch (RemoteException e) {
                 e.printStackTrace();
-            }*/
+            }
         });
 
         leagueCombo.valueProperty().addListener(event -> {
@@ -93,7 +109,7 @@ public class NewCompetition extends HBox implements Initializable {
             listView.getSourceItems().clear();
             try {
                 addTeamsByLeagueToAvailableList();
-                listView.getSourceItems().add(teams);
+                listView.getSourceItems().addAll(teams);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -207,7 +223,7 @@ public class NewCompetition extends HBox implements Initializable {
         teamViewModels.clear();
         if (teams != null) {
             for (TeamDTO team : teams) {
-                teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
+                teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, null));
             }
         }
         this.teams = FXCollections.observableArrayList(teamViewModels);
