@@ -15,4 +15,5 @@ public interface IControllerFactory extends Remote {
     IDepartmentController getDepartmentController() throws RemoteException;
     ITeamController getTeamController() throws RemoteException;
     ITournamentController getTournamentController() throws RemoteException;
+    IMessageController getMessageController() throws RemoteException;
 }
