@@ -4,6 +4,7 @@ import at.fhv.sportsclub.controller.interfaces.IMessageController;
 import at.fhv.team2.DataProvider;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,7 +12,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.TextMessage;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -24,9 +28,12 @@ import java.util.concurrent.Future;
 
 public class MessageModel implements Initializable {
 
-    public TableView messageTable;
-    public TextArea messageBody;
-    public Button confirmMatch, cancelMatch;
+    @FXML
+    private TableView messageTable;
+    @FXML
+    private TextArea messageBody;
+    @FXML
+    private Button agreeButton, rejectButton;
 
     private MessageViewModel messageViewModel;
 
@@ -53,7 +60,7 @@ public class MessageModel implements Initializable {
         Thread thread = new Thread(() ->
             messageViewModel.addToMessages(
                 messageControllerInstance.browseMessagesForUser(
-                    DataProvider.getSession(), DataProvider.getSession().getMyUserId()
+                    DataProvider.getSession(), DataProvider.getSession().getMyUserId() //TODO
             )
         ));
         thread.setDaemon(true);
@@ -61,18 +68,46 @@ public class MessageModel implements Initializable {
     }
 
     public void openMessage() {
-        // if(Prüfen ob selectedItem replyTo null ist) {}
-        selectedItem = "";
-        DataProvider.getMessageControllerInstance().removeMessageFromQueueAndArchive(DataProvider.getSession(), )
+        TextMessage selectedMessage = (TextMessage) messageTable.getSelectionModel().getSelectedItem();
+        if(selectedMessage == null) { return; }
 
-        messageBody.setText(); // Text setzen von dem selected Item
+        try {
+            messageBody.setText(selectedMessage.getText());
+
+            if(selectedMessage.getStringProperty("replyTo") == null) {
+                DataProvider.
+                        getMessageControllerInstance().
+                        removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getJMSCorrelationID(), null);
+                agreeButton.setVisible(false);
+                rejectButton.setVisible(false);
+            } else {
+                agreeButton.setVisible(true);
+                rejectButton.setVisible(true);
+            }
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
     }
 
+    //TODO Message
     public void confirmMessage() {
-        DataProvider.getMessageControllerInstance().
+        replyToMessage("Ich stimme zu");
     }
 
     public void cancelMessage() {
+        replyToMessage("Ich lehne ab");
+    }
 
+    private void replyToMessage(String replyMessageText) {
+        TextMessage selectedMessage = (TextMessage) messageTable.getSelectionModel().getSelectedItem();
+        if(selectedMessage == null) { return; }
+
+        try {
+            DataProvider.
+                    getMessageControllerInstance().
+                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getJMSCorrelationID(), replyMessageText);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
     }
 }
