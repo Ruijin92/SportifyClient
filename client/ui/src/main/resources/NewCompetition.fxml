@@ -45,32 +45,32 @@
 
              <VBox>
                  <HBox.margin>
-                     <Insets left="8.0"/>
+                     <Insets left="8.0" />
                  </HBox.margin>
                  <Label text="2. Datum eintragen">
                     <font>
-                        <Font name="System Bold" size="12.0"/>
+                        <Font name="System Bold" size="12.0" />
                     </font>
                     <VBox.margin>
-                        <Insets bottom="2.0"/>
+                        <Insets bottom="2.0" />
                     </VBox.margin>
                  </Label>
                  <DatePicker fx:id="datePick">
                     <VBox.margin>
-                        <Insets bottom="2.0" right="5.0"/>
+                        <Insets bottom="2.0" right="5.0" />
                     </VBox.margin>
                  </DatePicker>
              </VBox>
              <VBox>
                  <HBox.margin>
-                     <Insets left="8.0"/>
+                     <Insets left="8.0" />
                  </HBox.margin>
                  <Label text="3. Turniername eintragen">
                      <font>
-                         <Font name="System Bold" size="12.0"/>
+                         <Font name="System Bold" size="12.0" />
                      </font>
                      <VBox.margin>
-                         <Insets bottom="2.0"/>
+                         <Insets bottom="2.0" />
                      </VBox.margin>
                  </Label>
                  <TextField fx:id="tournamentName" promptText="Turniername">
@@ -96,7 +96,10 @@
                     <Insets right="5.0" />
                 </HBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#addExternTeam" text="Hinzufügen" />
+            <Button mnemonicParsing="false" onAction="#addExternTeam" text="Hinzufügen">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin></Button>
         </HBox>
       <HBox alignment="BOTTOM_RIGHT" maxHeight="25.0">
          <children>

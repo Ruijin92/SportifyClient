@@ -30,7 +30,6 @@ import java.util.ResourceBundle;
 public class AllCompetition extends HBox implements Initializable {
 
     public HBox hBox;
-
     public Button changeButton;
     public Button newButton;
     public Button resultButton;
@@ -44,8 +43,6 @@ public class AllCompetition extends HBox implements Initializable {
 
     private CompetitionViewModel tournamentDetails;
     private ITournamentController tournamentControllerInstance;
-
-    private PageProvider pageProvider = PageProvider.getPageProvider();
 
     public AllCompetition() {
 
