@@ -20,8 +20,8 @@ public @Data class EncounterDTO implements Serializable {
 
     private LocalDate date;
     private int time;
-    private ParticipantDTO homeTeam;
-    private ParticipantDTO guestTeam;
+    private String homeTeam;
+    private String guestTeam;
     private int homePoints;
     private int guestPoints;
     private ResponseMessageDTO response;
