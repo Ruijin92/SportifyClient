@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.controller.interfaces;
 
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 public interface ITeamController extends Remote {
     ArrayList<TeamDTO> getAllEntries(SessionDTO session) throws RemoteException;
     ResponseMessageDTO saveOrUpdateEntry(SessionDTO session, TeamDTO teamDTO) throws RemoteException;
-    TeamDTO getByLeague(SessionDTO session, String leagueId) throws RemoteException;
     TeamDTO getById(SessionDTO session, String id) throws RemoteException;
-    TeamDTO getByIdFull(SessionDTO session, String id) throws RemoteException;
+    TeamDTO getEntryDetails(SessionDTO session, String id) throws RemoteException;
+    ListWrapper<TeamDTO> getByLeague(SessionDTO session, String leagueId) throws RemoteException;
+    ListWrapper<TeamDTO> getBySport(SessionDTO session, String sportId) throws RemoteException;
 }
