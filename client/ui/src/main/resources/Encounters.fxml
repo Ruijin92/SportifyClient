@@ -56,7 +56,7 @@
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button fx:id="encounterAddButton" disable="true" mnemonicParsing="false" onAction="#addEncounter" text="Hinzufügen" />
+                  <Button fx:id="encounterAddButton"  mnemonicParsing="false" onAction="#addEncounter" text="Hinzufügen" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" />
@@ -83,7 +83,7 @@
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="resultButton" disable="true" mnemonicParsing="false" onAction="#addResult" text="Hinzufügen" />
+                  <Button fx:id="resultButton" mnemonicParsing="false" onAction="#addResult" text="Hinzufügen" />
                </children>
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
