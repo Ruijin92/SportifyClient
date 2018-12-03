@@ -50,19 +50,19 @@ public class Encounter extends HBox implements Initializable {
 
     }
 
-    void addEncounter(ActionEvent event) {
+    public void addEncounter(ActionEvent event) {
 
     }
 
-    void addResult(ActionEvent event) {
+    public void addResult(ActionEvent event) {
 
     }
 
-    void clickItem(MouseEvent event) {
+    public void clickItem(MouseEvent event) {
 
     }
 
-    void saveEncounter(ActionEvent event) {
+    public void saveEncounter(ActionEvent event) {
 
     }
 }
