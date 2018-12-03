@@ -54,15 +54,30 @@ public class Login implements Initializable {
      * @param event
      * @throws IOException
      */
-    public void logginAsAdmin(MouseEvent event) throws IOException {
-        Permission.getPermission().loadAdmin();
+    public void logginAsAdmin(MouseEvent event) throws IOException, NotBoundException {
+        DataProvider dataProvider = DataProvider.get();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        String pw = "snoop@do.gg";
+        if (dataProvider.authenticate("snoop@do.gg", pw.toCharArray()).equals("")) {
+
+            Permission.getPermission().setRoles(DataProvider.getSession().getRoles());
+            Permission.getPermission().checkPermission();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login failed");
+            alert.setContentText("Username or Password wrong - try again.");
+            alert.showAndWait();
+            username.setText("");
+            password.setText("");
+        }
+        //Permission.getPermission().loadAdmin();
     }
 
     public void loginfunction(ActionEvent actionEvent) throws IOException, NotBoundException {
