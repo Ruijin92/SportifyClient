@@ -1,4 +1,4 @@
-package at.fhv.team2.wettkampf;
+package at.fhv.team2.teams.ViewModels;
 
 import at.fhv.team2.member.PersonViewModel;
 import javafx.beans.property.SimpleStringProperty;

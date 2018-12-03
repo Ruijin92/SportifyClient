@@ -1,4 +1,4 @@
-package at.fhv.team2.wettkampf;
+package at.fhv.team2.wettkampf.ViewModels;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;

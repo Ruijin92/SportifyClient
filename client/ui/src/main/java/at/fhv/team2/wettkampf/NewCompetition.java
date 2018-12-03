@@ -11,7 +11,9 @@ import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
-import at.fhv.team2.teams.TeamViewModel;
+import at.fhv.team2.teams.ViewModels.TeamViewModel;
+import at.fhv.team2.wettkampf.ViewModels.LeagueViewModel;
+import at.fhv.team2.wettkampf.ViewModels.SportViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -71,7 +73,7 @@ public class NewCompetition extends HBox implements Initializable {
         this.departmentController = DataProvider.getDepartmentControllerInstance();
         this.teamControllerInstance = DataProvider.getTeamControllerInstance();
 
-        addSports();
+       addSports();
 
         sportsCombo.valueProperty().addListener(event -> {
             leagueCombo.setDisable(false);
@@ -115,7 +117,6 @@ public class NewCompetition extends HBox implements Initializable {
             participantTeams.add(new ParticipantDTO(null, team.getId(), null, null, null, ModificationType.MODIFIED));
         }
 
-        //TODO: Input Feld für Name des Tuniers einbauen. Beim speichern geben wir den Namen des Tuniers an 2. Attribut bei TournamentDTO.
         LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
         TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), selectedLeague.getId(), null, null, null, participantTeams, null, ModificationType.MODIFIED);
 
@@ -124,7 +125,7 @@ public class NewCompetition extends HBox implements Initializable {
         TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
 
         //Encoutner
-        PageProvider.getPageProvider().switchCompetitions();
+        PageProvider.getPageProvider().switchEncounter(tournament);
     }
 
     private void addSports() {

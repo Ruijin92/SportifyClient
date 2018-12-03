@@ -5,25 +5,18 @@ import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.team2.PageProvider;
-import at.fhv.team2.roles.Permission;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import at.fhv.team2.teams.ViewModels.TeamViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**

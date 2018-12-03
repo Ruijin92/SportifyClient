@@ -1,19 +1,15 @@
-package at.fhv.team2.wettkampf;
+package at.fhv.team2.wettkampf.ViewModels;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.util.ArrayList;
-
-public class SportViewModel {
+public class LeagueViewModel {
 
     private SimpleStringProperty id;
     private SimpleStringProperty name;
-    private ArrayList<LeagueViewModel> leagues;
 
-    public SportViewModel(String id, String name, ArrayList<LeagueViewModel> leagues) {
+    public LeagueViewModel(String id, String name) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
-        this.leagues = leagues;
     }
 
     public String getId() {
@@ -38,13 +34,5 @@ public class SportViewModel {
 
     public void setName(String name) {
         this.name.set(name);
-    }
-
-    public ArrayList<LeagueViewModel> getLeagues() {
-        return leagues;
-    }
-
-    public void setLeagues(ArrayList<LeagueViewModel> leagues) {
-        this.leagues = leagues;
     }
 }

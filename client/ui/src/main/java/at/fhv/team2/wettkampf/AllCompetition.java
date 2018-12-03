@@ -7,6 +7,7 @@ import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.roles.Permission;
+import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -104,7 +105,7 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void createCompetition(ActionEvent event) {
-        pageProvider.switchNewComp();
+        PageProvider.getPageProvider().switchNewComp();
     }
 
     public void enterResult(ActionEvent event) {

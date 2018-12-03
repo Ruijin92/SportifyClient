@@ -1,5 +1,7 @@
-package at.fhv.team2.wettkampf;
+package at.fhv.team2.teams.ViewModels;
 
+import at.fhv.team2.wettkampf.ViewModels.EncounterViewModel;
+import at.fhv.team2.wettkampf.ViewModels.ParticipantViewModel;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.List;

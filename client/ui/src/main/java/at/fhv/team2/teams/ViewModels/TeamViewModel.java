@@ -1,4 +1,4 @@
-package at.fhv.team2.teams;
+package at.fhv.team2.teams.ViewModels;
 
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
