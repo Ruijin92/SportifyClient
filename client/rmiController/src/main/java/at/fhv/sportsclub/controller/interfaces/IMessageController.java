@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.controller.interfaces;
 
+import at.fhv.sportsclub.model.security.SessionDTO;
+
 import javax.jms.Message;
 import java.rmi.Remote;
 import java.util.List;
@@ -15,10 +17,10 @@ public interface IMessageController extends Remote {
      * Send multiple messages to the queue.
      * @param messages Map<String(Username), String(messageText)>
      */
-    void sendMessagesToQueue(Map<String, String> messages);// sendMessagesToQueue(List<Message>, List<User>)
-    void sendMessageToQueue(String message, String username);
-    List<Message> browseMessagesForUser(String username); // (UserString für messageSelektor); //With Browser
-    boolean deleteMessageFromQueue(String correlationID);
-    boolean deleteMessagesFromQueue(List<String> correlationIDs);
+    void sendMessagesToQueue(SessionDTO sessionDTO, Map<String, String> messages);
+    void sendMessageToQueue(SessionDTO sessionDTO, String message, String username);
+    void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo);
+    List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username);
+    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyToReceiver);
 
 }

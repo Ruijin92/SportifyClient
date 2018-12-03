@@ -19,4 +19,8 @@ public @Data class SessionDTO<T> implements Serializable {
     private List<RoleDTO> roles;
 
     private ResponseMessageDTO responseMessage;
+
+    public String getMyUserId() {
+        return null;
+    }
 }

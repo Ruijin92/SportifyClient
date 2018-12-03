@@ -87,7 +87,7 @@ public class DataProvider {
     }
 
     public static IMessageController getMessageControllerInstance() {
-        if (tournamentController == null) {
+        if (messageController == null) {
             try {
                 return controllerFactory.getMessageController();
             } catch (RemoteException e) {
