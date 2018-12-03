@@ -121,20 +121,22 @@ public class NewCompetition extends HBox implements Initializable {
     }
 
     public void saveComp(ActionEvent event) throws RemoteException {
-        ArrayList<TeamViewModel> teams = new ArrayList<>();
-        //teams.addAll(listView.getTargetItems());
         ObservableList targetItems = listView.getTargetItems();
         List<TeamViewModel> list = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
 
 
         ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
 
-        for (TeamViewModel team: teams) {
+        for (TeamViewModel team: list) {
             participantTeams.add(new ParticipantDTO(null, team.getId(), null, null, null, ModificationType.MODIFIED));
         }
 
         LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
-        TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), selectedLeague.getId(), null, null, null, participantTeams, null, ModificationType.MODIFIED);
+        String leagueId = null;
+        if (selectedLeague != null) {
+            leagueId = selectedLeague.getId();
+        }
+        TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), leagueId, null, null, null, participantTeams, null, ModificationType.MODIFIED);
 
         this.tournamentController = DataProvider.getTournamentControllerInstance();
         //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
@@ -203,7 +205,7 @@ public class NewCompetition extends HBox implements Initializable {
         //"5c04554448a886e2bbad15c2" --> Test LeagueID bei welcher ein Team hinterlegt ist.
         LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
 
-        ArrayList<TeamDTO> teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(),"5c04e93a9b1ba6a0795fc7a1").getContents();
+        ArrayList<TeamDTO> teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(),selectedLeague.getId()).getContents();
 
         teamViewModels.clear();
         if (teams != null) {
