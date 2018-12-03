@@ -2,9 +2,12 @@ package at.fhv.team2.wettkampf;
 
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
+import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
+import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.teams.TeamViewModel;
 import javafx.collections.FXCollections;
@@ -37,13 +40,14 @@ public class NewCompetition extends HBox implements Initializable {
     public ListSelectionView listView;
     public TextField teamName;
 
-    private ObservableList<ParticipantViewModel> participants;
+    private ObservableList<TeamViewModel> participants;
 
     private ArrayList<TeamViewModel> teamViewModels;
     private ArrayList<SportViewModel> allSports;
 
     private ITeamController teamControllerInstance;
     private IDepartmentController departmentController;
+    private ITournamentController tournamentController;
 
     public NewCompetition() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/NewCompetition.fxml"));
@@ -66,6 +70,9 @@ public class NewCompetition extends HBox implements Initializable {
         leagueCombo.setDisable(true);
 
         this.departmentController = DataProvider.getDepartmentControllerInstance();
+        this.teamControllerInstance = DataProvider.getTeamControllerInstance();
+
+        teamViewModels = new ArrayList<>();
 
         addSports();
 
@@ -74,27 +81,66 @@ public class NewCompetition extends HBox implements Initializable {
             addLeague();
             listView.getSourceItems().clear();
             listView.getTargetItems().clear();
+            try {
+                addTeamsBySportToAvailableList();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         });
 
         leagueCombo.valueProperty().addListener(event -> {
             listView.getTargetItems().clear();
             listView.getSourceItems().clear();
-            addParticipantsToList();
+            try {
+                addTeamsByLeagueToAvailableList();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         });
-
     }
 
     public void addExternTeam(ActionEvent event) {
-        listView.getSourceItems().add(new ParticipantViewModel(null, teamName.getText(), null, null));
+        listView.getSourceItems().add(new TeamViewModel(null, teamName.getText(), null, null, null, null));
     }
 
-    public void saveComp(ActionEvent event) {
+    public void saveComp(ActionEvent event) throws RemoteException {
+        ArrayList<TeamViewModel> teams = new ArrayList<>();
+        teams.addAll(listView.getTargetItems());
 
+        ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
+        for (TeamViewModel team: teams) {
+            participantTeams.add(new ParticipantDTO(null, team.getId(), null, null, null));
+        }
+
+        //TODO: Input Feld für Name des Tuniers einbauen. Beim speichern geben wir den Namen des Tuniers an 2. Attribut bei TournamentDTO.
+        LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
+        TournamentDTO tournament = new TournamentDTO(null, "", selectedLeague.getId(), null, null, null, participantTeams, null);
+
+        this.tournamentController = DataProvider.getTournamentControllerInstance();
+        //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
+        TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
     }
 
+    //Methode kann gelöscht werden --> die beiden letzten Methoden übernehmen nun die Funktionalität dieser Methode. CellFactory Funktionalität muss
+    //jedoch noch umgelagert werden.
     private void addParticipantsToList() {
-        participants = FXCollections.observableArrayList(addTestData());
+        TeamViewModel selectedTeam = (TeamViewModel) leagueCombo.getSelectionModel().getSelectedItem();
+
+
+        //participants = FXCollections.observableArrayList(addTestData());
         listView.getSourceItems().add(participants);
+
+        listView.setCellFactory(lv -> new ListCell<TeamViewModel>() {
+            @Override
+            public void updateItem(TeamViewModel item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 
     private void addSports() {
@@ -154,35 +200,38 @@ public class NewCompetition extends HBox implements Initializable {
 
 
     //FIXME: only for testing
-    private List<ParticipantViewModel> addTestData() {
-
-        List<ParticipantViewModel> list = new ArrayList<>();
-        list.add(new ParticipantViewModel("22", "FC-Dornbirn", "FC", null));
+    private List<TeamViewModel> addTestData() {
+        List<TeamViewModel> list = new ArrayList<>();
+        list.add(new TeamViewModel(null, "Fc Dornbinr", null, null, null, null));
         return list;
     }
 
-    private void addTeamsFromLeagueToAvailableList(ActionEvent event) throws RemoteException {
-        //TODO: Den Eintrag (Liga) holen, der ausgewählt wurde --> ID wird benötigt.
+    private void addTeamsByLeagueToAvailableList() throws RemoteException {
+        //"5c04554448a886e2bbad15c2" --> Test LeagueID bei welcher ein Team hinterlegt ist.
+        LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
 
-        this.teamControllerInstance = DataProvider.getTeamControllerInstance();
         ArrayList<TeamDTO> teams = new ArrayList<>();
-        //teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(), "1"); Methode im Backend fehlt noch, es sollt eine Liste an Teams zurückgeliefert werden, welche die LeagueID haben.
+        teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(),selectedLeague.getId()).getContents();
 
-        teamViewModels = new ArrayList<>();
-        for (TeamDTO team : teams) {
-            teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
-        }
-
-        listView.setCellFactory(lv -> new ListCell<TeamViewModel>() {
-            @Override
-            public void updateItem(TeamViewModel item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(item.getName());
-                }
+        teamViewModels.clear();
+        if (teams != null) {
+            for (TeamDTO team : teams) {
+                teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
             }
-        });
+        }
+    }
+
+    private void addTeamsBySportToAvailableList() throws RemoteException {
+        SportViewModel selectedSport = (SportViewModel) sportsCombo.getSelectionModel().getSelectedItem();
+
+        ArrayList<TeamDTO> teams = new ArrayList<>();
+        teams = this.teamControllerInstance.getBySport(DataProvider.getSession(), selectedSport.getId()).getContents();
+
+        teamViewModels.clear();
+        if (teams != null) {
+            for (TeamDTO team : teams) {
+                teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), team.getMembers(), team.getTrainers(), team.getLeague().getId(), team.getType()));
+            }
+        }
     }
 }
