@@ -1,5 +1,6 @@
 package at.fhv.team2.mainpage.elements;
 
+import at.fhv.team2.DataProvider;
 import at.fhv.team2.roles.Permission;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.util.ResourceBundle;
 
 /**
@@ -36,7 +38,8 @@ public class Top extends HBox implements Initializable {
     }
 
 
-    public void logoutUser(ActionEvent event) throws IOException {
+    public void logoutUser(ActionEvent event) throws IOException, NotBoundException {
+        DataProvider.logout();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
         Parent root = fxmlLoader.load();

@@ -44,6 +44,11 @@
                         <Font size="10.0" />
                     </font>
                 </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsAdmin" prefHeight="70.0" prefWidth="418.0" text="Loggin as Admin" underline="true">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
             </children>
          <BorderPane.margin>
             <Insets bottom="300.0" left="600.0" right="600.0" />
