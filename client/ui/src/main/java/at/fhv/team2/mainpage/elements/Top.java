@@ -37,7 +37,6 @@ public class Top extends HBox implements Initializable {
         }
     }
 
-
     public void logoutUser(ActionEvent event) throws IOException, NotBoundException {
         DataProvider.logout();
 

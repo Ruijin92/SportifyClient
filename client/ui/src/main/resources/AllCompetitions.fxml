@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root fx:id="hBox" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="hBox" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox HBox.hgrow="ALWAYS">
             <children>
@@ -19,17 +19,22 @@
                                 <Insets left="5.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="changeButton" mnemonicParsing="false" onAction="#changeCompetition" text="Wettkampf ändern">
-                            <HBox.margin>
-                                <Insets left="5.0" />
-                            </HBox.margin>
-                        </Button>
                         <Button fx:id="newButton" mnemonicParsing="false" onAction="#createCompetition" text="Wettkampf erstellen">
                             <HBox.margin>
                                 <Insets left="5.0" />
                             </HBox.margin>
                         </Button>
+                        <Button fx:id="changeButton" mnemonicParsing="false" onAction="#changeCompetition" text="Wettkampf ändern">
+                            <HBox.margin>
+                                <Insets left="5.0" />
+                            </HBox.margin>
+                        </Button>
                   <Button fx:id="resultButton" mnemonicParsing="false" onAction="#enterResult" text="Ergebnis eintragen">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="squadButton" mnemonicParsing="false" onAction="#setSquad" text="Wettkampfkader festlegen">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>

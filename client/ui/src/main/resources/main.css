@@ -1,11 +1,11 @@
 .root {
-    -fx-font-family: Helvetica, Arial, sans-serif;
+    -fx-font-family: sans-serif;
     -fx-background-color: #f2f1ef;
 }
 .button {
     -fx-background-radius: 0;
     -fx-background-color: rgb(108, 122, 137);
-    -fx-font-family: Helvetica, Arial, sans-serif;
+    -fx-font-family: sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: #f9f9f9;
 }
@@ -43,11 +43,11 @@
 
 
 .header-section {
-    -fx-background-color: #34495e
+    -fx-background-color: #34495e;
 }
 
 .bottom-section {
-    -fx-background-color: rgba(108, 122, 137, 1);
+    -fx-background-color: #34495e;
 }
 
 .side-section {
