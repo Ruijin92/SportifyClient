@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.login.Login">
+<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" prefHeight="750.0" prefWidth="1200.0" styleClass="login-section" stylesheets="@main.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.login.Login">
     <center>
-        <VBox alignment="CENTER" minHeight="200.0" minWidth="300.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #dedede;" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" minHeight="200.0" minWidth="300.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #bdc3c7; -fx-border-width: 2 2 2 2;" BorderPane.alignment="CENTER">
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="418.0" text="SIGN IN">
                     <font>
@@ -56,9 +56,9 @@
         </VBox>
     </center>
     <top>
-        <VBox alignment="BOTTOM_CENTER" minHeight="250.0" minWidth="100.0" style="-fx-background-color: #ededed;" BorderPane.alignment="CENTER">
+        <VBox alignment="BOTTOM_CENTER" minHeight="250.0" minWidth="100.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="400.0" text="Sportify" textAlignment="CENTER">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="187.0" prefWidth="493.0" text="Sportify" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font size="55.0" />
                     </font>

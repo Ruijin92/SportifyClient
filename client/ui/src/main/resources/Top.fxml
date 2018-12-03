@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="hBox" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="hBox" styleClass="header-section" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label prefHeight="62.0" text="SPORTVERWALTUNG" HBox.hgrow="ALWAYS">
+      <Label fx:id="siteName" prefHeight="62.0" text="SPORTVERWALTUNG" textFill="WHITE" HBox.hgrow="ALWAYS">
          <font>
             <Font size="24.0" />
          </font>
@@ -24,14 +24,14 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="username" text="&lt;UserName&gt;" textFill="#e48c8c">
+                  <Label fx:id="username" text="&lt;UserName&gt;" textFill="WHITE">
                      <VBox.margin>
                         <Insets bottom="2.0" />
                      </VBox.margin>
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font></Label>
-                  <Button mnemonicParsing="false" onAction="#logoutUser" text="Logout"></Button>
+                  <Button mnemonicParsing="false" onAction="#logoutUser" text="Logout" />
                </children>
             </VBox>
          </children>

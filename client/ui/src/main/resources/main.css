@@ -1,0 +1,62 @@
+.root {
+    -fx-font-family: Helvetica, Arial, sans-serif;
+    -fx-background-color: #f2f1ef;
+}
+.button {
+    -fx-background-radius: 0;
+    -fx-background-color: rgb(108, 122, 137);
+    -fx-font-family: Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:hover {
+    -fx-background-color: rgb(88, 102, 117);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:pressed, .button:default:hover:pressed {
+    -fx-background-color: rgb(88, 102, 117);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:focused {
+    -fx-border-radius: 0, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: rgb(108, 122, 137);
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: rgb(108, 122, 137);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:default:hover {
+    -fx-background-color: rgb(88, 102, 117);
+}
+
+
+
+
+.header-section {
+    -fx-background-color: #34495e
+}
+
+.bottom-section {
+    -fx-background-color: rgba(108, 122, 137, 1);
+}
+
+.side-section {
+    -fx-background-color: rgb(108, 122, 137);
+}
+
+.login-section {
+    -fx-background-color: #34495e;
+}
+.text-field {
+    -fx-background-radius: 0;
+}

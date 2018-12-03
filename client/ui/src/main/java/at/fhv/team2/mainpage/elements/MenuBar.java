@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import org.controlsfx.glyphfont.FontAwesome;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,8 +21,8 @@ public class MenuBar extends VBox implements Initializable {
     @FXML
     public VBox vBox;
 
-    private final int WIDTH = 120;
-    private final int HEIGHT = 45;
+    private final int WIDTH = 135;
+    private final int HEIGHT = 50;
     private PageProvider pageProvider;
 
     private Button dashboard;
@@ -52,6 +53,7 @@ public class MenuBar extends VBox implements Initializable {
         dashboard = new Button("Dashboard");
         dashboard.setMinWidth(WIDTH);
         dashboard.setMinHeight(HEIGHT);
+
 
         dashboard.setOnMouseClicked(event -> {
             pageProvider.switchDashboard();
