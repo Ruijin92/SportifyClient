@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 public class Top extends HBox implements Initializable {
 
     public Label username;
+    public Label siteName;
 
     public Top() {
 
@@ -51,5 +52,9 @@ public class Top extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         username.setText(Permission.getPermission().getUsername());
+    }
+
+    public void setSiteName(String name){
+        siteName.setText(name);
     }
 }

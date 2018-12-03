@@ -34,6 +34,8 @@ public class AllCompetition extends HBox implements Initializable {
     public Button changeButton;
     public Button newButton;
     public Button resultButton;
+    public Button squadButton;
+
     public Button searchButton;
 
     public ListView listCompetitions;
@@ -64,6 +66,8 @@ public class AllCompetition extends HBox implements Initializable {
         newButton.setVisible(Permission.getPermission().createCompetitionPermission());
         resultButton.setVisible(Permission.getPermission().createCompetitionPermission());
         changeButton.setVisible(Permission.getPermission().createCompetitionPermission());
+        squadButton.setVisible(Permission.getPermission().createTeamPermission());
+
 
         changeButton.setDisable(true);
 
@@ -109,6 +113,10 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void enterResult(ActionEvent event) {
+
+    }
+
+    public void setSquad(ActionEvent event) {
 
     }
 

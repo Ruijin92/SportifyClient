@@ -11,9 +11,9 @@
     <children>
         <VBox HBox.hgrow="ALWAYS">
             <children>
-                <HBox maxHeight="25.0" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" maxHeight="25.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <TextField promptText="Wettkampf suchen" />
+                        <TextField prefHeight="26.0" promptText="Wettkampf suchen" />
                         <Button fx:id="searchButton" mnemonicParsing="false" text="Suchen">
                             <HBox.margin>
                                 <Insets left="5.0" />

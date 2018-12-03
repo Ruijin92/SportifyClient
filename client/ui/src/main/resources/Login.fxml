@@ -13,7 +13,7 @@
     <center>
         <VBox alignment="CENTER" minHeight="200.0" minWidth="300.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #bdc3c7; -fx-border-width: 2 2 2 2;" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="418.0" text="SIGN IN">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="418.0" text="Anmelden">
                     <font>
                         <Font name="System Bold" size="21.0" />
                     </font>
@@ -21,7 +21,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
                 </Label>
-                <TextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Username" VBox.vgrow="NEVER">
+                <TextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Benutzername" VBox.vgrow="NEVER">
                     <VBox.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                     </VBox.margin>
@@ -29,22 +29,22 @@
                         <Insets />
                     </opaqueInsets>
                 </TextField>
-                <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Password" VBox.vgrow="NEVER">
+                <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Passwort" VBox.vgrow="NEVER">
                     <VBox.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" />
                     </VBox.margin>
                 </PasswordField>
-                <Button id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginfunction" prefHeight="50.0" prefWidth="330.0" text="Login">
+                <Button id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginfunction" prefHeight="50.0" prefWidth="330.0" text="Einloggen">
                     <VBox.margin>
                         <Insets left="20.0" right="20.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsGuest" prefHeight="70.0" prefWidth="418.0" text="Loggin as Guest" underline="true">
+                <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsGuest" prefHeight="70.0" prefWidth="418.0" text="Gast anmelden" underline="true">
                     <font>
                         <Font size="10.0" />
                     </font>
                 </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsAdmin" prefHeight="70.0" prefWidth="418.0" text="Loggin as Admin" underline="true">
+            <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsAdmin" prefHeight="70.0" prefWidth="418.0" text="Admin anmelden" underline="true">
                <font>
                   <Font size="10.0" />
                </font>
@@ -58,7 +58,7 @@
     <top>
         <VBox alignment="BOTTOM_CENTER" minHeight="250.0" minWidth="100.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="187.0" prefWidth="493.0" text="Sportify" textAlignment="CENTER" textFill="WHITE">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="173.0" prefWidth="486.0" text="Sportify" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font size="55.0" />
                     </font>

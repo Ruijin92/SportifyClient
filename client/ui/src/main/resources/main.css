@@ -2,11 +2,12 @@
     -fx-font-family: sans-serif;
     -fx-background-color: #f2f1ef;
 }
+
 .button {
     -fx-background-radius: 0;
     -fx-background-color: rgb(108, 122, 137);
     -fx-font-family: sans-serif;
-    -fx-font-size: 11pt;
+    -fx-font-size: 10pt;
     -fx-text-fill: #f9f9f9;
 }
 
@@ -39,9 +40,6 @@
     -fx-background-color: rgb(88, 102, 117);
 }
 
-
-
-
 .header-section {
     -fx-background-color: #34495e;
 }
@@ -52,11 +50,17 @@
 
 .side-section {
     -fx-background-color: rgb(108, 122, 137);
+
+}
+.side-section .button{
+    -fx-font-size: 11pt;
 }
 
 .login-section {
     -fx-background-color: #34495e;
 }
+
 .text-field {
     -fx-background-radius: 0;
+    -fx-pref-height: 26px;
 }

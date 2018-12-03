@@ -22,8 +22,9 @@ public class MenuBar extends VBox implements Initializable {
     public VBox vBox;
 
     private final int WIDTH = 135;
-    private final int HEIGHT = 50;
+    private final int HEIGHT = 48;
     private PageProvider pageProvider;
+    private Top topBar;
 
     private Button dashboard;
     private Button member;
@@ -57,6 +58,7 @@ public class MenuBar extends VBox implements Initializable {
 
         dashboard.setOnMouseClicked(event -> {
             pageProvider.switchDashboard();
+            topBar.setSiteName("DASHBOARD");
         });
 
         member = new Button("Member");
@@ -65,6 +67,7 @@ public class MenuBar extends VBox implements Initializable {
 
         member.setOnMouseClicked(event -> {
             pageProvider.switchMember();
+            topBar.setSiteName("MITGLIEDER");
         });
 
         competition = new Button("Wettkampf");
@@ -74,6 +77,7 @@ public class MenuBar extends VBox implements Initializable {
 
         competition.setOnMouseClicked(event -> {
             pageProvider.switchCompetitions();
+            topBar.setSiteName("WETTKÄMPFE");
         });
 
         teams = new Button("Mannschaft");
@@ -82,6 +86,7 @@ public class MenuBar extends VBox implements Initializable {
 
         teams.setOnMouseClicked(event -> {
             pageProvider.switchTeams();
+            topBar.setSiteName("MANNSCHAFTEN");
         });
 
         vBox.getChildren().add(dashboard);
@@ -97,6 +102,9 @@ public class MenuBar extends VBox implements Initializable {
         }
     }
 
+    public void setTopBar(Top topbar) {
+        this.topBar = topbar;
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
