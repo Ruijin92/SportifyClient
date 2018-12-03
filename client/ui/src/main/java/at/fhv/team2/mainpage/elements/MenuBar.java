@@ -98,7 +98,7 @@ public class MenuBar extends VBox implements Initializable {
             vBox.getChildren().add(competition);
         }
         if(Permission.getPermission().viewTeamPermission()){
-            vBox.getChildren().add(teams);
+            //vBox.getChildren().add(teams);
         }
     }
 

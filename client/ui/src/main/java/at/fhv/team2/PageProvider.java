@@ -5,11 +5,11 @@ import at.fhv.team2.dashboard.Dashboard;
 import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.member.Member;
 import at.fhv.team2.teams.AllTeams;
-import at.fhv.team2.teams.TeamSquad;
-import at.fhv.team2.teams.ViewModels.TeamViewModel;
 import at.fhv.team2.wettkampf.AllCompetition;
 import at.fhv.team2.wettkampf.Encounter;
 import at.fhv.team2.wettkampf.NewCompetition;
+import at.fhv.team2.wettkampf.TeamSquad;
+import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -52,7 +52,7 @@ public class PageProvider {
         mainPage.mainPane.setCenter(new NewCompetition());
     }
 
-    public void switchTeamSquad(TeamViewModel team) {
+    public void switchTeamSquad(CompetitionViewModel team) {
         mainPage.mainPane.setCenter(new TeamSquad(team));
     }
 

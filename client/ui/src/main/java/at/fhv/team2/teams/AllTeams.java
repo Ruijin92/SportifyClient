@@ -5,7 +5,6 @@ import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.team2.PageProvider;
-import at.fhv.team2.teams.ViewModels.TeamViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -65,8 +64,6 @@ public class AllTeams extends HBox implements Initializable {
         //TODO: sind ja eigendlich Wettlkämpfer die er da sieht -> muss die richtige mannschaft dazu gesucht werden
         //TODO: oder es zeigt seine mannschaften an die als zusatz haben in welchen Wettkampf ka?
         //TODO: TeamViewModel ist das alte Model das neue ist Participant
-        TeamViewModel selectedItem =  (TeamViewModel)table.getSelectionModel().getSelectedItem();
-        PageProvider.getPageProvider().switchTeamSquad(selectedItem);
     }
 
 

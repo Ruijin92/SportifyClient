@@ -3,6 +3,7 @@ package at.fhv.team2.login;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.roles.Permission;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -24,6 +25,7 @@ import java.util.ResourceBundle;
 
 public class Login implements Initializable {
 
+    @FXML
     public TextField username;
     public TextField password;
     public BorderPane pane;
@@ -37,7 +39,7 @@ public class Login implements Initializable {
      * @throws IOException
      */
     public void logginAsGuest(MouseEvent event) throws IOException {
-        Permission.getPermission().loadGuest();
+        Permission.getPermission().loadAdmin();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
         Parent root = fxmlLoader.load();
