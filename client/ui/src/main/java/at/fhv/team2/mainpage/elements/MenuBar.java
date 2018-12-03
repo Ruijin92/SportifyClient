@@ -30,6 +30,7 @@ public class MenuBar extends VBox implements Initializable {
     private Button member;
     private Button competition;
     private Button teams;
+    private Button message;
 
     public MenuBar() {
 

@@ -4,6 +4,7 @@ import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.dashboard.Dashboard;
 import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.member.Member;
+import at.fhv.team2.message.MessageModel;
 import at.fhv.team2.teams.AllTeams;
 import at.fhv.team2.wettkampf.AllCompetition;
 import at.fhv.team2.wettkampf.Encounter;
@@ -59,5 +60,9 @@ public class PageProvider {
     public void switchEncounter(TournamentDTO tournamentDTO) {
         mainPage.mainPane.setCenter(new Encounter(tournamentDTO));
 
+    }
+
+    public void switchMessages(){
+        mainPage.mainPane.setCenter(new MessageModel());
     }
 }

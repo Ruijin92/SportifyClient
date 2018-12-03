@@ -7,34 +7,36 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="hBox" styleClass="header-section" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label fx:id="siteName" prefHeight="62.0" text="SPORTVERWALTUNG" textFill="WHITE" HBox.hgrow="ALWAYS">
+<fx:root fx:id="hBox" styleClass="header-section" stylesheets="@main.css" type="HBox"
+         xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <Label fx:id="siteName" prefHeight="62.0" text="SPORTVERWALTUNG" textFill="WHITE" HBox.hgrow="ALWAYS">
+      <font>
+         <Font size="24.0"/>
+      </font>
+      <HBox.margin>
+         <Insets/>
+      </HBox.margin>
+      <padding>
+         <Insets left="10.0"/>
+      </padding>
+   </Label>
+   <HBox alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+      <Button styleClass="messageButton" onAction="#switchMessage" fx:id="messageButton" alignment="CENTER" mnemonicParsing="false" scaleShape="false"
+              text="0 new Messages" textAlignment="CENTER">
          <font>
-            <Font size="24.0" />
+            <Font name="Agency FB" size="34.0"/>
          </font>
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
-         <padding>
-            <Insets left="10.0" />
-         </padding>
-      </Label>
-      <HBox alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-         <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="username" text="&lt;UserName&gt;" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets bottom="2.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font></Label>
-                  <Button mnemonicParsing="false" onAction="#logoutUser" text="Logout" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-   </children>
+      </Button>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+         <Label fx:id="username" text="&lt;UserName&gt;" textFill="WHITE">
+            <VBox.margin>
+               <Insets bottom="2.0"/>
+            </VBox.margin>
+            <font>
+               <Font name="System Bold" size="13.0"/>
+            </font>
+         </Label>
+         <Button mnemonicParsing="false" onAction="#logoutUser" text="Logout"/>
+      </VBox>
+   </HBox>
 </fx:root>

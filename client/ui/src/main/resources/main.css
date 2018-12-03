@@ -69,3 +69,14 @@
     -fx-pref-height: 26px;
     -fx-min-height: 26px;
 }
+
+.messageButton {
+    -fx-background-color: #1f3c52;
+    -fx-text-fill: rgba(165, 56, 60, 0.82);
+
+}
+
+.messageButton:hover {
+    -fx-background-color: #1f3c52;
+    -fx-text-fill: rgba(255, 93, 99, 0.82);
+}
