@@ -62,16 +62,16 @@ public class EncounterViewModel {
         this.time.set(time);
     }
 
-    public ParticipantViewModel getHomeTeam() {
-        return homeTeam;
+    public String getHomeTeam() {
+        return homeTeam.getTeamName();
     }
 
     public void setHomeTeam(ParticipantViewModel homeTeam) {
         this.homeTeam = homeTeam;
     }
 
-    public ParticipantViewModel getGuestTeam() {
-        return guestTeam;
+    public String getGuestTeam() {
+        return guestTeam.getTeamName();
     }
 
     public void setGuestTeam(ParticipantViewModel guestTeam) {
@@ -101,6 +101,10 @@ public class EncounterViewModel {
     public void setGuestPoints(int guestPoints) {
         this.guestPoints.set(guestPoints);
     }
+
+    public ParticipantViewModel getHomeTeamModel() { return homeTeam; }
+
+    public ParticipantViewModel getGuestTeamModel() { return guestTeam; }
 
     //endregion
 }
