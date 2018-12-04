@@ -2,6 +2,7 @@ package at.fhv.team2.wettkampf;
 
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
@@ -175,15 +176,17 @@ public class AllCompetition extends HBox implements Initializable {
             squadButton.setVisible(false);
             squadChangeButton.setDisable(true);
             squadChangeButton.setVisible(false);
-
             try {
                 tournamentsForList = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-
-            for (TournamentDTO tournament : tournamentsForList) {
-                tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
+            if (tournamentsForList == null) {
+                showAlert(tournamentsForList.get(0).getResponse().getInfoMessage());
+            } else {
+                for (TournamentDTO tournament : tournamentsForList) {
+                    tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
+                }
             }
         } else {
             try {
@@ -192,14 +195,24 @@ public class AllCompetition extends HBox implements Initializable {
                 e.printStackTrace();
             }
 
-            for (TournamentDTO tournament : tournamentsForList) {
-                ArrayList<ParticipantViewModel> participants = new ArrayList<>();
-                for (ParticipantDTO team : tournament.getTeams()) {
-                    participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), null, null));
+            if (tournamentsForList == null) {
+                showAlert(tournamentsForList.get(0).getResponse().getInfoMessage());
+            } else
+                for (TournamentDTO tournament : tournamentsForList) {
+                    ArrayList<ParticipantViewModel> participants = new ArrayList<>();
+                    for (ParticipantDTO team : tournament.getTeams()) {
+                        participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), null, null));
+                    }
+                    tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, participants));
                 }
-                tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, participants));
-            }
         }
         addCompetitionsToList(tournaments);
+    }
+
+    private void showAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Loading Tournaments error");
+        alert.setContentText(text);
+        alert.showAndWait();
     }
 }
