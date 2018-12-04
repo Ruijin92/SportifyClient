@@ -2,34 +2,21 @@ package at.fhv.team2.message;
 
 import at.fhv.sportsclub.controller.interfaces.IMessageController;
 import at.fhv.team2.DataProvider;
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.jmx.MXNodeAlgorithm;
-import com.sun.javafx.jmx.MXNodeAlgorithmContext;
-import com.sun.javafx.sg.prism.NGNode;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.TextMessage;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.Future;
 
 /**
  * Created by Alex on 26.11.2018.
@@ -66,7 +53,7 @@ public class MessageModel extends AnchorPane implements Initializable {
         Thread thread = new Thread(() ->
             messageViewModel.addToMessages(
                 messageControllerInstance.browseMessagesForUser(
-                    DataProvider.getSession(), DataProvider.getSession().getMyUserId() //TODO
+                    DataProvider.getSession(), "Alex"/*DataProvider.getSession().getMyUserId()*/ //TODO
             )
         ));
         thread.setDaemon(true);
