@@ -63,7 +63,7 @@
     <top>
         <VBox alignment="BOTTOM_CENTER" minHeight="250.0" minWidth="100.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="173.0" prefWidth="486.0" text="Sportify" textAlignment="CENTER" textFill="WHITE">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0" prefWidth="391.0" text="Sportify" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font size="55.0" />
                     </font>

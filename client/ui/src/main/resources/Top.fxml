@@ -3,40 +3,45 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="hBox" styleClass="header-section" stylesheets="@main.css" type="HBox"
-         xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <Label fx:id="siteName" prefHeight="62.0" text="SPORTVERWALTUNG" textFill="WHITE" HBox.hgrow="ALWAYS">
+<fx:root fx:id="hBox" styleClass="header-section" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <ImageView fitHeight="62.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@sportify-logo.png" />
+      </image>
+   </ImageView>
+   <Label fx:id="siteName" prefHeight="62.0" textFill="WHITE" HBox.hgrow="ALWAYS">
       <font>
-         <Font size="24.0"/>
+         <Font size="24.0" />
       </font>
       <HBox.margin>
-         <Insets/>
+         <Insets />
       </HBox.margin>
       <padding>
-         <Insets left="10.0"/>
+         <Insets left="10.0" />
       </padding>
    </Label>
    <HBox alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-      <Button styleClass="messageButton" onAction="#switchMessage" fx:id="messageButton" alignment="CENTER" mnemonicParsing="false" scaleShape="false"
-              text="0 new Messages" textAlignment="CENTER">
+      <Button fx:id="messageButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchMessage" scaleShape="false" styleClass="messageButton" text="0 Nachrichten" textAlignment="CENTER">
          <font>
-            <Font name="Agency FB" size="34.0"/>
+            <Font name="Agency FB" size="34.0" />
          </font>
       </Button>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-         <Label fx:id="username" text="&lt;UserName&gt;" textFill="WHITE">
+         <Label fx:id="username" text="User" textFill="WHITE">
             <VBox.margin>
-               <Insets bottom="2.0"/>
+               <Insets bottom="2.0" />
             </VBox.margin>
             <font>
-               <Font name="System Bold" size="13.0"/>
+               <Font name="System Bold" size="13.0" />
             </font>
          </Label>
-         <Button mnemonicParsing="false" onAction="#logoutUser" text="Logout"/>
+         <Button mnemonicParsing="false" onAction="#logoutUser" styleClass="logoutButton" text="Ausloggen" />
       </VBox>
    </HBox>
 </fx:root>
