@@ -69,4 +69,8 @@ public class PageProvider {
     public void switchChangeCompetitions(String tournamentId) {
         mainPage.mainPane.setCenter(new NewCompetition(tournamentId));
     }
+
+    public void switchEnterResult(String tournamentId) {
+        mainPage.mainPane.setCenter(new Encounter(tournamentId));
+    }
 }
