@@ -53,7 +53,7 @@ public class MessageModel extends AnchorPane implements Initializable {
         Thread thread = new Thread(() ->
             messageViewModel.addToMessages(
                 messageControllerInstance.browseMessagesForUser(
-                    DataProvider.getSession(), DataProvider.getSession().getMyUserId() //TODO
+                    DataProvider.getSession(), "Alex"/*DataProvider.getSession().getMyUserId()*/ //TODO
             )
         ));
         thread.setDaemon(true);

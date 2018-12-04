@@ -1,5 +1,6 @@
 package at.fhv.team2;
 
+import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,7 +38,7 @@ public class Start extends Application {
             while(isRunning) {
                 List<Message> messages = DataProvider.
                         getMessageControllerInstance().
-                        browseMessagesForUser(DataProvider.getSession(), "");
+                        browseMessagesForUser(DataProvider.getSession(), "Alex");
                 if(messages.size() > 0) {
                     DataProvider.setMessageStatus("New Messages");
                 } else {

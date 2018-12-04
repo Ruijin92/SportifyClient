@@ -21,6 +21,6 @@ public @Data class SessionDTO<T> implements Serializable {
     private ResponseMessageDTO responseMessage;
 
     public String getMyUserId() {
-        return null;
+        return "User";
     }
 }
