@@ -1,7 +1,9 @@
 package at.fhv.team2.wettkampf;
 
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
+import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
 import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
@@ -14,8 +16,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -65,15 +69,18 @@ public class AllCompetition extends HBox implements Initializable {
         changeButton.setDisable(true);
         squadButton.setDisable(true);
 
-        //FIXME: this.tournamentControllerInstance = DataProvider.getTournamentControllerInstance();
-        ArrayList<TournamentDTO> tournamentEntries = addTestData(); //FIXME: muss auf null wieder geändert werden
-        /*
+        this.tournamentControllerInstance = DataProvider.getTournamentControllerInstance();
+        ArrayList<TournamentDTO> tournamentEntries = new ArrayList<>();
+        ArrayList<TournamentDTO> tourne = new ArrayList<>();
         try {
-            tournamentEntries = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
+            ResponseMessageDTO responseMessageDTO = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getResponse();
+            tournamentEntries = tournamentControllerInstance.getTournamentByTrainerId(DataProvider.getSession(), DataProvider.getSession().getMyUserId()).getContents();
+            tourne = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        */
+
+        //ArrayList<TournamentDTO> tournamentEntries = addTestData(); //FIXME: muss auf null wieder geändert werden
 
         for (TournamentDTO tournament : tournamentEntries) {
             tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
@@ -94,8 +101,8 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void changeCompetition(ActionEvent event) {
-        String tournamentId = "adksda";
-        PageProvider.getPageProvider().switchChangeCompetitions(tournamentId);
+        CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
+        PageProvider.getPageProvider().switchChangeCompetitions(selectedCompetition.getId());
     }
 
     public void createCompetition(ActionEvent event) {
@@ -103,11 +110,11 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void enterResult(ActionEvent event) {
-
+        CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
+        PageProvider.getPageProvider().switchEnterResult(selectedCompetition.getId());
     }
 
     public void setSquad(ActionEvent event) {
-
         Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
         PageProvider.getPageProvider().switchTeamSquad((CompetitionViewModel) selectedItem);
     }
