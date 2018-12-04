@@ -57,6 +57,10 @@ public class PageProvider {
         mainPage.mainPane.setCenter(new TeamSquad(team));
     }
 
+    public void switchToChangeTeamSquad(CompetitionViewModel team, boolean changeTeamSquad) {
+        mainPage.mainPane.setCenter(new TeamSquad(team, changeTeamSquad));
+    }
+
     public void switchEncounter(TournamentDTO tournamentDTO) {
         mainPage.mainPane.setCenter(new Encounter(tournamentDTO));
 
