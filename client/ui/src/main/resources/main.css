@@ -92,3 +92,11 @@
 .logoutButton{
     -fx-background-color: #1f3c52;
 }
+
+.login-dev {
+    -fx-font-style: bold;
+}
+
+.login-dev:hover {
+    -fx-text-fill: #747474;
+}
