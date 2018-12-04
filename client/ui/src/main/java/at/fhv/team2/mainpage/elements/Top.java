@@ -78,7 +78,7 @@ public class Top extends HBox implements Initializable {
         siteName.setText("DASHBOARD");
       
         username.setText(Permission.getPermission().getUsername());
-        messageButton.textProperty().bind(DataProvider.getMessageStatus());
+        //messageButton.textProperty().bind(DataProvider.getMessageStatus());
     }
 
     public void setSiteName(String name){

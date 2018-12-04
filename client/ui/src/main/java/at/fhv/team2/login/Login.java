@@ -134,7 +134,7 @@ public class Login implements Initializable {
     }
 
     private boolean connect() {
-        Registry registry = null;
+    /*    Registry registry = null;
         try {
             registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
         } catch (RemoteException e) {
@@ -146,6 +146,7 @@ public class Login implements Initializable {
             return false;
         }
         DataProvider.setRegistry(registry);
-        return true;
+        return true;*/
+    return true;
     }
 }

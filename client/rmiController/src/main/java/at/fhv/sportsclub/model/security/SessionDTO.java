@@ -24,8 +24,8 @@ public @Data class SessionDTO<T> implements Serializable {
 
     private ResponseMessageDTO responseMessage;
   
-    public String getMyUserId() {
+    /*public String getMyUserId() {
         return "User";
-    }
+    }*/
 
 }
