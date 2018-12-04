@@ -80,3 +80,15 @@
     -fx-background-color: #1f3c52;
     -fx-text-fill: rgba(255, 93, 99, 0.82);
 }
+
+.header-dash{
+    -fx-background-color: rgb(108, 122, 137);
+}
+
+.body-dash{
+    -fx-background-color: rgba(44, 47, 65, 0.19);
+}
+
+.logoutButton{
+    -fx-background-color: #1f3c52;
+}

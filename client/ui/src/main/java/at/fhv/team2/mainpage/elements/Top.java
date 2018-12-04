@@ -55,8 +55,12 @@ public class Top extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        username.setText(Permission.getPermission().getUsername());
-
+        if(Permission.getPermission().getUsername() == null){
+            username.setText("Admin");
+        } else {
+            username.setText(Permission.getPermission().getUsername());
+        }
+        siteName.setText("DASHBOARD");
     }
 
     public void setSiteName(String name){
