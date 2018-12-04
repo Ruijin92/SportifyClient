@@ -70,12 +70,12 @@ public class AllCompetition extends HBox implements Initializable {
         squadButton.setDisable(true);
 
         this.tournamentControllerInstance = DataProvider.getTournamentControllerInstance();
+        //ArrayList<TournamentDTO> tournamentEntries = new ArrayList<>();
         ArrayList<TournamentDTO> tournamentEntries = new ArrayList<>();
-        ArrayList<TournamentDTO> tourne = new ArrayList<>();
         try {
             ResponseMessageDTO responseMessageDTO = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getResponse();
-            tournamentEntries = tournamentControllerInstance.getTournamentByTrainerId(DataProvider.getSession(), DataProvider.getSession().getMyUserId()).getContents();
-            tourne = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
+            //tournamentEntries = tournamentControllerInstance.getTournamentByTrainerId(DataProvider.getSession(), DataProvider.getSession().getMyUserId()).getContents();
+            tournamentEntries = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
