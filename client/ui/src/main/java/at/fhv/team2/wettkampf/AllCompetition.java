@@ -127,14 +127,24 @@ public class AllCompetition extends HBox implements Initializable {
         Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
         CompetitionViewModel selectedCompetition = (CompetitionViewModel) selectedItem;
 
+        TournamentDTO tournament = this.tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), selectedCompetition.getId());
         if (selectedItem != null) {
             if (!showAllCompetitions) {
                 if (selectedCompetition.getParticipants().get(0).getParticipants() != null) {
                     squadButton.setDisable(false);
                 }
+                if (tournament.getEncounters() == null) {
+                    resultButton.setDisable(true);
+                } else {
+                    resultButton.setDisable(false);
+                }
                 changeButton.setDisable(false);
                 squadButton.setDisable(true);
                 squadChangeButton.setDisable(false);
+            } else {
+                if (selectedCompetition.getEncounters() == null) {
+                    resultButton.setDisable(true);
+                }
             }
         } else {
             changeButton.setVisible(true);
