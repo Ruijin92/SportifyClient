@@ -1,5 +1,7 @@
 package at.fhv.team2.mainpage.elements;
 
+import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
@@ -14,9 +16,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 /**
@@ -29,7 +33,10 @@ public class Top extends HBox implements Initializable {
     public Button messageButton;
     private int messageCounter;
 
+    private IPersonController personController;
+
     public Top() {
+        this.personController = DataProvider.getPersonControllerInstance();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Top.fxml"));
         fxmlLoader.setController(this);
@@ -55,10 +62,16 @@ public class Top extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(Permission.getPermission().getUsername() == null){
+        PersonDTO person = null;
+        try {
+            person = this.personController.getEntryDetails(DataProvider.getSession(), DataProvider.getSession().getMyUserId());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        if(person.getFirstName() == null){
             username.setText("Admin");
         } else {
-            username.setText(Permission.getPermission().getUsername());
+            username.setText(person.getFirstName());
         }
         siteName.setText("DASHBOARD");
     }
