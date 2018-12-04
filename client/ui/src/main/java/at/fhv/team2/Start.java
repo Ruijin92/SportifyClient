@@ -29,9 +29,12 @@ public class Start extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        Registry registry = LocateRegistry.getRegistry("127.0.0.1", 1099);
-        DataProvider.setRegistry(registry);
+        if (DataProvider.getSession() != null) {
+            startThread();
+        }
+    }
 
+    private void startThread() {
         Thread synchronMessages = new Thread(() -> {
             boolean isRunning = true;
             while(isRunning) {
