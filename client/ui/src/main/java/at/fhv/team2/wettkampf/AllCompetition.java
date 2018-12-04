@@ -123,14 +123,17 @@ public class AllCompetition extends HBox implements Initializable {
         listCompetitions.setItems(competitionTableList);
     }
 
-    public void clickItem(MouseEvent event) {
-
+    public void clickItem(MouseEvent event) throws RemoteException {
         Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
+        CompetitionViewModel selectedCompetition = (CompetitionViewModel) selectedItem;
 
         if (selectedItem != null) {
             if (!showAllCompetitions) {
+                if (selectedCompetition.getParticipants().get(0).getParticipants() != null) {
+                    squadButton.setDisable(false);
+                }
                 changeButton.setDisable(false);
-                squadButton.setDisable(false);
+                squadButton.setDisable(true);
                 squadChangeButton.setDisable(false);
             }
         } else {
