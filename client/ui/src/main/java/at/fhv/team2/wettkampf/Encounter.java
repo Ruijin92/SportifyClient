@@ -3,7 +3,6 @@ package at.fhv.team2.wettkampf;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.common.ModificationType;
-import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
@@ -16,21 +15,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
 public class Encounter extends HBox implements Initializable {
@@ -165,7 +161,7 @@ public class Encounter extends HBox implements Initializable {
     private void addTeamsToComboBox() {
         ArrayList<ParticipantViewModel> teams = new ArrayList<>();
         for (ParticipantDTO team : tournamentDTO.getTeams()) {
-            teams.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), null));
+            teams.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), null, team.getModificationType()));
         }
         ObservableList<ParticipantViewModel> allItems = FXCollections.observableArrayList(teams);
         homeCombo.setItems(allItems);
@@ -211,9 +207,9 @@ public class Encounter extends HBox implements Initializable {
 
         for (EncounterDTO encounter : this.tournamentDTO.getEncounters()) {
             ParticipantDTO homeTeam = participants.get(encounter.getHomeTeam());
-            ParticipantViewModel homeTeamModel = new ParticipantViewModel(homeTeam.getId(), homeTeam.getTeam(), homeTeam.getTeamName(), null);
+            ParticipantViewModel homeTeamModel = new ParticipantViewModel(homeTeam.getId(), homeTeam.getTeam(), homeTeam.getTeamName(), null, homeTeam.getModificationType());
             ParticipantDTO guestTeam = participants.get(encounter.getGuestTeam());
-            ParticipantViewModel guestTeamModel = new ParticipantViewModel(guestTeam.getId(), guestTeam.getTeam(), guestTeam.getTeamName(), null);
+            ParticipantViewModel guestTeamModel = new ParticipantViewModel(guestTeam.getId(), guestTeam.getTeam(), guestTeam.getTeamName(), null, guestTeam.getModificationType());
             this.encounters.add(new EncounterViewModel(encounter.getId(), encounter.getDate().toString(), null, homeTeamModel, guestTeamModel, encounter.getHomePoints(), encounter.getGuestPoints(), ModificationType.NONE));
         }
 
