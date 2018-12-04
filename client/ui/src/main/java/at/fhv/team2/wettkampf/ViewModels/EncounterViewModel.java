@@ -1,5 +1,6 @@
 package at.fhv.team2.wettkampf.ViewModels;
 
+import at.fhv.sportsclub.model.common.ModificationType;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -14,8 +15,10 @@ public class EncounterViewModel {
     private SimpleIntegerProperty homePoints;
     private SimpleIntegerProperty guestPoints;
 
+    private ModificationType modificationType;
+
     public EncounterViewModel(String id, String date, String time, ParticipantViewModel homeTeam, ParticipantViewModel guestTeam,
-                              int homePoints, int guestPoints) {
+                              int homePoints, int guestPoints, ModificationType modificationType) {
         this.id = new SimpleStringProperty(id);
         this.date = new SimpleStringProperty(date);
         this.time = new SimpleStringProperty(time);
@@ -23,6 +26,7 @@ public class EncounterViewModel {
         this.guestTeam = guestTeam;
         this.homePoints = new SimpleIntegerProperty(homePoints);
         this.guestPoints = new SimpleIntegerProperty(guestPoints);
+        this.modificationType = modificationType;
     }
 
     //region Getter and Setter
@@ -105,6 +109,14 @@ public class EncounterViewModel {
     public ParticipantViewModel getHomeTeamModel() { return homeTeam; }
 
     public ParticipantViewModel getGuestTeamModel() { return guestTeam; }
+
+    public ModificationType getModificationType() {
+        return modificationType;
+    }
+
+    public void setModificationType(ModificationType modificationType) {
+        this.modificationType = modificationType;
+    }
 
     //endregion
 }
