@@ -1,5 +1,6 @@
 package at.fhv.team2.wettkampf;
 
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
 import at.fhv.team2.wettkampf.ViewModels.ParticipantViewModel;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
-import static at.fhv.sportsclub.model.common.ModificationType.NONE;
 
 public class TeamSquad extends VBox implements Initializable {
 
@@ -59,6 +58,6 @@ public class TeamSquad extends VBox implements Initializable {
         PersonViewModel p1 = new PersonViewModel("11","Ray","Örnek","Dornbirn",null,null,null,null);
         PersonViewModel p2 = new PersonViewModel("12","Luki","Dödel","Dornbirn",null,null,null,null);
         ArrayList<PersonViewModel> pvm = new ArrayList<>();
-        comp.getParticipants().add(new ParticipantViewModel("1","FC-Dornbirn","FC-Dornbirn", pvm, NONE));
+        comp.getParticipants().add(new ParticipantViewModel("1","FC-Dornbirn","FC-Dornbirn", pvm, ModificationType.NONE));
     }
 }
