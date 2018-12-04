@@ -22,6 +22,9 @@ import org.controlsfx.validation.Validator;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
@@ -41,6 +44,9 @@ public class Login implements Initializable {
      * @throws IOException
      */
     public void logginAsGuest(MouseEvent event) throws IOException {
+        if (!connect()) {
+            return;
+        }
         Permission.getPermission().loadAdmin();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
@@ -59,6 +65,9 @@ public class Login implements Initializable {
      * @throws IOException
      */
     public void logginAsAdmin(MouseEvent event) throws IOException, NotBoundException {
+        if (!connect()) {
+            return;
+        }
         DataProvider dataProvider = DataProvider.get();
 
         String pw = "snoop@do.gg";
@@ -85,7 +94,9 @@ public class Login implements Initializable {
     }
 
     public void loginfunction(ActionEvent actionEvent) throws IOException, NotBoundException {
-
+        if (!connect()) {
+            return;
+        }
         if (!validationSupport.isInvalid()) {
             DataProvider dataProvider = DataProvider.get();
 
@@ -116,8 +127,25 @@ public class Login implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ipBox.setText("127.0.0.1");
         validationSupport.registerValidator(ipBox, Validator.createRegexValidator("IP - Adress is not valid","^$|^\\d+(.\\d{1,4}){3}$", Severity.ERROR));
         validationSupport.registerValidator(username, Validator.createEmptyValidator("Username - Has to be filled"));
         validationSupport.registerValidator(password, Validator.createEmptyValidator("Password - Has to be filled"));
+    }
+
+    private boolean connect() {
+        Registry registry = null;
+        try {
+            registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Connection failed!");
+            alert.setContentText("Could not locate RMI registry by given IP: " + ipBox.getText());
+            alert.showAndWait();
+            return false;
+        }
+        DataProvider.setRegistry(registry);
+        return true;
     }
 }
