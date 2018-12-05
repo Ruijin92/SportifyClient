@@ -1,6 +1,7 @@
 package at.fhv.team2.message;
 
 import at.fhv.sportsclub.controller.interfaces.IMessageController;
+import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.team2.DataProvider;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -16,6 +17,8 @@ import javax.jms.JMSException;
 import javax.jms.TextMessage;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -43,19 +46,23 @@ public class MessageModel extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         messageViewModel = new MessageViewModel();
         messageViewModel.setMessages(FXCollections.observableArrayList());
         messageTable.setItems(messageViewModel.getMessages());
 
         // Lade alle Nachrichten
         IMessageController messageControllerInstance = DataProvider.getMessageControllerInstance();
-        Thread thread = new Thread(() ->
-            messageViewModel.addToMessages(
-                messageControllerInstance.browseMessagesForUser(
-                    DataProvider.getSession(), "Alex"/*DataProvider.getSession().getMyUserId()*/ //TODO
-            )
-        ));
+        Thread thread = new Thread(() -> {
+            try {
+                messageViewModel.addToMessages(
+                        messageControllerInstance.
+                                browseMessagesForUser(
+                                        DataProvider.getSession(),
+                                        DataProvider.getSession().getMyUserId()));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
         thread.setDaemon(true);
         thread.start();
 
@@ -78,7 +85,7 @@ public class MessageModel extends AnchorPane implements Initializable {
                 agreeButton.setVisible(true);
                 rejectButton.setVisible(true);
             }
-        } catch (JMSException e) {
+        } catch (JMSException | RemoteException e) {
             e.printStackTrace();
         }
     }
@@ -100,7 +107,7 @@ public class MessageModel extends AnchorPane implements Initializable {
             DataProvider.
                     getMessageControllerInstance().
                     removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getJMSCorrelationID(), replyMessageText);
-        } catch (JMSException e) {
+        } catch (JMSException | RemoteException e) {
             e.printStackTrace();
         }
     }

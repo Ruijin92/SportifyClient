@@ -10,14 +10,14 @@
 <fx:root fx:id="anchor" prefHeight="400.0" prefWidth="600.0" stylesheets="@main.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <TableView fx:id="messageTable" layoutX="14.0" layoutY="14.0" onMouseClicked="#openMessage" prefHeight="379.0" prefWidth="187.0">
       <columns>
-          <TableColumn prefWidth="95.0" text="Sender">
+          <TableColumn prefWidth="95.0" text="Absender">
               <cellValueFactory>
-                  <PropertyValueFactory property="sender" />
+                  <PropertyValueFactory property="replyTo" />
               </cellValueFactory>
           </TableColumn>
-          <TableColumn prefWidth="90.0" text="Betreff">
+          <TableColumn prefWidth="90.0" text="Preview">
               <cellValueFactory>
-                  <PropertyValueFactory property="betreff" />
+                  <PropertyValueFactory property="body" />
               </cellValueFactory>
           </TableColumn>
       </columns>
