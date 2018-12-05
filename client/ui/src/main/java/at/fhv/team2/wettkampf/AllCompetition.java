@@ -1,6 +1,7 @@
 package at.fhv.team2.wettkampf;
 
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
@@ -183,14 +184,17 @@ public class AllCompetition extends HBox implements Initializable {
             squadButton.setVisible(false);
             squadChangeButton.setDisable(true);
             squadChangeButton.setVisible(false);
+
+            ListWrapper<TournamentDTO> allEntries = null;
             try {
-                tournamentsForList = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
+                allEntries = tournamentControllerInstance.getAllEntries(DataProvider.getSession());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            if (tournamentsForList == null) {
-                showAlert(tournamentsForList.get(0).getResponse().getInfoMessage());
+            if (allEntries == null) {
+                showAlert("");
             } else {
+                tournamentsForList = allEntries.getContents();
                 for (TournamentDTO tournament : tournamentsForList) {
                     tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
                 }
