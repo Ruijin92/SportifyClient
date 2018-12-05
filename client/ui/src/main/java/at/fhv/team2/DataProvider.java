@@ -4,6 +4,7 @@ import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
 
@@ -25,7 +26,7 @@ public class DataProvider {
     private static Registry registry;
     private static SessionDTO session;
 
-    @Getter private static StringProperty messageStatus;
+    @Getter private static StringProperty messageStatus = new SimpleStringProperty();
 
   private DataProvider(){
         if (controllerFactory == null) {

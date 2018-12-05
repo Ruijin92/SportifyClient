@@ -82,9 +82,10 @@ public class Top extends HBox implements Initializable {
         siteName.setText("DASHBOARD");
       
         username.setText(Permission.getPermission().getUsername());
-        //messageButton.textProperty().bind(DataProvider.getMessageStatus());
+        DataProvider.setMessageStatus("Nachrichten");
+        messageButton.textProperty().bind(DataProvider.getMessageStatus());
 
-        Thread thread = new Thread(() -> {
+        new Thread(() -> {
             while(DataProvider.getSession() != null) {
                 List<MessageDTO> messageDTOS = null;
                 try {
@@ -96,9 +97,9 @@ public class Top extends HBox implements Initializable {
                     e.printStackTrace();
                 }
                 if(messageDTOS != null && messageDTOS.size() > 0) {
-                    messageButton.setText("New Messages");
+                    DataProvider.setMessageStatus("Neue Nachrichten");
                 } else {
-                    messageButton.setText("Messages");
+                    DataProvider.setMessageStatus("Nachrichten");
                 }
 
                 try {
@@ -107,9 +108,7 @@ public class Top extends HBox implements Initializable {
                     e.printStackTrace();
                 }
             }
-        });
-        thread.setDaemon(true);
-        thread.start();
+        }).start();
     }
 
     public void setSiteName(String name){

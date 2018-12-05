@@ -103,6 +103,9 @@ public class MessageModel extends AnchorPane implements Initializable {
     }
 
     private void replyToMessage(String replyMessageText) {
+        agreeButton.setVisible(false);
+        rejectButton.setVisible(false);
+
         MessageDTO selectedMessage = (MessageDTO) messageTable.getSelectionModel().getSelectedItem();
         if(selectedMessage == null) { return; }
 
