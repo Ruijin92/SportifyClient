@@ -22,6 +22,6 @@ public interface IMessageController extends Remote {
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username) throws RemoteException;
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo) throws RemoteException;
     List<MessageDTO> browseMessagesForUser(SessionDTO sessionDTO, String username) throws RemoteException;
-    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage) throws RemoteException;
+    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, Boolean confirm) throws RemoteException;
 
 }

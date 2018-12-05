@@ -107,14 +107,14 @@ public class MessageModel extends AnchorPane implements Initializable {
 
     //TODO Message
     public void confirmMessage(ActionEvent event) {
-        replyToMessage("Ich stimme zu");
+        replyToMessage(true);
     }
 
     public void cancelMessage(ActionEvent event) {
-        replyToMessage("Ich lehne ab");
+        replyToMessage(false);
     }
 
-    private void replyToMessage(String replyMessageText) {
+    private void replyToMessage(boolean confirm) {
         agreeButton.setVisible(false);
         rejectButton.setVisible(false);
 
@@ -124,7 +124,7 @@ public class MessageModel extends AnchorPane implements Initializable {
         try {
             DataProvider.
                     getMessageControllerInstance().
-                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationsId(), replyMessageText);
+                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationsId(), confirm);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
