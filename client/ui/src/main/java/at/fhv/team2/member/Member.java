@@ -32,10 +32,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -223,7 +220,7 @@ public class Member extends HBox implements Initializable {
      *
      * @param event
      */
-    public void changeData(ActionEvent event) {
+    public void changeData(ActionEvent event) throws RemoteException {
         PersonViewModel pr = (PersonViewModel) table.getSelectionModel().getSelectedItem();
 
         pr.setFirstName(firstName.getText());
@@ -244,7 +241,7 @@ public class Member extends HBox implements Initializable {
      *
      * @param event
      */
-    public void saveMember(ActionEvent event) {
+    public void saveMember(ActionEvent event) throws RemoteException {
         //TODO: Fix NullPointerException (Sports)
         PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText(), null);
 
@@ -278,23 +275,66 @@ public class Member extends HBox implements Initializable {
         addMemberToTable(filteredPersons);
     }
 
-    private void saveData(String id) {
+    private void saveData(String id) throws RemoteException {
         IPersonController personController = DataProvider.get().getPersonControllerInstance();
         List<SportDTO> sports = new LinkedList<>();
+        ListWrapper<SportDTO> allSportEntries = this.departmentController.getAllSportEntries(DataProvider.getSession());
+        ArrayList<SportDTO> contents = allSportEntries.getContents();
+        HashMap<String, String> allSports = new HashMap<>();
+        for (SportDTO content : contents) {
+            allSports.put(content.getName(), content.getId());
+        }
 
-        AddressDTO addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
-        ContactDTO contactDTO = new ContactDTO(null, phoneNumber.getText(), "placeholder@example.com");
-        SportDTO sportDTO = new SportDTO();
-        PersonDTO personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), LocalDate.now(), addressDTO, contactDTO, sports, null, null);
-
+        AddressDTO addressDTO;
+        ContactDTO contactDTO;
+        PersonDTO personDTO;
         ResponseMessageDTO response = null;
+        if (id == null) {
+            addressDTO = new AddressDTO(null, street.getText(), zipCode.getText(), city.getText());
+            contactDTO = new ContactDTO(null, phoneNumber.getText(), emailAddress.getText());
+
+            List<String> selectedSports = getSelectedSports();
+            for (String selectedSport : selectedSports) {
+                sports.add(new SportDTO(allSports.get(selectedSport), selectedSport, null, null));
+            }
+            personDTO = new PersonDTO(id, firstName.getText(), lastName.getText(), dateOfBirth.getValue(), addressDTO, contactDTO, sports, null, null);
+        } else {
+            PersonDTO entryDetails = null;
+            try {
+                entryDetails = personController.getEntryDetails(DataProvider.getSession(), id);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            addressDTO = new AddressDTO(entryDetails.getAddress().getId(), street.getText(), zipCode.getText(), city.getText());
+            contactDTO = new ContactDTO(entryDetails.getContact().getId(), phoneNumber.getText(), emailAddress.getText());
+
+            List<String> selectedSports = getSelectedSports();
+            for (SportDTO sport : entryDetails.getSports()) {
+                for (String selectedSport : selectedSports) {
+                    if (selectedSport.equals(sport.getName())) {
+                        sports.add(sport);
+                    }
+                }
+            }
+            for (String selectedSport : selectedSports) {
+                boolean newSportDTO = true;
+                for (SportDTO sport : entryDetails.getSports()) {
+                    if (selectedSport.equals(sport.getName())) {
+                        newSportDTO = false;
+                    }
+                }
+                if (newSportDTO == true) {
+                    sports.add(new SportDTO(allSports.get(selectedSport), selectedSport, null, null));
+                }
+            }
+            personDTO = new PersonDTO(entryDetails.getId(), firstName.getText(), lastName.getText(), dateOfBirth.getValue(), addressDTO, contactDTO, sports, null, null);
+        }
 
         try {
-            response = personController.saveOrUpdateEntry(null, personDTO);
+            response = personController.saveOrUpdateEntry(DataProvider.getSession(), personDTO);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        System.out.println(response.toString());
     }
 
     /**
