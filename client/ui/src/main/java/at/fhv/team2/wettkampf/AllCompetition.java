@@ -2,6 +2,7 @@ package at.fhv.team2.wettkampf;
 
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
@@ -128,7 +129,12 @@ public class AllCompetition extends HBox implements Initializable {
         Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
         CompetitionViewModel selectedCompetition = (CompetitionViewModel) selectedItem;
 
-        TournamentDTO tournament = this.tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), selectedCompetition.getId());
+        TournamentDTO tournament = null;
+        if (selectedCompetition.getId() == null) {
+            tournament = new TournamentDTO();
+        } else {
+            tournament = this.tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), selectedCompetition.getId());
+        }
         if (selectedItem != null) {
             if (!showAllCompetitions) {
                 if (selectedCompetition.getParticipants().get(0).getParticipants() != null) {
@@ -169,6 +175,7 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     private void showCompetitions() {
+        List<RoleDTO> a = DataProvider.getSession().getRoles();
         this.tournaments.clear();
         ArrayList<TournamentDTO> tournamentsForList = new ArrayList<>();
         if (this.showAllCompetitions) {
