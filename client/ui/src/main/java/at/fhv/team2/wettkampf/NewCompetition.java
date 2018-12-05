@@ -3,6 +3,7 @@ package at.fhv.team2.wettkampf;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
@@ -358,8 +359,11 @@ public class NewCompetition extends HBox implements Initializable {
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
         } else {
-            ArrayList<TeamDTO> teams = this.teamControllerInstance.getByLeague(DataProvider.getSession(), this.loadedLeagueId).getContents();
-
+            ListWrapper<TeamDTO> wrapper = this.teamControllerInstance.getByLeague(DataProvider.getSession(), loadedTournament.getLeague());
+            ArrayList<TeamDTO> teams = new ArrayList<>();
+            if (wrapper.getContents() != null) {
+                 teams = wrapper.getContents();
+            }
             this.teamViewModels.clear();
 
             for (TeamDTO team : teams) {
@@ -379,6 +383,7 @@ public class NewCompetition extends HBox implements Initializable {
     }
 
     private void addTeamsBySportToAvailableList() throws RemoteException {
+        if (changed) {
             SportViewModel selectedSport = (SportViewModel) sportsCombo.getSelectionModel().getSelectedItem();
 
             ArrayList<TeamDTO> teams;
@@ -391,6 +396,9 @@ public class NewCompetition extends HBox implements Initializable {
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
+        } else {
+            SportDTO sportByLeagueId = this.departmentController.getSportByLeagueId(DataProvider.getSession(), this.loadedLeagueId);
+        }
         this.changed = true;
 
     }
