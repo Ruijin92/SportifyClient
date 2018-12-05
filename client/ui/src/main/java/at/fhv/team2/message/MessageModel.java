@@ -1,7 +1,9 @@
 package at.fhv.team2.message;
 
 import at.fhv.sportsclub.controller.interfaces.IMessageController;
+import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.model.message.MessageDTO;
+import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.team2.DataProvider;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -13,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -29,6 +32,7 @@ public class MessageModel extends AnchorPane implements Initializable {
     public TextArea messageBody;
     public Button agreeButton, rejectButton;
     private MessageViewModel messageViewModel;
+    private IPersonController personControllerInstance;
 
     public MessageModel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Message.fxml"));
@@ -57,8 +61,16 @@ public class MessageModel extends AnchorPane implements Initializable {
                                 browseMessagesForUser(
                                         DataProvider.getSession(),
                                         DataProvider.getSession().getMyUserId());
+
+                personControllerInstance = DataProvider.getPersonControllerInstance();
+
                 for(MessageDTO actual: messageDTOS) {
-                    if(actual.getReplyTo() == null) {
+                    if(actual.getReplyTo() != null) {
+                        PersonDTO personDetails = personControllerInstance.getEntryDetails(
+                                DataProvider.getSession(),
+                                actual.getReplyTo());
+                        actual.setReplyTo(personDetails.getFirstName() + " " + personDetails.getLastName());
+                    } else {
                         actual.setReplyTo("System");
                     }
                 }
