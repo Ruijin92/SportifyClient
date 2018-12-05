@@ -13,8 +13,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -54,38 +52,43 @@ public class MessageModel extends AnchorPane implements Initializable {
         IMessageController messageControllerInstance = DataProvider.getMessageControllerInstance();
         Thread thread = new Thread(() -> {
             try {
-                messageViewModel.addToMessages(
+                List<MessageDTO> messageDTOS =
                         messageControllerInstance.
                                 browseMessagesForUser(
                                         DataProvider.getSession(),
-                                        DataProvider.getSession().getMyUserId()));
+                                        DataProvider.getSession().getMyUserId());
+                for(MessageDTO actual: messageDTOS) {
+                    if(actual.getReplyTo() == null) {
+                        actual.setReplyTo("System");
+                    }
+                }
+                messageViewModel.addToMessages(messageDTOS);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         });
         thread.setDaemon(true);
         thread.start();
-
     }
 
     public void openMessage(MouseEvent event) {
-        TextMessage selectedMessage = (TextMessage) messageTable.getSelectionModel().getSelectedItem();
+        MessageDTO selectedMessage = (MessageDTO) messageTable.getSelectionModel().getSelectedItem();
         if(selectedMessage == null) { return; }
 
         try {
-            messageBody.setText(selectedMessage.getText());
+            messageBody.setText(selectedMessage.getBody());
 
-            if(selectedMessage.getStringProperty("replyTo") == null) {
+            if(selectedMessage.getReplyTo() == null || selectedMessage.getReplyTo().equals("System")) {
                 DataProvider.
                         getMessageControllerInstance().
-                        removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getJMSCorrelationID(), null);
+                        removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationsId(), null);
                 agreeButton.setVisible(false);
                 rejectButton.setVisible(false);
             } else {
                 agreeButton.setVisible(true);
                 rejectButton.setVisible(true);
             }
-        } catch (JMSException | RemoteException e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
@@ -100,14 +103,14 @@ public class MessageModel extends AnchorPane implements Initializable {
     }
 
     private void replyToMessage(String replyMessageText) {
-        TextMessage selectedMessage = (TextMessage) messageTable.getSelectionModel().getSelectedItem();
+        MessageDTO selectedMessage = (MessageDTO) messageTable.getSelectionModel().getSelectedItem();
         if(selectedMessage == null) { return; }
 
         try {
             DataProvider.
                     getMessageControllerInstance().
-                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getJMSCorrelationID(), replyMessageText);
-        } catch (JMSException | RemoteException e) {
+                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationsId(), replyMessageText);
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }

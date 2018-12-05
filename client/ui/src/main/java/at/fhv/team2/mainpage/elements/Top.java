@@ -1,6 +1,7 @@
 package at.fhv.team2.mainpage.elements;
 
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -64,6 +66,8 @@ public class Top extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println(DataProvider.getSession().getMyUserId());
+
         PersonDTO person = null;
         try {
             person = this.personController.getEntryDetails(DataProvider.getSession(), DataProvider.getSession().getMyUserId());
@@ -79,6 +83,33 @@ public class Top extends HBox implements Initializable {
       
         username.setText(Permission.getPermission().getUsername());
         //messageButton.textProperty().bind(DataProvider.getMessageStatus());
+
+        Thread thread = new Thread(() -> {
+            while(DataProvider.getSession() != null) {
+                List<MessageDTO> messageDTOS = null;
+                try {
+                    messageDTOS =
+                            DataProvider.
+                                    getMessageControllerInstance().
+                                    browseMessagesForUser(null, DataProvider.getSession().getMyUserId());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                if(messageDTOS != null && messageDTOS.size() > 0) {
+                    messageButton.setText("New Messages");
+                } else {
+                    messageButton.setText("Messages");
+                }
+
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void setSiteName(String name){

@@ -29,33 +29,6 @@ public class Start extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        if (DataProvider.getSession() != null) {
-            startThread();
-        }
     }
-
-    private void startThread() {
-        Thread synchronMessages = new Thread(() -> {
-            boolean isRunning = true;
-            while(isRunning) {
-                List<Message> messages = DataProvider.
-                        getMessageControllerInstance().
-                        browseMessagesForUser(DataProvider.getSession(), "Alex");
-                if(messages.size() > 0) {
-                    DataProvider.setMessageStatus("New Messages");
-                } else {
-                    DataProvider.setMessageStatus("Messages");
-                }
-                try {
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        synchronMessages.setDaemon(true);
-        synchronMessages.start();
-    }
-
 
 }
