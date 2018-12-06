@@ -10,6 +10,7 @@ import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.team2.DataProvider;
+import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -113,12 +114,6 @@ public class Member extends HBox implements Initializable {
         }
 
         persons = new ArrayList<>();
-
-        /*for (PersonDTO personEntry : personEntries) {
-            persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
-                    personEntry.getAddress().getCity(), personEntry.getAddress().getStreet(),
-                    personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber()));
-        }*/
 
         for (PersonDTO personEntry : personEntries) {
             List<String> sports = new LinkedList<>();
@@ -269,7 +264,7 @@ public class Member extends HBox implements Initializable {
                                 || p.matcher(t.getLastName()).find()
                                 || p.matcher(t.getZipCode()).find()
                                 || p.matcher(t.getCity()).find()
-                                || t.getSports().stream().allMatch(s -> p.matcher(s).find()))
+                                || t.getSports().stream().anyMatch(s -> p.matcher(s).find()))
                         .collect(toList());
 
         addMemberToTable(filteredPersons);
@@ -335,6 +330,7 @@ public class Member extends HBox implements Initializable {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        PageProvider.getPageProvider().switchMember();
     }
 
     /**
