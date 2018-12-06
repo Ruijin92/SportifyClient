@@ -191,8 +191,8 @@ public class AllCompetition extends HBox implements Initializable {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            if (allEntries == null) {
-                showAlert("");
+            if (allEntries.getContents() == null) {
+                showAlert(allEntries.getResponse().getInfoMessage());
             } else {
                 tournamentsForList = allEntries.getContents();
                 for (TournamentDTO tournament : tournamentsForList) {
@@ -200,15 +200,17 @@ public class AllCompetition extends HBox implements Initializable {
                 }
             }
         } else {
+            ListWrapper<TournamentDTO> allTournaments = new ListWrapper<>();
             try {
-                tournamentsForList = tournamentControllerInstance.getTournamentByTrainerId(DataProvider.getSession(), DataProvider.getSession().getMyUserId()).getContents();
+                allTournaments = tournamentControllerInstance.getTournamentByTrainerId(DataProvider.getSession(), DataProvider.getSession().getMyUserId());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
 
-            if (tournamentsForList == null) {
-                showAlert(tournamentsForList.get(0).getResponse().getInfoMessage());
+            if (allTournaments.getContents() == null) {
+                showAlert(allTournaments.getResponse().getInfoMessage());
             } else
+                tournamentsForList = allTournaments.getContents();
                 for (TournamentDTO tournament : tournamentsForList) {
                     ArrayList<ParticipantViewModel> participants = new ArrayList<>();
                     for (ParticipantDTO team : tournament.getTeams()) {
