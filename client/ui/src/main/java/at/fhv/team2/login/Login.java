@@ -134,18 +134,30 @@ public class Login implements Initializable {
     }
 
     private boolean connect() {
+        boolean connected = false;
         Registry registry = null;
-        try {
-            registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if (ipBox.getText().equals("127.0.0.1")) {
+            try {
+                registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Connection failed!");
+                alert.setContentText("Could not locate RMI registry by given IP: " + ipBox.getText());
+                alert.showAndWait();
+                connected = false;
+            }
+            DataProvider.setRegistry(registry);
+            connected = true;
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection failed!");
-            alert.setContentText("Could not locate RMI registry by given IP: " + ipBox.getText());
+            alert.setContentText("Currently this application can only be used locally. Please use the default IP address:  127.0.0.1");
             alert.showAndWait();
-            return false;
+            ipBox.setText("127.0.0.1");
+            username.setText("");
+            password.setText("");
         }
-        DataProvider.setRegistry(registry);
-        return true;
+        return connected;
     }
 }
