@@ -169,21 +169,11 @@ public class AllCompetition extends HBox implements Initializable {
                     squadButton.setDisable(true);
                     squadChangeButton.setDisable(false);
                 }
-                if (tournament.getEncounters() == null) {
-                    resultButton.setDisable(true);
-                } else {
-                    resultButton.setDisable(false);
-                }
+                resultButton.setDisable(checkForResultButton(tournament));
                 changeButton.setDisable(false);
-                //squadButton.setDisable(true);
-                //squadChangeButton.setDisable(false);
             } else {
                 if (role.equals("Admin")) {
-                    if (tournament.getEncounters() == null) {
-                        resultButton.setDisable(true);
-                    } else {
-                        resultButton.setDisable(false);
-                    }
+                    resultButton.setDisable(checkForResultButton(tournament));
                     changeButton.setDisable(false);
                 } else if (selectedCompetition.getEncounters() == null) {
                     resultButton.setDisable(true);
@@ -194,6 +184,19 @@ public class AllCompetition extends HBox implements Initializable {
             squadButton.setDisable(true);
             squadChangeButton.setDisable(true);
         }
+    }
+
+    private boolean checkForResultButton(TournamentDTO tournament) {
+        boolean showResultButton = true;
+        if (tournament.getEncounters() != null && tournament.getTeams() != null) {
+            if (tournament.getEncounters().size() > 0 && tournament.getTeams().size() > 0) {
+                showResultButton = true;
+            }
+            showResultButton = false;
+        } else {
+            showResultButton = false;
+        }
+        return showResultButton;
     }
 
     public void searchTournament() {
