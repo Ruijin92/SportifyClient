@@ -14,8 +14,8 @@
             <children>
                 <HBox alignment="CENTER_LEFT" maxHeight="25.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <TextField prefHeight="26.0" promptText="Wettkampf suchen"/>
-                        <Button fx:id="searchButton" mnemonicParsing="false" text="Suchen">
+                        <TextField prefHeight="26.0" promptText="Wettkampf suchen" fx:id="searchTournament"/>
+                        <Button fx:id="searchButton" mnemonicParsing="false" text="Suchen" onAction="#searchTournament">
                             <HBox.margin>
                                 <Insets left="5.0"/>
                             </HBox.margin>
