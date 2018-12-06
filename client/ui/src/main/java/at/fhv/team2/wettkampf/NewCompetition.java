@@ -22,10 +22,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.controlsfx.control.ListSelectionView;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -109,6 +113,7 @@ public class NewCompetition extends HBox implements Initializable {
                         setGraphic(null);
                     } else {
                         setText(item.getName());
+                        backgroundProperty();
                         setGraphic(null);
                     }
                 }
@@ -219,12 +224,12 @@ public class NewCompetition extends HBox implements Initializable {
                 for (TeamViewModel teamViewModel : list) {
                     TeamDTO newExternTeam = null;
                     if (teamViewModel.getId() == null) {
-                         newExternTeam = new TeamDTO(null, teamViewModel.getName(), null, null, null, "Extern", null);
-                         ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
-                         if (responseOfNewTeamSaved.getContextId() != null) {
-                             TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
-                             participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
-                         }
+                        newExternTeam = new TeamDTO(null, teamViewModel.getName(), null, null, null, "Extern", null);
+                        ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
+                        if (responseOfNewTeamSaved.getContextId() != null) {
+                            TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
+                            participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
+                        }
                     } else {
 
 
@@ -254,7 +259,7 @@ public class NewCompetition extends HBox implements Initializable {
                     sportId = this.sportId;
                 }
                 TournamentDTO tournamentDTO = new TournamentDTO(loadedTournament.getId(), tournamentName.getText(), leagueId, sportId, loadedTournament.getLeagueName(), loadedTournament.getSportsName(),
-                                                                datePick.getValue(), loadedTournament.getEncounters(), participantTeams, null, ModificationType.MODIFIED);
+                        datePick.getValue(), loadedTournament.getEncounters(), participantTeams, null, ModificationType.MODIFIED);
 
                 //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
                 //TODO: Name des Tuniers und Datum wird nicht überschrieben.
@@ -285,7 +290,7 @@ public class NewCompetition extends HBox implements Initializable {
                     leagueId = selectedLeague.getId();
                 }
 
-                TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), leagueId, this.sportId,null, null, datePick.getValue(), null, participantTeams, null, ModificationType.MODIFIED);
+                TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), leagueId, this.sportId, null, null, datePick.getValue(), null, participantTeams, null, ModificationType.MODIFIED);
 
                 //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
                 TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
@@ -391,7 +396,7 @@ public class NewCompetition extends HBox implements Initializable {
             }
             ArrayList<TeamDTO> teams = new ArrayList<>();
             if (wrapper.getContents() != null) {
-                 teams = wrapper.getContents();
+                teams = wrapper.getContents();
             }
             this.teamViewModels.clear();
 

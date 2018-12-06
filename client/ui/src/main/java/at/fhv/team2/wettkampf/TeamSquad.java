@@ -145,7 +145,6 @@ public class TeamSquad extends VBox implements Initializable {
             listView.setTargetItems(FXCollections.observableArrayList(loadedMembersOfTeamSquad));
         } else {
             ArrayList<PersonViewModel> persons = new ArrayList<>();
-            //TODO: Alle mitglieder auf die linke Liste binden --> Zuerst mapping auf PersonViewModel
             for (PersonDTO member : team.getMembers()) {
                 persons.add(new PersonViewModel(member.getId(), member.getFirstName(), member.getLastName(), null, null, null, null, null));
             }
@@ -160,7 +159,6 @@ public class TeamSquad extends VBox implements Initializable {
         ArrayList<PersonDTO> participants = new ArrayList<>();
         ArrayList<SquadMemberDTO> parti = new ArrayList<>();
         for (PersonViewModel personViewModel : list) {
-            //participants.add(new PersonDTO(personViewModel.getId(), null, null, null, null, null, null, null, null));
             PersonDTO person = new PersonDTO(personViewModel.getId(), null, null, null, null, null, null, null, null);
             parti.add(new SquadMemberDTO(person, false, null));
         }
