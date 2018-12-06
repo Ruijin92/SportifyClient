@@ -16,6 +16,7 @@ import at.fhv.team2.PageProvider;
 import at.fhv.team2.teams.ViewModels.TeamViewModel;
 import at.fhv.team2.wettkampf.ViewModels.LeagueViewModel;
 import at.fhv.team2.wettkampf.ViewModels.SportViewModel;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -259,6 +260,21 @@ public class NewCompetition extends HBox implements Initializable {
                             participantId = teamViewModel.getLoadedParticipantId();
                         }
                         participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null, null, ModificationType.MODIFIED));
+                    }
+                }
+
+                for (ParticipantDTO team : loadedTournament.getTeams()) {
+                    boolean deleted = true;
+                    List<TeamViewModel> targetTeams = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
+                    for (TeamViewModel targetTeam : targetTeams) {
+                         if (team.getTeamName().equals(targetTeam.getName())) {
+                             deleted = false;
+                         }
+                    }
+                    if (deleted) {
+                        ParticipantDTO deletedParticipant = team;
+                        deletedParticipant.setModificationType(ModificationType.REMOVED);
+                        participantTeams.add(deletedParticipant);
                     }
                 }
 
@@ -507,7 +523,7 @@ public class NewCompetition extends HBox implements Initializable {
 
             if (leaguesBySportId != null) {
                 Random rand = new Random();
-                int value = rand.nextInt(leaguesBySportId.getContents().size());
+                int value = rand.nextInt(leaguesBySportId.getContents().size() - 1);
                 leagueForExternTeam = leaguesBySportId.getContents().get(value);
             }
         }
