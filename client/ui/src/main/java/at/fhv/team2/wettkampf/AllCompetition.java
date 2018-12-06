@@ -8,12 +8,15 @@ import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
+import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.roles.Permission;
 import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
 import at.fhv.team2.wettkampf.ViewModels.ParticipantViewModel;
+import at.fhv.team2.wettkampf.ViewModels.SquadViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -143,18 +146,20 @@ public class AllCompetition extends HBox implements Initializable {
         CompetitionViewModel selectedCompetition = (CompetitionViewModel) selectedItem;
 
         TournamentDTO tournament = null;
-        if (selectedCompetition.getId() == null) {
+        if (selectedCompetition == null) {
             tournament = new TournamentDTO();
         } else {
             tournament = this.tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), selectedCompetition.getId());
         }
-        ITeamController a = DataProvider.getTeamControllerInstance();
-        TeamDTO a1 = a.getEntryDetails(DataProvider.getSession(), tournament.getTeams().get(0).getTeam());
 
         if (selectedItem != null) {
             if (!showAllCompetitions) {
-                if (selectedCompetition.getParticipants().get(0).getParticipants() != null) {
+                if (selectedCompetition.getParticipants().get(0).getParticipants() == null || selectedCompetition.getParticipants().get(0).getParticipants().size() < 1) {
                     squadButton.setDisable(false);
+                    squadChangeButton.setDisable(true);
+                } else {
+                    squadButton.setDisable(true);
+                    squadChangeButton.setDisable(false);
                 }
                 if (tournament.getEncounters() == null) {
                     resultButton.setDisable(true);
@@ -162,8 +167,8 @@ public class AllCompetition extends HBox implements Initializable {
                     resultButton.setDisable(false);
                 }
                 changeButton.setDisable(false);
-                squadButton.setDisable(true);
-                squadChangeButton.setDisable(false);
+                //squadButton.setDisable(true);
+                //squadChangeButton.setDisable(false);
             } else {
                if (role.equals("Admin")) {
                    if (tournament.getEncounters() == null) {
@@ -204,10 +209,6 @@ public class AllCompetition extends HBox implements Initializable {
 
     public void showOnlyPersonalCompetitions() {
         this.showAllCompetitions = false;
-        squadButton.setDisable(false);
-        squadButton.setVisible(true);
-        squadChangeButton.setDisable(false);
-        squadChangeButton.setVisible(true);
         showCompetitions();
     }
 
@@ -256,7 +257,13 @@ public class AllCompetition extends HBox implements Initializable {
                 for (TournamentDTO tournament : tournamentsForList) {
                     ArrayList<ParticipantViewModel> participants = new ArrayList<>();
                     for (ParticipantDTO team : tournament.getTeams()) {
-                        participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), null, null));
+                        ArrayList<SquadViewModel> teamSquad = new ArrayList<>();
+                        if (team.getParticipants() != null) {
+                            for (SquadMemberDTO participant : team.getParticipants()) {
+                                teamSquad.add(new SquadViewModel(new PersonViewModel(participant.getMember().getId(), participant.getMember().getFirstName(), participant.getMember().getLastName(), null, null, null, null, null), participant.isParticipating()));
+                            }
+                        }
+                        participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), teamSquad, null));
                     }
                     tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, participants));
                 }
