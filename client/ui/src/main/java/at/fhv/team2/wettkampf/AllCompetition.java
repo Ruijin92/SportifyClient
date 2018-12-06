@@ -113,8 +113,10 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void changeCompetition(ActionEvent event) {
-        CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
-        PageProvider.getPageProvider().switchChangeCompetitions(selectedCompetition.getId());
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchChangeCompetitions(selectedCompetition.getId());
+        }
     }
 
     public void createCompetition(ActionEvent event) {
@@ -122,18 +124,24 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     public void enterResult(ActionEvent event) {
-        CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
-        PageProvider.getPageProvider().switchEnterResult(selectedCompetition.getId());
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchEnterResult(selectedCompetition.getId());
+        }
     }
 
     public void setSquad(ActionEvent event) {
-        Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
-        PageProvider.getPageProvider().switchTeamSquad((CompetitionViewModel) selectedItem);
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchTeamSquad((CompetitionViewModel) selectedItem);
+        }
     }
 
     public void changeSquad(ActionEvent event) {
-        Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
-        PageProvider.getPageProvider().switchToChangeTeamSquad((CompetitionViewModel) selectedItem, true);
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchToChangeTeamSquad((CompetitionViewModel) selectedItem, true);
+        }
     }
 
     private void addCompetitionsToList(List<CompetitionViewModel> competitions) {
@@ -170,14 +178,14 @@ public class AllCompetition extends HBox implements Initializable {
                 //squadButton.setDisable(true);
                 //squadChangeButton.setDisable(false);
             } else {
-               if (role.equals("Admin")) {
-                   if (tournament.getEncounters() == null) {
-                       resultButton.setDisable(true);
-                   } else {
-                       resultButton.setDisable(false);
-                   }
-                   changeButton.setDisable(false);
-               } else if (selectedCompetition.getEncounters() == null) {
+                if (role.equals("Admin")) {
+                    if (tournament.getEncounters() == null) {
+                        resultButton.setDisable(true);
+                    } else {
+                        resultButton.setDisable(false);
+                    }
+                    changeButton.setDisable(false);
+                } else if (selectedCompetition.getEncounters() == null) {
                     resultButton.setDisable(true);
                 }
             }
@@ -254,19 +262,19 @@ public class AllCompetition extends HBox implements Initializable {
                 showAlert(allTournaments.getResponse().getInfoMessage());
             } else
                 tournamentsForList = allTournaments.getContents();
-                for (TournamentDTO tournament : tournamentsForList) {
-                    ArrayList<ParticipantViewModel> participants = new ArrayList<>();
-                    for (ParticipantDTO team : tournament.getTeams()) {
-                        ArrayList<SquadViewModel> teamSquad = new ArrayList<>();
-                        if (team.getParticipants() != null) {
-                            for (SquadMemberDTO participant : team.getParticipants()) {
-                                teamSquad.add(new SquadViewModel(new PersonViewModel(participant.getMember().getId(), participant.getMember().getFirstName(), participant.getMember().getLastName(), null, null, null, null, null), participant.isParticipating()));
-                            }
+            for (TournamentDTO tournament : tournamentsForList) {
+                ArrayList<ParticipantViewModel> participants = new ArrayList<>();
+                for (ParticipantDTO team : tournament.getTeams()) {
+                    ArrayList<SquadViewModel> teamSquad = new ArrayList<>();
+                    if (team.getParticipants() != null) {
+                        for (SquadMemberDTO participant : team.getParticipants()) {
+                            teamSquad.add(new SquadViewModel(new PersonViewModel(participant.getMember().getId(), participant.getMember().getFirstName(), participant.getMember().getLastName(), null, null, null, null, null), participant.isParticipating()));
                         }
-                        participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), teamSquad, null));
                     }
-                    tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, participants));
+                    participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), teamSquad, null));
                 }
+                tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, participants));
+            }
         }
         addCompetitionsToList(tournaments);
     }
