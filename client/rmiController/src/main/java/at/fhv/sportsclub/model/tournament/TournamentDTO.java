@@ -18,8 +18,10 @@ public @Data class TournamentDTO implements Serializable {
     private static final long serialVersionUID = 111111111267757691L; // changed 20.11.2018
 
     private String id;
+
     private String name;
-    private String league;          // object id
+    private String league;
+    private String sport;
     private String leagueName;
     private String sportsName;
     private LocalDate date;
