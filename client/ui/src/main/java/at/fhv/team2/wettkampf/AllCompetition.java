@@ -1,10 +1,12 @@
 package at.fhv.team2.wettkampf;
 
+import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
+import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
@@ -28,6 +30,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -42,6 +48,7 @@ public class AllCompetition extends HBox implements Initializable {
     public Button squadChangeButton;
     public Button personalCompetition;
     public Button allCompetitions;
+    public TextField searchTournament;
 
     public Button searchButton;
 
@@ -49,6 +56,7 @@ public class AllCompetition extends HBox implements Initializable {
     private List<CompetitionViewModel> tournaments = new ArrayList<>();
     private ObservableList<CompetitionViewModel> competitionTableList;
     private boolean showAllCompetitions;
+    private String role;
 
     private CompetitionViewModel tournamentDetails;
     private ITournamentController tournamentControllerInstance;
@@ -68,6 +76,10 @@ public class AllCompetition extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        List<RoleDTO> roles = DataProvider.getSession().getRoles();
+        if (roles.get(0).getName().equals("Admin")) {
+            role = "Admin";
+        }
 
         newButton.setVisible(Permission.getPermission().createCompetitionPermission());
         resultButton.setVisible(Permission.getPermission().createCompetitionPermission());
@@ -136,6 +148,9 @@ public class AllCompetition extends HBox implements Initializable {
         } else {
             tournament = this.tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), selectedCompetition.getId());
         }
+        ITeamController a = DataProvider.getTeamControllerInstance();
+        TeamDTO a1 = a.getEntryDetails(DataProvider.getSession(), tournament.getTeams().get(0).getTeam());
+
         if (selectedItem != null) {
             if (!showAllCompetitions) {
                 if (selectedCompetition.getParticipants().get(0).getParticipants() != null) {
@@ -150,7 +165,14 @@ public class AllCompetition extends HBox implements Initializable {
                 squadButton.setDisable(true);
                 squadChangeButton.setDisable(false);
             } else {
-                if (selectedCompetition.getEncounters() == null) {
+               if (role.equals("Admin")) {
+                   if (tournament.getEncounters() == null) {
+                       resultButton.setDisable(true);
+                   } else {
+                       resultButton.setDisable(false);
+                   }
+                   changeButton.setDisable(false);
+               } else if (selectedCompetition.getEncounters() == null) {
                     resultButton.setDisable(true);
                 }
             }
@@ -159,6 +181,25 @@ public class AllCompetition extends HBox implements Initializable {
             squadButton.setDisable(true);
             squadChangeButton.setDisable(true);
         }
+    }
+
+    public void searchTournament() {
+        String searchQuery = searchTournament.getText();
+
+        Pattern p = Pattern.compile("^" + searchQuery, Pattern.CASE_INSENSITIVE);
+        Matcher m;
+
+        if (searchQuery.isEmpty()) {
+            addCompetitionsToList(tournaments);
+            return;
+        }
+
+        List<CompetitionViewModel> filteredCompetitions =
+                tournaments.stream()
+                        .filter(t -> p.matcher(t.getName()).find())
+                        .collect(toList());
+
+        addCompetitionsToList(filteredCompetitions);
     }
 
     public void showOnlyPersonalCompetitions() {
@@ -176,14 +217,15 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     private void showCompetitions() {
-        List<RoleDTO> a = DataProvider.getSession().getRoles();
         this.tournaments.clear();
         ArrayList<TournamentDTO> tournamentsForList = new ArrayList<>();
         if (this.showAllCompetitions) {
-            squadButton.setDisable(true);
-            squadButton.setVisible(false);
-            squadChangeButton.setDisable(true);
-            squadChangeButton.setVisible(false);
+            if (!role.equals("Admin")) {
+                squadButton.setDisable(true);
+                squadButton.setVisible(false);
+                squadChangeButton.setDisable(true);
+                squadChangeButton.setVisible(false);
+            }
 
             ListWrapper<TournamentDTO> allEntries = null;
             try {
