@@ -106,7 +106,11 @@ public class Encounter extends HBox implements Initializable {
             }
         }
 
-        addTeamsToComboBox();
+        try {
+            addTeamsToComboBox();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         addToTable();
         table.setItems(tableEncounters);
     }
@@ -124,14 +128,16 @@ public class Encounter extends HBox implements Initializable {
     }
 
     public void addResult(ActionEvent event) {
-        EncounterViewModel encounter = (EncounterViewModel) table.getSelectionModel().getSelectedItem();
-        encounter.setHomePoints(Integer.parseInt(homeResult.getText()));
-        encounter.setGuestPoints(Integer.parseInt(guestResult.getText()));
-        encounter.setModificationType(ModificationType.MODIFIED);
-        homeResult.clear();
-        guestResult.clear();
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            EncounterViewModel encounter = (EncounterViewModel) table.getSelectionModel().getSelectedItem();
+            encounter.setHomePoints(Integer.parseInt(homeResult.getText()));
+            encounter.setGuestPoints(Integer.parseInt(guestResult.getText()));
+            encounter.setModificationType(ModificationType.MODIFIED);
+            homeResult.clear();
+            guestResult.clear();
 
-        changed = true;
+            changed = true;
+        }
     }
 
     public void clickItem(MouseEvent event) {
@@ -162,9 +168,16 @@ public class Encounter extends HBox implements Initializable {
         PageProvider.getPageProvider().switchCompetitions();
     }
 
-    private void addTeamsToComboBox() {
+    private void addTeamsToComboBox() throws RemoteException {
         ArrayList<ParticipantViewModel> teams = new ArrayList<>();
         for (ParticipantDTO team : tournamentDTO.getTeams()) {
+            String teamName = null;
+            if (team.getTeamName() == null) {
+                TeamDTO teamDTO = this.teamController.getById(DataProvider.getSession(), team.getTeam());
+                teamName = teamDTO.getName();
+            } else {
+                teamName = team.getTeamName();
+            }
             teams.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), null, ModificationType.NONE));
         }
         ObservableList<ParticipantViewModel> allItems = FXCollections.observableArrayList(teams);
