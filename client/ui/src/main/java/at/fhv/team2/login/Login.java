@@ -128,36 +128,24 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ipBox.setText("127.0.0.1");
-        validationSupport.registerValidator(ipBox, Validator.createRegexValidator("IP - Adress is not valid","^$|^\\d+(.\\d{1,4}){3}$", Severity.ERROR));
+        validationSupport.registerValidator(ipBox, Validator.createRegexValidator("IP - Adress is not valid", "^$|^\\d+(.\\d{1,4}){3}$", Severity.ERROR));
         validationSupport.registerValidator(username, Validator.createEmptyValidator("Username - Has to be filled"));
         validationSupport.registerValidator(password, Validator.createEmptyValidator("Password - Has to be filled"));
     }
 
     private boolean connect() {
-        boolean connected = false;
         Registry registry = null;
-        if (ipBox.getText().equals("127.0.0.1")) {
-            try {
-                registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Connection failed!");
-                alert.setContentText("Could not locate RMI registry by given IP: " + ipBox.getText());
-                alert.showAndWait();
-                connected = false;
-            }
-            DataProvider.setRegistry(registry);
-            connected = true;
-        } else {
+        try {
+            registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
+        } catch (RemoteException e) {
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection failed!");
-            alert.setContentText("Currently this application can only be used locally. Please use the default IP address:  127.0.0.1");
+            alert.setContentText("Could not locate RMI registry by given IP: " + ipBox.getText());
             alert.showAndWait();
-            ipBox.setText("127.0.0.1");
-            username.setText("");
-            password.setText("");
+            return false;
         }
-        return connected;
+        DataProvider.setRegistry(registry);
+        return true;
     }
 }

@@ -187,14 +187,15 @@ public class AllCompetition extends HBox implements Initializable {
     }
 
     private boolean checkForResultButton(TournamentDTO tournament) {
-        boolean showResultButton = true;
+        boolean showResultButton = false;
         if (tournament.getEncounters() != null && tournament.getTeams() != null) {
-            if (tournament.getEncounters().size() > 0 && tournament.getTeams().size() > 0) {
+            if (tournament.getTeams().size() > 0) {
+                showResultButton = false;
+            } else {
                 showResultButton = true;
             }
-            showResultButton = false;
         } else {
-            showResultButton = false;
+            showResultButton = true;
         }
         return showResultButton;
     }
