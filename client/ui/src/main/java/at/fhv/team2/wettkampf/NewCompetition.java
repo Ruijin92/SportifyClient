@@ -115,7 +115,7 @@ public class NewCompetition extends HBox implements Initializable {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        setText(item.getName());
+                        setText(item.getType() + "   |   " + item.getName());
                         backgroundProperty();
                         setGraphic(null);
                     }
@@ -237,7 +237,7 @@ public class NewCompetition extends HBox implements Initializable {
         } else if (tournamentName.getText().equals("")) {
             showAlert("Sie müssen einen Namen für das Tunier eingeben!");
             return;
-        
+
         } else {
             checkIfDateOrNameHasChanged();
             if (changed) {
