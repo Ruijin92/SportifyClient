@@ -28,10 +28,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Encounter extends HBox implements Initializable {
 
@@ -41,6 +39,7 @@ public class Encounter extends HBox implements Initializable {
     private ObservableList<EncounterViewModel> tableEncounters;
 
     private boolean changed;
+    private ArrayList<EncounterDTO> removedEncounters;
 
     private ITournamentController tournamentController;
     private ITeamController teamController;
@@ -58,6 +57,7 @@ public class Encounter extends HBox implements Initializable {
     public TextField guestResult;
     public Button resultButton;
     public Button saveButton;
+    public Button removeEncounter;
 
 
     public Encounter(TournamentDTO tournamentDTO) {
@@ -94,8 +94,10 @@ public class Encounter extends HBox implements Initializable {
         this.tournamentController = DataProvider.getTournamentControllerInstance();
         this.teamController = DataProvider.getTeamControllerInstance();
 
+        removeEncounter.setDisable(true);
         tableEncounters = FXCollections.observableArrayList();
         encounters = new ArrayList<>();
+        removedEncounters = new ArrayList<>();
 
         if (this.tournamentDTO == null) {
             try {
@@ -141,7 +143,9 @@ public class Encounter extends HBox implements Initializable {
     }
 
     public void clickItem(MouseEvent event) {
-
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            removeEncounter.setDisable(false);
+        }
     }
 
     public void saveEncounter(ActionEvent event) throws RemoteException {
@@ -159,6 +163,9 @@ public class Encounter extends HBox implements Initializable {
                         0, encounter.getHomeTeamModel().getId(), encounter.getGuestTeamModel().getId(),
                         encounter.getHomePoints(), encounter.getGuestPoints(), null, encounter.getModificationType()));
             }
+            for (EncounterDTO removedEncounter : removedEncounters) {
+                encounterDTOS.add(removedEncounter);
+            }
             tournamentDTO.setEncounters(encounterDTOS);
             TournamentDTO updatedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
         } else {
@@ -166,6 +173,22 @@ public class Encounter extends HBox implements Initializable {
             alert.setTitle("Du hast nix geändert.");
         }
         PageProvider.getPageProvider().switchCompetitions();
+    }
+
+    public void removeEncounter() {
+        //List<EncounterViewModel> encounters = (List<EncounterViewModel>) table.getItems().stream().collect(Collectors.toList());
+        EncounterViewModel encounter = (EncounterViewModel) table.getSelectionModel().getSelectedItem();
+        int removedIndex = table.getSelectionModel().getFocusedIndex();
+
+        this.encounters.remove(removedIndex);
+        //encounters.remove(removedIndex);
+        String[] date = encounter.getDate().split("-");
+        removedEncounters.add(new EncounterDTO(encounter.getId(), LocalDate.of(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[1])), 0, encounter.getHomeTeam(), encounter.getGuestTeam(),
+                                encounter.getHomePoints(), encounter.getGuestPoints(), null, ModificationType.REMOVED));
+
+        tableEncounters.clear();
+        tableEncounters.addAll(FXCollections.observableArrayList(encounters));
+        changed = true;
     }
 
     private void addTeamsToComboBox() throws RemoteException {
