@@ -210,7 +210,7 @@ public class NewCompetition extends HBox implements Initializable {
 
             ArrayList<TeamViewModel> loadedTeams = new ArrayList<>();
             for (ParticipantDTO team : loadedTournament.getTeams()) {
-                TeamViewModel teamModel = new TeamViewModel(team.getTeam(), team.getTeamName(), null, null, null, null, ModificationType.NONE);
+                TeamViewModel teamModel = new TeamViewModel(team.getTeam(), team.getTeamName(), null, null, null, team.getType(), ModificationType.NONE);
                 teamModel.setLoadedParticipantId(team.getId());
                 loadedTeams.add(teamModel);
             }
@@ -219,9 +219,17 @@ public class NewCompetition extends HBox implements Initializable {
     }
 
     public void addExternTeam(ActionEvent event) {
-        listView.getSourceItems().add(new TeamViewModel(null, teamName.getText(), null, null, null, null, ModificationType.MODIFIED));
-        teamName.clear();
-        this.changed = true;
+        if (!teamName.getText().equals("")) {
+            listView.getSourceItems().add(new TeamViewModel(null, teamName.getText(), null, null, null, "Extern", ModificationType.MODIFIED));
+            teamName.clear();
+            this.changed = true;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Name required");
+            alert.setContentText("You need a Name for an Extern Team");
+            alert.showAndWait();
+            return;
+        }
     }
 
     public void saveComp(ActionEvent event) throws RemoteException {
@@ -255,7 +263,7 @@ public class NewCompetition extends HBox implements Initializable {
                             ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
                             if (responseOfNewTeamSaved.getContextId() != null) {
                                 TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
-                                participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
+                                participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null,savedTeam.getType(), null, ModificationType.MODIFIED));
                             }
                         } else {
 
@@ -273,7 +281,7 @@ public class NewCompetition extends HBox implements Initializable {
                             if (teamViewModel.getLoadedParticipantId() != null) {
                                 participantId = teamViewModel.getLoadedParticipantId();
                             }
-                            participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null, null, ModificationType.MODIFIED));
+                            participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null,teamViewModel.getType(), null, ModificationType.MODIFIED));
                         }
                     }
 
@@ -319,10 +327,10 @@ public class NewCompetition extends HBox implements Initializable {
                             ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
                             if (responseOfNewTeamSaved.getContextId() != null) {
                                 TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
-                                participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
+                                participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, savedTeam.getType(), null, ModificationType.MODIFIED));
                             }
                         } else {
-                            participantTeams.add(new ParticipantDTO(null, team.getId(), team.getName(), null, null, ModificationType.MODIFIED));
+                            participantTeams.add(new ParticipantDTO(null, team.getId(), team.getName(), null, team.getType(), null, ModificationType.MODIFIED));
 
                         }
                     }
@@ -428,7 +436,7 @@ public class NewCompetition extends HBox implements Initializable {
             teamViewModels.clear();
             if (teams != null) {
                 for (TeamDTO team : teams) {
-                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, null, ModificationType.MODIFIED));
+                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
@@ -453,7 +461,7 @@ public class NewCompetition extends HBox implements Initializable {
                     }
                 }
                 if (matched == false) {
-                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, null, ModificationType.MODIFIED));
+                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
@@ -472,7 +480,7 @@ public class NewCompetition extends HBox implements Initializable {
             teamViewModels.clear();
             if (teams != null) {
                 for (TeamDTO team : teams) {
-                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, null, ModificationType.MODIFIED));
+                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
@@ -499,7 +507,7 @@ public class NewCompetition extends HBox implements Initializable {
                     }
                 }
                 if (matched == false) {
-                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, null, ModificationType.MODIFIED));
+                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
