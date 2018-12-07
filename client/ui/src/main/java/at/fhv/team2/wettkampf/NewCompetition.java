@@ -225,113 +225,129 @@ public class NewCompetition extends HBox implements Initializable {
     }
 
     public void saveComp(ActionEvent event) throws RemoteException {
-        checkIfDateOrNameHasChanged();
-        if (changed) {
-            ObservableList targetItems = listView.getTargetItems();
-            List<TeamViewModel> list = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
-            if (loadedTournament != null) {
-                checkIfTeamsWereRemovedFromTournament();
-                ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
-
-                for (TeamViewModel teamViewModel : list) {
-                    TeamDTO newExternTeam = null;
-                    if (teamViewModel.getId() == null) {
-                        LeagueDTO league = getLeagueDTO();
-                        newExternTeam = new TeamDTO(null, teamViewModel.getName(), null, null, league, "Extern", null);
-                        ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
-                        if (responseOfNewTeamSaved.getContextId() != null) {
-                            TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
-                            participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
-                        }
-                    } else {
-
-
-                        ModificationType modifiedStatus = null;
-                        if (teamViewModel.getModificationType() == ModificationType.NONE) {
-                            modifiedStatus = ModificationType.NONE;
-                        } else if (teamViewModel.getModificationType() == ModificationType.MODIFIED) {
-                            modifiedStatus = ModificationType.MODIFIED;
-                        } else if (teamViewModel.getModificationType() == ModificationType.REMOVED) {
-                            modifiedStatus = ModificationType.REMOVED;
-                        }
-
-                        String participantId = null;
-                        if (teamViewModel.getLoadedParticipantId() != null) {
-                            participantId = teamViewModel.getLoadedParticipantId();
-                        }
-                        participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null, null, ModificationType.MODIFIED));
-                    }
-                }
-
-                for (ParticipantDTO team : loadedTournament.getTeams()) {
-                    boolean deleted = true;
-                    List<TeamViewModel> targetTeams = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
-                    for (TeamViewModel targetTeam : targetTeams) {
-                         if (team.getTeamName().equals(targetTeam.getName())) {
-                             deleted = false;
-                         }
-                    }
-                    if (deleted) {
-                        ParticipantDTO deletedParticipant = team;
-                        deletedParticipant.setModificationType(ModificationType.REMOVED);
-                        participantTeams.add(deletedParticipant);
-                    }
-                }
-
-                String leagueId = null;
-                if (loadedLeagueId != null) {
-                    leagueId = loadedLeagueId;
-                }
-                String sportId = null;
-                if (this.sportId != null) {
-                    sportId = this.sportId;
-                }
-                TournamentDTO tournamentDTO = new TournamentDTO(loadedTournament.getId(), tournamentName.getText(), leagueId, sportId, loadedTournament.getLeagueName(), loadedTournament.getSportsName(),
-                        datePick.getValue(), loadedTournament.getEncounters(), participantTeams, null, ModificationType.MODIFIED);
-
-                //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
-                //TODO: Name des Tuniers und Datum wird nicht überschrieben.
-                TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
-
-                PageProvider.getPageProvider().switchCompetitions();
-            } else {
-                ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
-
-                for (TeamViewModel team : list) {
-                    TeamDTO newExternTeam = null;
-                    if (team.getId() == null) {
-                        LeagueDTO league = getLeagueDTO();
-                        newExternTeam = new TeamDTO(null, team.getName(), null, null, league, "Extern", null);
-                        ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
-                        if (responseOfNewTeamSaved.getContextId() != null) {
-                            TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
-                            participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
-                        }
-                    } else {
-                        participantTeams.add(new ParticipantDTO(null, team.getId(), team.getName(), null, null, ModificationType.MODIFIED));
-
-                    }
-                }
-
-                LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
-                String leagueId = null;
-                if (selectedLeague != null) {
-                    leagueId = selectedLeague.getId();
-                }
-
-                TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), leagueId, this.sportId, null, null, datePick.getValue(), null, participantTeams, null, ModificationType.MODIFIED);
-
-                //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
-                TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
-
-                //Encoutner
-                PageProvider.getPageProvider().switchEncounter(savedTournament);
-            }
-
+        if (sportsCombo.getSelectionModel().getSelectedItem() == null) {
+            showAlert("Sie müssen mindenstens die Sportart wählen - Die Liga ist Optional!");
+            return;
+        } else if (listView.getTargetItems().size() == 0) {
+            showAlert("Sie müssen mindenstens 1 Team zum Tunier hinzufügen!");
+            return;
+        } else if (datePick.getValue() == null) {
+            showAlert("Sie müssen ein Datum auswählen!");
+            return;
+        } else if (tournamentName.getText().equals("")) {
+            showAlert("Sie müssen einen Namen für das Tunier eingeben!");
+            return;
+        
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Du hast nix geändert.");
+            checkIfDateOrNameHasChanged();
+            if (changed) {
+                ObservableList targetItems = listView.getTargetItems();
+                List<TeamViewModel> list = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
+                if (loadedTournament != null) {
+                    checkIfTeamsWereRemovedFromTournament();
+                    ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
+
+                    for (TeamViewModel teamViewModel : list) {
+                        TeamDTO newExternTeam = null;
+                        if (teamViewModel.getId() == null) {
+                            LeagueDTO league = getLeagueDTO();
+                            newExternTeam = new TeamDTO(null, teamViewModel.getName(), null, null, league, "Extern", null);
+                            ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
+                            if (responseOfNewTeamSaved.getContextId() != null) {
+                                TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
+                                participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
+                            }
+                        } else {
+
+
+                            ModificationType modifiedStatus = null;
+                            if (teamViewModel.getModificationType() == ModificationType.NONE) {
+                                modifiedStatus = ModificationType.NONE;
+                            } else if (teamViewModel.getModificationType() == ModificationType.MODIFIED) {
+                                modifiedStatus = ModificationType.MODIFIED;
+                            } else if (teamViewModel.getModificationType() == ModificationType.REMOVED) {
+                                modifiedStatus = ModificationType.REMOVED;
+                            }
+
+                            String participantId = null;
+                            if (teamViewModel.getLoadedParticipantId() != null) {
+                                participantId = teamViewModel.getLoadedParticipantId();
+                            }
+                            participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null, null, ModificationType.MODIFIED));
+                        }
+                    }
+
+                    for (ParticipantDTO team : loadedTournament.getTeams()) {
+                        boolean deleted = true;
+                        List<TeamViewModel> targetTeams = (List<TeamViewModel>) targetItems.stream().collect(Collectors.toList());
+                        for (TeamViewModel targetTeam : targetTeams) {
+                            if (team.getTeamName().equals(targetTeam.getName())) {
+                                deleted = false;
+                            }
+                        }
+                        if (deleted) {
+                            ParticipantDTO deletedParticipant = team;
+                            deletedParticipant.setModificationType(ModificationType.REMOVED);
+                            participantTeams.add(deletedParticipant);
+                        }
+                    }
+
+                    String leagueId = null;
+                    if (loadedLeagueId != null) {
+                        leagueId = loadedLeagueId;
+                    }
+                    String sportId = null;
+                    if (this.sportId != null) {
+                        sportId = this.sportId;
+                    }
+                    TournamentDTO tournamentDTO = new TournamentDTO(loadedTournament.getId(), tournamentName.getText(), leagueId, sportId, loadedTournament.getLeagueName(), loadedTournament.getSportsName(),
+                            datePick.getValue(), loadedTournament.getEncounters(), participantTeams, null, ModificationType.MODIFIED);
+
+                    //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
+                    //TODO: Name des Tuniers und Datum wird nicht überschrieben.
+                    TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
+
+                    PageProvider.getPageProvider().switchCompetitions();
+                } else {
+                    ArrayList<ParticipantDTO> participantTeams = new ArrayList<>();
+
+                    for (TeamViewModel team : list) {
+                        TeamDTO newExternTeam = null;
+                        if (team.getId() == null) {
+                            LeagueDTO league = getLeagueDTO();
+                            newExternTeam = new TeamDTO(null, team.getName(), null, null, league, "Extern", null);
+                            ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
+                            if (responseOfNewTeamSaved.getContextId() != null) {
+                                TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
+                                participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, null, ModificationType.MODIFIED));
+                            }
+                        } else {
+                            participantTeams.add(new ParticipantDTO(null, team.getId(), team.getName(), null, null, ModificationType.MODIFIED));
+
+                        }
+                    }
+
+                    LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
+                    String leagueId = null;
+                    if (selectedLeague != null) {
+                        leagueId = selectedLeague.getId();
+                    }
+
+                    TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), leagueId, this.sportId, null, null, datePick.getValue(), null, participantTeams, null, ModificationType.MODIFIED);
+
+                    //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
+                    TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
+
+                    //Encoutner
+                    PageProvider.getPageProvider().switchEncounter(savedTournament);
+                }
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Du hast nix geändert.");
+            }
         }
+
     }
 
     private void addSports() {
@@ -528,5 +544,12 @@ public class NewCompetition extends HBox implements Initializable {
             }
         }
         return leagueForExternTeam;
+    }
+
+    private void showAlert(String errorMessage) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Can't save the Tournament!");
+        alert.setContentText(errorMessage);
+        alert.showAndWait();
     }
 }
