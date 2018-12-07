@@ -44,14 +44,6 @@
                         <Insets left="20.0" right="20.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsGuest" prefHeight="45.0" prefWidth="418.0" styleClass="login-dev" text="Gast anmelden" textAlignment="CENTER" underline="true" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font size="10.0" />
-                    </font>
-               <VBox.margin>
-                  <Insets top="3.0" />
-               </VBox.margin>
-                </Label>
             <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsAdmin" prefHeight="45.0" prefWidth="418.0" styleClass="login-dev" text="Admin anmelden" textAlignment="CENTER" underline="true" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="10.0" />

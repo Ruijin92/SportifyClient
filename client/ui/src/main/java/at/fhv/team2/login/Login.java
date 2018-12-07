@@ -43,27 +43,6 @@ public class Login implements Initializable {
      * @param event
      * @throws IOException
      */
-    public void logginAsGuest(MouseEvent event) throws IOException {
-        if (!connect()) {
-            return;
-        }
-        Permission.getPermission().loadAdmin();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainPage.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-
-    }
-
-    /**
-     * Just for Developing purpose
-     *
-     * @param event
-     * @throws IOException
-     */
     public void logginAsAdmin(MouseEvent event) throws IOException, NotBoundException {
         if (!connect()) {
             return;

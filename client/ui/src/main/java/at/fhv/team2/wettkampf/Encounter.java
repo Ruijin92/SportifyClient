@@ -176,12 +176,10 @@ public class Encounter extends HBox implements Initializable {
     }
 
     public void removeEncounter() {
-        //List<EncounterViewModel> encounters = (List<EncounterViewModel>) table.getItems().stream().collect(Collectors.toList());
         EncounterViewModel encounter = (EncounterViewModel) table.getSelectionModel().getSelectedItem();
         int removedIndex = table.getSelectionModel().getFocusedIndex();
 
         this.encounters.remove(removedIndex);
-        //encounters.remove(removedIndex);
         String[] date = encounter.getDate().split("-");
         removedEncounters.add(new EncounterDTO(encounter.getId(), LocalDate.of(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[1])), 0, encounter.getHomeTeam(), encounter.getGuestTeam(),
                                 encounter.getHomePoints(), encounter.getGuestPoints(), null, ModificationType.REMOVED));
