@@ -229,6 +229,7 @@ public class NewCompetition extends HBox implements Initializable {
             alert.setContentText("You need a Name for an Extern Team");
             alert.showAndWait();
             return;
+            
         }
     }
 
