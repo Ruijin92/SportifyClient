@@ -12,11 +12,11 @@ public class ParticipantViewModel {
     private SimpleStringProperty team;
     private SimpleStringProperty teamName;
 
-    private List<PersonViewModel> participants;
+    private List<SquadViewModel> participants;
 
     private ModificationType modificationType;
 
-    public ParticipantViewModel(String id, String team, String teamName, List<PersonViewModel> participants, ModificationType modificationType) {
+    public ParticipantViewModel(String id, String team, String teamName, List<SquadViewModel> participants, ModificationType modificationType) {
         this.id = new SimpleStringProperty(id);
         this.team = new SimpleStringProperty(team);
         this.teamName = new SimpleStringProperty(teamName);
@@ -61,11 +61,11 @@ public class ParticipantViewModel {
         this.teamName.set(teamName);
     }
 
-    public List<PersonViewModel> getParticipants() {
+    public List<SquadViewModel> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<PersonViewModel> participants) {
+    public void setParticipants(List<SquadViewModel> participants) {
         this.participants = participants;
     }
 

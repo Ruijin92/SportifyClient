@@ -7,6 +7,7 @@ import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
@@ -119,13 +120,13 @@ public class TeamSquad extends VBox implements Initializable {
             }
 
 
-            List<PersonDTO> loadedParticipants= tournamentDTO.getTeams().get(indexUpdatingParticipants).getParticipants();
+            List<SquadMemberDTO> loadedParticipants= tournamentDTO.getTeams().get(indexUpdatingParticipants).getParticipants();
             ArrayList<PersonViewModel> persons = new ArrayList<>();
 
             for (PersonDTO member : team.getMembers()) {
                 boolean matched = false;
-                for (PersonDTO loadedParticipant : loadedParticipants) {
-                    if (member.getFirstName().equals(loadedParticipant.getFirstName())) {
+                for (SquadMemberDTO loadedParticipant : loadedParticipants) {
+                    if (member.getFirstName().equals(loadedParticipant.getMember().getFirstName())) {
                         matched = true;
                     }
                 }
@@ -135,8 +136,8 @@ public class TeamSquad extends VBox implements Initializable {
             }
 
             ArrayList<PersonViewModel> loadedMembersOfTeamSquad = new ArrayList<>();
-            for (PersonDTO loadedParticipant : loadedParticipants) {
-                loadedMembersOfTeamSquad.add(new PersonViewModel(loadedParticipant.getId(), loadedParticipant.getFirstName(), loadedParticipant.getLastName(),
+            for (SquadMemberDTO loadedParticipant : loadedParticipants) {
+                loadedMembersOfTeamSquad.add(new PersonViewModel(loadedParticipant.getMember().getId(), loadedParticipant.getMember().getFirstName(), loadedParticipant.getMember().getLastName(),
                                             null, null, null, null, null));
             }
 
@@ -144,7 +145,6 @@ public class TeamSquad extends VBox implements Initializable {
             listView.setTargetItems(FXCollections.observableArrayList(loadedMembersOfTeamSquad));
         } else {
             ArrayList<PersonViewModel> persons = new ArrayList<>();
-            //TODO: Alle mitglieder auf die linke Liste binden --> Zuerst mapping auf PersonViewModel
             for (PersonDTO member : team.getMembers()) {
                 persons.add(new PersonViewModel(member.getId(), member.getFirstName(), member.getLastName(), null, null, null, null, null));
             }
@@ -157,9 +157,12 @@ public class TeamSquad extends VBox implements Initializable {
         List<PersonViewModel> list = (List<PersonViewModel>) targetItems.stream().collect(Collectors.toList());
 
         ArrayList<PersonDTO> participants = new ArrayList<>();
+        ArrayList<SquadMemberDTO> parti = new ArrayList<>();
         for (PersonViewModel personViewModel : list) {
-            participants.add(new PersonDTO(personViewModel.getId(), null, null, null, null, null, null, null, null));
+            PersonDTO person = new PersonDTO(personViewModel.getId(), null, null, null, null, null, null, null, null);
+            parti.add(new SquadMemberDTO(person, false, null));
         }
+        SquadMemberDTO squad = new SquadMemberDTO();
 
         TournamentDTO tournamentDTO = this.tournamentController.getEntryDetails(DataProvider.getSession(), comp.getId());
 
@@ -172,7 +175,8 @@ public class TeamSquad extends VBox implements Initializable {
             }
         }
 
-        tournamentDTO.getTeams().get(indexUpdatingParticipants).setParticipants(participants);
+        //set SquadMemberDTO
+        tournamentDTO.getTeams().get(indexUpdatingParticipants).setParticipants(parti);
         tournamentDTO.getTeams().get(indexUpdatingParticipants).setModificationType(ModificationType.MODIFIED);
 
         TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
@@ -183,14 +187,5 @@ public class TeamSquad extends VBox implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Can't save the participants.");
         }
-    }
-
-
-    private void addTestData(){
-
-        PersonViewModel p1 = new PersonViewModel("11","Ray","Örnek","Dornbirn",null,null,null,null);
-        PersonViewModel p2 = new PersonViewModel("12","Luki","Dödel","Dornbirn",null,null,null,null);
-        ArrayList<PersonViewModel> pvm = new ArrayList<>();
-        comp.getParticipants().add(new ParticipantViewModel("1","FC-Dornbirn","FC-Dornbirn", pvm, ModificationType.NONE));
     }
 }

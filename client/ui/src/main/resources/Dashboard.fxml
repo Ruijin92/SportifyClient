@@ -5,6 +5,8 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -83,6 +85,11 @@
                   <children>
                      <Label text="Nachrichten" />
                   </children></VBox>
+               <ImageView fitHeight="280.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                  <image>
+                     <Image url="@asd.PNG" />
+                  </image>
+               </ImageView>
             </children>
          </VBox>
          <VBox prefHeight="200.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
