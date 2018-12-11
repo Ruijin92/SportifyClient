@@ -160,7 +160,7 @@ public class TeamSquad extends VBox implements Initializable {
         ArrayList<SquadMemberDTO> parti = new ArrayList<>();
         for (PersonViewModel personViewModel : list) {
             PersonDTO person = new PersonDTO(personViewModel.getId(), null, null, null, null, null, null, null, null);
-            parti.add(new SquadMemberDTO(person, false, null));
+            parti.add(new SquadMemberDTO(person, false, null, false));
         }
         SquadMemberDTO squad = new SquadMemberDTO();
 
