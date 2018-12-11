@@ -6,6 +6,7 @@ import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.team2.DataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -96,11 +97,15 @@ public class Top extends HBox implements Initializable {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+
+                String messageText;
                 if(messageDTOS != null && messageDTOS.size() > 0) {
-                    DataProvider.setMessageStatus("Neue Nachrichten");
+                    messageText = "Neue Nachrichten";
                 } else {
-                    DataProvider.setMessageStatus("Nachrichten");
+                    messageText = "Nachrichten";
                 }
+
+                Platform.runLater(() -> DataProvider.setMessageStatus(messageText));
 
                 try {
                     Thread.sleep(60000);
