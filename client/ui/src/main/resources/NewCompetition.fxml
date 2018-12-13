@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.ListSelectionView?>
 
-<fx:root fx:id="hBox" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="hBox" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <VBox HBox.hgrow="ALWAYS">
         <HBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -42,45 +42,43 @@
                     </HBox>
                </children>
             </VBox>
-            <VBox>
-               <children>
-                  <Label text="2. Datum und Uhrzeit auswählen">
-                     <font>
+
+             <VBox>
+                 <HBox.margin>
+                     <Insets left="8.0" />
+                 </HBox.margin>
+                 <Label text="2. Datum eintragen">
+                    <font>
                         <Font name="System Bold" size="12.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="2.0" />
+                    </VBox.margin>
+                 </Label>
+                 <DatePicker fx:id="datePick">
+                    <VBox.margin>
+                        <Insets bottom="2.0" right="5.0" />
+                    </VBox.margin>
+                 </DatePicker>
+             </VBox>
+             <VBox>
+                 <HBox.margin>
+                     <Insets left="8.0" />
+                 </HBox.margin>
+                 <Label text="3. Turniername eintragen">
+                     <font>
+                         <Font name="System Bold" size="12.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="2.0" />
+                         <Insets bottom="2.0" />
                      </VBox.margin>
-                  </Label>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                           <Label text="Datum">
-                               <HBox.margin>
-                                   <Insets bottom="2.0" right="5.0" />
-                               </HBox.margin>
-                           </Label>
-                           <DatePicker fx:id="datePick" prefHeight="25.0" prefWidth="111.0">
-                               <HBox.margin>
-                                   <Insets bottom="2.0" right="5.0" />
-                               </HBox.margin>
-                           </DatePicker>
-                           <Label text="Uhrzeit">
-                               <HBox.margin>
-                                   <Insets bottom="2.0" right="5.0" />
-                               </HBox.margin>
-                           </Label>
-                           <TextField fx:id="time" prefHeight="25.0" prefWidth="112.0">
-                               <HBox.margin>
-                                   <Insets bottom="2.0" />
-                               </HBox.margin>
-                           </TextField>
-                     </children>
-                  </HBox>
-               </children>
-               <HBox.margin>
-                  <Insets left="8.0" />
-               </HBox.margin>
-            </VBox>
+                 </Label>
+                 <TextField fx:id="tournamentName" promptText="Turniername">
+                     <HBox.margin>
+                         <Insets right="5.0" />
+                     </HBox.margin>
+                 </TextField>
+             </VBox>
          </children>
       </HBox>
       <ListSelectionView fx:id="listView" VBox.vgrow="ALWAYS" />
@@ -98,7 +96,10 @@
                     <Insets right="5.0" />
                 </HBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#addExternTeam" text="Hinzufügen" />
+            <Button mnemonicParsing="false" onAction="#addExternTeam" text="Hinzufügen">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin></Button>
         </HBox>
       <HBox alignment="BOTTOM_RIGHT" maxHeight="25.0">
          <children>

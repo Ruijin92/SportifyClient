@@ -29,14 +29,17 @@ public class MainPage implements Initializable {
     private void setMainPageUp() {
         pageProvider.setMainPage(this);
 
+        Top topBar = new Top();
         MenuBar menubar = new MenuBar();
         menubar.addingButtons();
+        menubar.setTopBar(topBar);
 
         //Dashboard as standard
         pageProvider.switchDashboard();
 
         mainPane.setLeft(menubar);
-        mainPane.setTop(new Top());
+        mainPane.setTop(topBar);
         mainPane.setBottom(new Bottom());
+
     }
 }

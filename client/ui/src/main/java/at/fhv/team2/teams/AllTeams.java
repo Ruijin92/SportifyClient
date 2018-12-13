@@ -1,28 +1,21 @@
 package at.fhv.team2.teams;
 
+import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.team2.PageProvider;
-import at.fhv.team2.roles.Permission;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -32,6 +25,8 @@ public class AllTeams extends HBox implements Initializable {
 
     public TableView table;
     public Button teamSquadButton;
+
+    private ITournamentController tournamentController;
 
     public AllTeams() {
 
@@ -49,7 +44,7 @@ public class AllTeams extends HBox implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
+        //TODO: Anhand der User ID alle bevorstehenden Wettkämpfe laden
     }
 
     public void clickItem(MouseEvent event) {
@@ -69,8 +64,6 @@ public class AllTeams extends HBox implements Initializable {
         //TODO: sind ja eigendlich Wettlkämpfer die er da sieht -> muss die richtige mannschaft dazu gesucht werden
         //TODO: oder es zeigt seine mannschaften an die als zusatz haben in welchen Wettkampf ka?
         //TODO: TeamViewModel ist das alte Model das neue ist Participant
-        TeamViewModel selectedItem =  (TeamViewModel)table.getSelectionModel().getSelectedItem();
-        PageProvider.getPageProvider().switchTeamSquad(selectedItem);
     }
 
 

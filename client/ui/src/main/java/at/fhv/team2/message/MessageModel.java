@@ -2,15 +2,24 @@ package at.fhv.team2.message;
 
 import at.fhv.sportsclub.controller.interfaces.IMessageController;
 import at.fhv.team2.DataProvider;
+import com.sun.javafx.geom.BaseBounds;
+import com.sun.javafx.geom.transform.BaseTransform;
+import com.sun.javafx.jmx.MXNodeAlgorithm;
+import com.sun.javafx.jmx.MXNodeAlgorithmContext;
+import com.sun.javafx.sg.prism.NGNode;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,15 +35,11 @@ import java.util.concurrent.Future;
  * Created by Alex on 26.11.2018.
  */
 
-public class MessageModel implements Initializable {
+public class MessageModel extends AnchorPane implements Initializable {
 
-    @FXML
-    private TableView messageTable;
-    @FXML
-    private TextArea messageBody;
-    @FXML
-    private Button agreeButton, rejectButton;
-
+    public TableView messageTable;
+    public TextArea messageBody;
+    public Button agreeButton, rejectButton;
     private MessageViewModel messageViewModel;
 
     public MessageModel() {
@@ -51,6 +56,7 @@ public class MessageModel implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         messageViewModel = new MessageViewModel();
         messageViewModel.setMessages(FXCollections.observableArrayList());
         messageTable.setItems(messageViewModel.getMessages());
@@ -65,9 +71,10 @@ public class MessageModel implements Initializable {
         ));
         thread.setDaemon(true);
         thread.start();
+
     }
 
-    public void openMessage() {
+    public void openMessage(MouseEvent event) {
         TextMessage selectedMessage = (TextMessage) messageTable.getSelectionModel().getSelectedItem();
         if(selectedMessage == null) { return; }
 
@@ -90,11 +97,11 @@ public class MessageModel implements Initializable {
     }
 
     //TODO Message
-    public void confirmMessage() {
+    public void confirmMessage(ActionEvent event) {
         replyToMessage("Ich stimme zu");
     }
 
-    public void cancelMessage() {
+    public void cancelMessage(ActionEvent event) {
         replyToMessage("Ich lehne ab");
     }
 

@@ -131,8 +131,8 @@ public class Member extends HBox implements Initializable {
                 }
             }
             persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
-                    personEntry.getAddress().getCity(),null,
-                    personEntry.getAddress().getZipCode(), null,  sports));
+                    personEntry.getAddress().getCity(), null,
+                    personEntry.getAddress().getZipCode(), null, sports));
         }
 
         addSport(sportEntries);
@@ -180,10 +180,12 @@ public class Member extends HBox implements Initializable {
         vBoxSports.getChildren().clear();
         setAllCheckboxesToUnselect();
 
-       for (SportDTO sport : entryDetails.getSports()) {
-            for (CheckBox sportCheck : sportChecks) {
-                if (sportCheck.getId().equals(sport.getName())) {
-                    sportCheck.setSelected(true);
+        if (entryDetails.getSports() != null) {
+            for (SportDTO sport : entryDetails.getSports()) {
+                for (CheckBox sportCheck : sportChecks) {
+                    if (sportCheck.getId().equals(sport.getName())) {
+                        sportCheck.setSelected(true);
+                    }
                 }
             }
         }

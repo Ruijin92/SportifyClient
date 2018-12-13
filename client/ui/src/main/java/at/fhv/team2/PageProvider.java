@@ -1,15 +1,16 @@
 package at.fhv.team2;
 
+import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.team2.dashboard.Dashboard;
 import at.fhv.team2.mainpage.MainPage;
 import at.fhv.team2.member.Member;
+import at.fhv.team2.message.MessageModel;
 import at.fhv.team2.teams.AllTeams;
-import at.fhv.team2.teams.TeamSquad;
-import at.fhv.team2.teams.TeamViewModel;
 import at.fhv.team2.wettkampf.AllCompetition;
+import at.fhv.team2.wettkampf.Encounter;
 import at.fhv.team2.wettkampf.NewCompetition;
-import javafx.scene.layout.BorderPane;
-import sun.applet.Main;
+import at.fhv.team2.wettkampf.TeamSquad;
+import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -52,7 +53,28 @@ public class PageProvider {
         mainPage.mainPane.setCenter(new NewCompetition());
     }
 
-    public void switchTeamSquad(TeamViewModel team) {
+    public void switchTeamSquad(CompetitionViewModel team) {
         mainPage.mainPane.setCenter(new TeamSquad(team));
+    }
+
+    public void switchToChangeTeamSquad(CompetitionViewModel team, boolean changeTeamSquad) {
+        mainPage.mainPane.setCenter(new TeamSquad(team, changeTeamSquad));
+    }
+
+    public void switchEncounter(TournamentDTO tournamentDTO) {
+        mainPage.mainPane.setCenter(new Encounter(tournamentDTO));
+
+    }
+
+    public void switchMessages(){
+        mainPage.mainPane.setCenter(new MessageModel());
+    }
+
+    public void switchChangeCompetitions(String tournamentId) {
+        mainPage.mainPane.setCenter(new NewCompetition(tournamentId));
+    }
+
+    public void switchEnterResult(String tournamentId) {
+        mainPage.mainPane.setCenter(new Encounter(tournamentId));
     }
 }

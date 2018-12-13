@@ -14,13 +14,13 @@ import java.util.List;
 */
 @AllArgsConstructor
 public @Data class SessionDTO<T> implements Serializable {
+
+    private static final long serialVersionUID = 1111111092267757692L; // changed 26.11
+
     private T sessionId;
     private Long expires;
     private List<RoleDTO> roles;
+    private String myUserId;
 
     private ResponseMessageDTO responseMessage;
-
-    public String getMyUserId() {
-        return null;
-    }
 }

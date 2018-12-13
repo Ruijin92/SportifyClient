@@ -9,56 +9,64 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.login.Login">
+<BorderPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="700.0" prefHeight="750.0" prefWidth="1200.0" styleClass="login-section" stylesheets="@main.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.login.Login">
     <center>
-        <VBox alignment="CENTER" minHeight="200.0" minWidth="300.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #dedede;" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" maxHeight="220.0" maxWidth="290.0" minHeight="220.0" minWidth="290.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #bdc3c7; -fx-border-width: 2 2 2 2;" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="418.0" text="SIGN IN">
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Anmelden">
                     <font>
                         <Font name="System Bold" size="21.0" />
                     </font>
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets top="3.0" />
                </VBox.margin>
                 </Label>
-                <TextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Username" VBox.vgrow="NEVER">
+            <TextField fx:id="ipBox" maxWidth="220.0" prefHeight="60.0" prefWidth="300.0" promptText="IP-Adresse">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="5.0" />
+               </VBox.margin>
+            </TextField>
+                <TextField fx:id="username" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="220.0" promptText="Benutzername" VBox.vgrow="NEVER">
                     <VBox.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="20.0" right="20.0" />
                     </VBox.margin>
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
                 </TextField>
-                <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="300.0" promptText="Password" VBox.vgrow="NEVER">
+                <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="220.0" promptText="Passwort" VBox.vgrow="NEVER">
                     <VBox.margin>
                         <Insets bottom="5.0" left="20.0" right="20.0" />
                     </VBox.margin>
                 </PasswordField>
-                <Button id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginfunction" prefHeight="50.0" prefWidth="330.0" text="Login">
+                <Button id="login" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#loginfunction" prefHeight="26.0" prefWidth="220.0" text="Einloggen">
                     <VBox.margin>
                         <Insets left="20.0" right="20.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsGuest" prefHeight="70.0" prefWidth="418.0" text="Loggin as Guest" underline="true">
+                <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsGuest" prefHeight="45.0" prefWidth="418.0" styleClass="login-dev" text="Gast anmelden" textAlignment="CENTER" underline="true" VBox.vgrow="ALWAYS">
                     <font>
                         <Font size="10.0" />
                     </font>
+               <VBox.margin>
+                  <Insets top="3.0" />
+               </VBox.margin>
                 </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsAdmin" prefHeight="70.0" prefWidth="418.0" text="Loggin as Admin" underline="true">
+            <Label alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#logginAsAdmin" prefHeight="45.0" prefWidth="418.0" styleClass="login-dev" text="Admin anmelden" textAlignment="CENTER" underline="true" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
             </children>
          <BorderPane.margin>
-            <Insets bottom="300.0" left="600.0" right="600.0" />
+            <Insets bottom="280.0" left="500.0" right="500.0" />
          </BorderPane.margin>
         </VBox>
     </center>
     <top>
-        <VBox alignment="BOTTOM_CENTER" minHeight="250.0" minWidth="100.0" style="-fx-background-color: #ededed;" BorderPane.alignment="CENTER">
+        <VBox alignment="BOTTOM_CENTER" minHeight="240.0" minWidth="100.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="150.0" prefWidth="400.0" text="Sportify" textAlignment="CENTER">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="120.0" prefWidth="390.0" text="Sportify" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font size="55.0" />
                     </font>

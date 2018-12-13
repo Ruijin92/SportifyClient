@@ -1,7 +1,5 @@
-package at.fhv.team2.teams;
+package at.fhv.team2.wettkampf.ViewModels;
 
-import at.fhv.team2.wettkampf.EncounterViewModel;
-import at.fhv.team2.wettkampf.ParticipantViewModel;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.List;
@@ -13,6 +11,7 @@ public class CompetitionViewModel {
     private SimpleStringProperty leagueName;
     private SimpleStringProperty sportsName;
     private SimpleStringProperty league;
+    private SimpleStringProperty date;
 
     private List<EncounterViewModel> encounters;
     private List<ParticipantViewModel> participants;
@@ -104,5 +103,18 @@ public class CompetitionViewModel {
     public void setParticipants(List<ParticipantViewModel> participants) {
         this.participants = participants;
     }
+
+    public String getDate() {
+        return date.get();
+    }
+
+    public SimpleStringProperty dateProperty() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date.set(date);
+    }
+
     //endregion
 }

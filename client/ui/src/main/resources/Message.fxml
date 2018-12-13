@@ -7,24 +7,22 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.team2.message.MessageModel">
-   <children>
-      <TableView fx:id="messageTable" layoutX="14.0" layoutY="14.0" onMouseClicked="#openMessage" prefHeight="379.0" prefWidth="187.0">
-        <columns>
+<fx:root fx:id="anchor" prefHeight="400.0" prefWidth="600.0" stylesheets="@main.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+    <TableView fx:id="messageTable" layoutX="14.0" layoutY="14.0" onMouseClicked="#openMessage" prefHeight="379.0" prefWidth="187.0">
+      <columns>
           <TableColumn prefWidth="95.0" text="Sender">
-            <cellValueFactory>
-                <PropertyValueFactory property="sender" />
-            </cellValueFactory>
+              <cellValueFactory>
+                  <PropertyValueFactory property="sender" />
+              </cellValueFactory>
           </TableColumn>
           <TableColumn prefWidth="90.0" text="Betreff">
-            <cellValueFactory>
-                <PropertyValueFactory property="betreff" />
-            </cellValueFactory>
+              <cellValueFactory>
+                  <PropertyValueFactory property="betreff" />
+              </cellValueFactory>
           </TableColumn>
-        </columns>
-      </TableView>
-      <TextArea fx:id="messageBody" layoutX="207.0" layoutY="39.0" prefHeight="317.0" prefWidth="386.0" />
-      <Button fx:id="agreeButton" layoutX="248.0" layoutY="361.0" mnemonicParsing="false" onAction="#confirmMessage" prefHeight="25.0" prefWidth="117.0" text="Zustimmen" />
-      <Button fx:id="rejectButton" layoutX="429.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancelMessage" prefHeight="25.0" prefWidth="117.0" text="Ablehnen" />
-   </children>
-</AnchorPane>
+      </columns>
+    </TableView>
+    <TextArea fx:id="messageBody" layoutX="207.0" layoutY="39.0" prefHeight="317.0" prefWidth="386.0" />
+    <Button fx:id="agreeButton" layoutX="248.0" layoutY="361.0" mnemonicParsing="false" onAction="#confirmMessage" prefHeight="25.0" prefWidth="117.0" text="Zustimmen" visible="false" />
+    <Button fx:id="rejectButton" layoutX="429.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancelMessage" prefHeight="25.0" prefWidth="117.0" text="Ablehnen" visible="false" />
+</fx:root>

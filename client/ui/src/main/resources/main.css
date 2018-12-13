@@ -1,0 +1,102 @@
+.root {
+    -fx-font-family: sans-serif;
+    -fx-background-color: #f2f1ef;
+}
+
+.button {
+    -fx-background-radius: 0;
+    -fx-background-color: rgb(108, 122, 137);
+    -fx-font-size: 10pt;
+    -fx-text-fill: #f9f9f9;
+    -fx-pref-height: 25px;
+}
+
+.button:hover {
+    -fx-background-color: rgb(88, 102, 117);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:pressed, .button:default:hover:pressed {
+    -fx-background-color: rgb(88, 102, 117);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:focused {
+    -fx-border-radius: 0, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.65;
+    -fx-background-color: rgb(108, 122, 137);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:default {
+    -fx-background-color: rgb(108, 122, 137);
+    -fx-text-fill: #f9f9f9;
+}
+
+.button:default:hover {
+    -fx-background-color: rgb(88, 102, 117);
+}
+
+.header-section {
+    -fx-background-color: #34495e;
+}
+
+.bottom-section {
+    -fx-background-color: #34495e;
+}
+
+.side-section {
+    -fx-background-color: rgb(108, 122, 137);
+
+}
+.side-section .button{
+    -fx-font-size: 11pt;
+}
+
+.login-section {
+    -fx-background-color: #34495e;
+}
+
+.text-field {
+    -fx-background-radius: 0;
+    -fx-pref-height: 26px;
+}
+.combo-box {
+    -fx-background-radius: 0;
+    -fx-pref-height: 26px;
+    -fx-min-height: 26px;
+}
+
+.messageButton {
+    -fx-background-color: #1f3c52;
+    -fx-text-fill: rgba(165, 56, 60, 0.82);
+
+}
+
+.messageButton:hover {
+    -fx-background-color: #1f3c52;
+    -fx-text-fill: rgba(255, 93, 99, 0.82);
+}
+
+.header-dash{
+    -fx-background-color: rgb(108, 122, 137);
+}
+
+.body-dash{
+    -fx-background-color: rgba(44, 47, 65, 0.19);
+}
+
+.logoutButton{
+    -fx-background-color: #1f3c52;
+}
+
+.login-dev {
+
+}
+
+.login-dev:hover {
+    -fx-text-fill: #747474;
+}

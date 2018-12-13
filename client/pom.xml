@@ -41,5 +41,11 @@
             <artifactId>jfoenix</artifactId>
             <version>8.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

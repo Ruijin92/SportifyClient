@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.model.tournament;
 
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
@@ -14,7 +15,7 @@ public @Data class ParticipantDTO implements Serializable {
 
     public ParticipantDTO() { }
 
-    private static final long serialVersionUID = 111111198267757691L; // changed 20.11.2018
+    private static final long serialVersionUID = 111111198267757692L; // changed 26.11.2018
 
     private String id;
 
@@ -22,4 +23,6 @@ public @Data class ParticipantDTO implements Serializable {
     private String teamName;
     private List<PersonDTO> participants;
     private ResponseMessageDTO response;
+
+    private ModificationType modificationType;
 }

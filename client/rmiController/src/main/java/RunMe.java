@@ -19,20 +19,6 @@ public class RunMe {
 
         IPersonController personController = controllerFactory.getPersonController();
         IDepartmentController departmentController = controllerFactory.getDepartmentController();
-
-        /*IAuthenticationController iAuthenticationController = controllerFactory.getAuthenticationController();
-
-        IAuthenticationController authenticationController = controllerFactory.getAuthenticationController();
-        String pw ="snoop@do.gg";
-        SessionDTO sessionDTO = authenticationController.authenticate("snoop@do.gg",pw.toCharArray());
-
-        for (PersonDTO dto : personController.getAllEntries(sessionDTO).getContents()) {
-            System.out.println(dto.toString());
-        }
-
-        for (SportDTO sportDTO : departmentController.getAllSportEntries()) {
-            System.out.println(sportDTO);
-        }*/
     }
 
 }
