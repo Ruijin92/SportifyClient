@@ -93,7 +93,7 @@ public class MessageModel extends AnchorPane implements Initializable {
             if(selectedMessage.getReplyTo() == null || selectedMessage.getReplyTo().equals("System")) {
                 DataProvider.
                         getMessageControllerInstance().
-                        removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationsId(), null);
+                        removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationId(), null);
                 agreeButton.setVisible(false);
                 rejectButton.setVisible(false);
             } else {
@@ -124,7 +124,7 @@ public class MessageModel extends AnchorPane implements Initializable {
         try {
             DataProvider.
                     getMessageControllerInstance().
-                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationsId(), confirm);
+                    removeMessageFromQueueAndArchive(DataProvider.getSession(), selectedMessage.getCorrelationId(), confirm);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

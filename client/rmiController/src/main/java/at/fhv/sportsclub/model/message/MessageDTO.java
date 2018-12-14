@@ -19,7 +19,7 @@ public @Data class MessageDTO implements Serializable {
     private String body;
     private String replyTo;
 
-    private String correlationsId;
+    private String correlationId;
 
     private ResponseMessageDTO response = null;
 }
