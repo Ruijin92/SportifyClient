@@ -131,14 +131,14 @@ public class TeamSquad extends VBox implements Initializable {
                     }
                 }
                 if (!matched) {
-                    persons.add(new PersonViewModel(member.getId(), member.getFirstName(), member.getLastName(), null, null, null, null, null));
+                    persons.add(new PersonViewModel(member.getId(), member.getFirstName(), member.getLastName(), null, null, null, null, null, false));
                 }
             }
 
             ArrayList<PersonViewModel> loadedMembersOfTeamSquad = new ArrayList<>();
             for (SquadMemberDTO loadedParticipant : loadedParticipants) {
                 loadedMembersOfTeamSquad.add(new PersonViewModel(loadedParticipant.getMember().getId(), loadedParticipant.getMember().getFirstName(), loadedParticipant.getMember().getLastName(),
-                                            null, null, null, null, null));
+                                            null, null, null, null, null, true));
             }
 
             listView.setSourceItems(FXCollections.observableArrayList(persons));
@@ -146,7 +146,7 @@ public class TeamSquad extends VBox implements Initializable {
         } else {
             ArrayList<PersonViewModel> persons = new ArrayList<>();
             for (PersonDTO member : team.getMembers()) {
-                persons.add(new PersonViewModel(member.getId(), member.getFirstName(), member.getLastName(), null, null, null, null, null));
+                persons.add(new PersonViewModel(member.getId(), member.getFirstName(), member.getLastName(), null, null, null, null, null, false));
             }
             listView.setSourceItems(FXCollections.observableArrayList(persons));
         }
@@ -160,7 +160,7 @@ public class TeamSquad extends VBox implements Initializable {
         ArrayList<SquadMemberDTO> parti = new ArrayList<>();
         for (PersonViewModel personViewModel : list) {
             PersonDTO person = new PersonDTO(personViewModel.getId(), null, null, null, null, null, null, null, null);
-            parti.add(new SquadMemberDTO(person, false, null, false));
+            parti.add(new SquadMemberDTO(person, false, null, personViewModel.getAlreadyAddedToSquad()));
         }
         SquadMemberDTO squad = new SquadMemberDTO();
 

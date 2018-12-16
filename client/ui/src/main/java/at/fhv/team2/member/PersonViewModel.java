@@ -21,7 +21,9 @@ public class PersonViewModel {
 
     private List<String> sports;
 
-    public PersonViewModel(String id, String firstName, String lastName, String city, String street, String zipCode, String phoneNumber, List<String> sports){
+    private Boolean alreadyAddedToSquad;
+
+    public PersonViewModel(String id, String firstName, String lastName, String city, String street, String zipCode, String phoneNumber, List<String> sports, Boolean alreadyAddedToSquad){
         this.id = new SimpleStringProperty(id);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
@@ -30,6 +32,7 @@ public class PersonViewModel {
         this.zipCode = new SimpleStringProperty(zipCode);
         this.phoneNumber = new SimpleStringProperty(phoneNumber);
         this.sports = sports;
+        this.alreadyAddedToSquad = alreadyAddedToSquad;
     }
 
     public String getFirstName() {
@@ -122,4 +125,6 @@ public class PersonViewModel {
     public void setSports(List<String> sports) {
         this.sports = sports;
     }
+
+    public Boolean getAlreadyAddedToSquad(){return alreadyAddedToSquad;}
 }

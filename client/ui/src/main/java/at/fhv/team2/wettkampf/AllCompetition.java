@@ -272,7 +272,7 @@ public class AllCompetition extends HBox implements Initializable {
                     ArrayList<SquadViewModel> teamSquad = new ArrayList<>();
                     if (team.getParticipants() != null) {
                         for (SquadMemberDTO participant : team.getParticipants()) {
-                            teamSquad.add(new SquadViewModel(new PersonViewModel(participant.getMember().getId(), participant.getMember().getFirstName(), participant.getMember().getLastName(), null, null, null, null, null), participant.isParticipating()));
+                            teamSquad.add(new SquadViewModel(new PersonViewModel(participant.getMember().getId(), participant.getMember().getFirstName(), participant.getMember().getLastName(), null, null, null, null, null, true), participant.isParticipating()));
                         }
                     }
                     participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), teamSquad, null));

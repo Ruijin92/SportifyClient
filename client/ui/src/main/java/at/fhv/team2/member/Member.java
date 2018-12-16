@@ -124,7 +124,7 @@ public class Member extends HBox implements Initializable {
             }
             persons.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
                     personEntry.getAddress().getCity(), null,
-                    personEntry.getAddress().getZipCode(), null, sports));
+                    personEntry.getAddress().getZipCode(), null, sports, null));
         }
 
         addSport(sportEntries);
@@ -238,7 +238,7 @@ public class Member extends HBox implements Initializable {
      */
     public void saveMember(ActionEvent event) throws RemoteException {
         //TODO: Fix NullPointerException (Sports)
-        PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText(), null);
+        PersonViewModel pr = new PersonViewModel(null, firstName.getText(), lastName.getText(), city.getText(), street.getText(), zipCode.getText(), phoneNumber.getText(), null, null);
 
         if (!validation.isInvalid()) {
             saveData(null);
