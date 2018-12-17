@@ -177,7 +177,7 @@ public class TeamSquad extends VBox implements Initializable {
 
         //set SquadMemberDTO
         tournamentDTO.getTeams().get(indexUpdatingParticipants).setParticipants(parti);
-        tournamentDTO.getTeams().get(indexUpdatingParticipants).setModificationType(ModificationType.MODIFIED);
+        tournamentDTO.getTeams().get(indexUpdatingParticipants).setModificationType(ModificationType.INFORMEDANDMODIFIED);
 
         TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
 

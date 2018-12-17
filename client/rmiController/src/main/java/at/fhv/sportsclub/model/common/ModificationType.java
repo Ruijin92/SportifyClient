@@ -6,5 +6,5 @@ package at.fhv.sportsclub.model.common;
       Co-Authors: 
 */
 public enum ModificationType {
-    MODIFIED, REMOVED, NONE         // MODIFIED wraps updated and added in one
+    MODIFIED, REMOVED, NONE, INFORMEDANDMODIFIED        // MODIFIED wraps updated and added in one
 }
