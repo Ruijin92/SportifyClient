@@ -1,17 +1,14 @@
 package at.fhv.sportsclub.controller.interfaces;
 
+import at.fhv.sportsclub.interfacesReturn.ITournamentControllerReturn;
 import at.fhv.sportsclub.model.common.ListWrapper;
-import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
-import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 
-public interface ITournamentController extends Remote {
+public interface ITournamentController extends Remote, ITournamentControllerReturn {
     ListWrapper<TournamentDTO> getAllEntries(SessionDTO session) throws RemoteException;
     TournamentDTO getEntryDetails(SessionDTO session, String id) throws RemoteException;
     TournamentDTO getById(SessionDTO session, String id) throws RemoteException;

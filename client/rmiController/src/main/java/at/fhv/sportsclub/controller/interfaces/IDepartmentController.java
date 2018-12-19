@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.controller.interfaces;
 
+import at.fhv.sportsclub.interfacesReturn.IDepartmentControllerReturn;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
@@ -9,9 +10,8 @@ import at.fhv.sportsclub.model.security.SessionDTO;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 
-public interface IDepartmentController extends Remote {
+public interface IDepartmentController extends Remote, IDepartmentControllerReturn {
 
     ListWrapper<DepartmentDTO> getAllEntries(SessionDTO session) throws RemoteException;
 
@@ -26,6 +26,8 @@ public interface IDepartmentController extends Remote {
     LeagueDTO getLeagueById(SessionDTO session, String id) throws RemoteException;
 
     ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId) throws RemoteException;
+
+    DepartmentDTO getDepartmentBySportId(SessionDTO session, String sportId) throws RemoteException;
 
 }
 

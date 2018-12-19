@@ -1,18 +1,17 @@
-package at.fhv.sportsclub.controller.interfaces;
+package at.fhv.sportsclub.ejb.interfaces;
 
 import at.fhv.sportsclub.interfacesReturn.IMessageControllerReturn;
 import at.fhv.sportsclub.model.security.SessionDTO;
 
-import javax.jms.Message;
-import java.rmi.Remote;
-import java.util.List;
+import javax.ejb.Remote;
 import java.util.Map;
 
 /**
  * Created by Alex on 25.11.2018.
  */
 
-public interface IMessageController extends Remote, IMessageControllerReturn {
+@Remote
+public interface IMessageController extends IMessageControllerReturn {
 
     /**
      * Send multiple messages to the queue.
@@ -21,7 +20,7 @@ public interface IMessageController extends Remote, IMessageControllerReturn {
     void sendMessagesToQueue(SessionDTO sessionDTO, Map<String, String> messages);
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username);
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo);
-    List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username);
+    //List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username);
     boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage);
 
 }
