@@ -1,10 +1,10 @@
 package at.fhv.team2.mainpage.elements;
 
-import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.interfacesReturn.IPersonControllerReturn;
 import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.team2.DataProvider;
-import at.fhv.team2.PageProvider;
-import at.fhv.team2.roles.Permission;
+import at.fhv.team2.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,11 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import javax.xml.crypto.Data;
+import javax.naming.NamingException;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
@@ -32,11 +33,14 @@ public class Top extends HBox implements Initializable {
     public Label siteName;
     public Button messageButton;
     private int messageCounter;
+    private IDataProvider dataProvider;
 
-    private IPersonController personController;
+    private IPersonControllerReturn personController;
 
     public Top() {
-        this.personController = DataProvider.getPersonControllerInstance();
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
+
+        this.personController = dataProvider.getPersonControllerInstance();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Top.fxml"));
         fxmlLoader.setController(this);
@@ -49,8 +53,8 @@ public class Top extends HBox implements Initializable {
         }
     }
 
-    public void logoutUser(ActionEvent event) throws IOException, NotBoundException {
-        DataProvider.logout();
+    public void logoutUser(ActionEvent event) throws IOException, NotBoundException, NamingException {
+        dataProvider.logout();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Login.fxml"));
         Parent root = fxmlLoader.load();
@@ -62,9 +66,10 @@ public class Top extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         PersonDTO person = null;
         try {
-            person = this.personController.getEntryDetails(DataProvider.getSession(), DataProvider.getSession().getMyUserId());
+            person = this.personController.getEntryDetails(dataProvider.getSession(), dataProvider.getSession().getMyUserId());
         } catch (RemoteException e) {
             e.printStackTrace();
         }

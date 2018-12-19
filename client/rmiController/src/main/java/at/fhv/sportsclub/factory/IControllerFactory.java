@@ -1,7 +1,6 @@
 package at.fhv.sportsclub.factory;
 
 import at.fhv.sportsclub.controller.interfaces.*;
-import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

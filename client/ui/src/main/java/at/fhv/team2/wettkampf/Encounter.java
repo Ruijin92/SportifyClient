@@ -1,13 +1,14 @@
 package at.fhv.team2.wettkampf;
 
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.interfacesReturn.ITeamControllerReturn;
+import at.fhv.sportsclub.interfacesReturn.ITournamentControllerReturn;
 import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.team2.DataProvider;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.wettkampf.ViewModels.EncounterViewModel;
 import at.fhv.team2.wettkampf.ViewModels.ParticipantViewModel;
@@ -16,20 +17,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Encounter extends HBox implements Initializable {
 
@@ -41,8 +39,9 @@ public class Encounter extends HBox implements Initializable {
     private boolean changed;
     private ArrayList<EncounterDTO> removedEncounters;
 
-    private ITournamentController tournamentController;
-    private ITeamController teamController;
+    private ITournamentControllerReturn tournamentController;
+    private ITeamControllerReturn teamController;
+    private IDataProvider dataProvider;
 
     public TableView table;
     public TableColumn homeColumn;
@@ -91,8 +90,10 @@ public class Encounter extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.tournamentController = DataProvider.getTournamentControllerInstance();
-        this.teamController = DataProvider.getTeamControllerInstance();
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
+
+        this.tournamentController = dataProvider.getTournamentControllerInstance();
+        this.teamController = dataProvider.getTeamControllerInstance();
 
         removeEncounter.setDisable(true);
         tableEncounters = FXCollections.observableArrayList();
@@ -101,7 +102,7 @@ public class Encounter extends HBox implements Initializable {
 
         if (this.tournamentDTO == null) {
             try {
-                this.tournamentDTO = this.tournamentController.getEntryDetails(DataProvider.getSession(), this.tournamentId);
+                this.tournamentDTO = this.tournamentController.getEntryDetails(dataProvider.getSession(), this.tournamentId);
                 addLoadedEncountersToList();
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -167,7 +168,7 @@ public class Encounter extends HBox implements Initializable {
                 encounterDTOS.add(removedEncounter);
             }
             tournamentDTO.setEncounters(encounterDTOS);
-            TournamentDTO updatedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
+            TournamentDTO updatedTournament = this.tournamentController.saveOrUpdateEntry(dataProvider.getSession(), tournamentDTO);
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Du hast nix geändert.");
@@ -194,7 +195,7 @@ public class Encounter extends HBox implements Initializable {
         for (ParticipantDTO team : tournamentDTO.getTeams()) {
             String teamName = null;
             if (team.getTeamName() == null) {
-                TeamDTO teamDTO = this.teamController.getById(DataProvider.getSession(), team.getTeam());
+                TeamDTO teamDTO = this.teamController.getById(dataProvider.getSession(), team.getTeam());
                 teamName = teamDTO.getName();
             } else {
                 teamName = team.getTeamName();

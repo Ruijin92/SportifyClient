@@ -1,8 +1,8 @@
 package at.fhv.team2.wettkampf;
 
-import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.interfacesReturn.IDepartmentControllerReturn;
+import at.fhv.sportsclub.interfacesReturn.ITeamControllerReturn;
+import at.fhv.sportsclub.interfacesReturn.ITournamentControllerReturn;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
@@ -11,12 +11,12 @@ import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.team2.DataProvider;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.teams.ViewModels.TeamViewModel;
 import at.fhv.team2.wettkampf.ViewModels.LeagueViewModel;
 import at.fhv.team2.wettkampf.ViewModels.SportViewModel;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,16 +26,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.controlsfx.control.ListSelectionView;
 
-import javax.xml.crypto.Data;
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -56,9 +52,10 @@ public class NewCompetition extends HBox implements Initializable {
 
     private ArrayList<TeamViewModel> teamViewModels = new ArrayList<>();
     private ArrayList<SportViewModel> allSports;
-    private ITeamController teamControllerInstance;
-    private IDepartmentController departmentController;
-    private ITournamentController tournamentController;
+    private ITeamControllerReturn teamControllerInstance;
+    private IDepartmentControllerReturn departmentController;
+    private ITournamentControllerReturn tournamentController;
+    private IDataProvider dataProvider;
 
     private String sportId;
     private String leagueId;
@@ -105,6 +102,8 @@ public class NewCompetition extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
+
         listView.setCellFactory(view -> {
             ListCell<TeamViewModel> cell = new ListCell<TeamViewModel>() {
 
@@ -124,9 +123,9 @@ public class NewCompetition extends HBox implements Initializable {
             return cell;
         });
 
-        this.departmentController = DataProvider.getDepartmentControllerInstance();
-        this.teamControllerInstance = DataProvider.getTeamControllerInstance();
-        this.tournamentController = DataProvider.getTournamentControllerInstance();
+        this.departmentController = dataProvider.getDepartmentControllerInstance();
+        this.teamControllerInstance = dataProvider.getTeamControllerInstance();
+        this.tournamentController = dataProvider.getTournamentControllerInstance();
 
         addSports();
 
@@ -157,7 +156,7 @@ public class NewCompetition extends HBox implements Initializable {
         } else {
             this.loadedTournament = null;
             try {
-                this.loadedTournament = this.tournamentController.getEntryDetails(DataProvider.getSession(), this.tournamentId);
+                this.loadedTournament = this.tournamentController.getEntryDetails(dataProvider.getSession(), this.tournamentId);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -246,7 +245,6 @@ public class NewCompetition extends HBox implements Initializable {
         } else if (tournamentName.getText().equals("")) {
             showAlert("Sie müssen einen Namen für das Tunier eingeben!");
             return;
-
         } else {
             checkIfDateOrNameHasChanged();
             if (changed) {
@@ -261,9 +259,9 @@ public class NewCompetition extends HBox implements Initializable {
                         if (teamViewModel.getId() == null) {
                             LeagueDTO league = getLeagueDTO();
                             newExternTeam = new TeamDTO(null, teamViewModel.getName(), null, null, league, "Extern", null);
-                            ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
+                            ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(dataProvider.getSession(), newExternTeam);
                             if (responseOfNewTeamSaved.getContextId() != null) {
-                                TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
+                                TeamDTO savedTeam = this.teamControllerInstance.getById(dataProvider.getSession(), responseOfNewTeamSaved.getContextId());
                                 participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null,savedTeam.getType(), null, ModificationType.MODIFIED));
                             }
                         } else {
@@ -314,7 +312,7 @@ public class NewCompetition extends HBox implements Initializable {
 
                     //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
                     //TODO: Name des Tuniers und Datum wird nicht überschrieben.
-                    TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
+                    TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(dataProvider.getSession(), tournamentDTO);
 
                     PageProvider.getPageProvider().switchCompetitions();
                 } else {
@@ -325,9 +323,9 @@ public class NewCompetition extends HBox implements Initializable {
                         if (team.getId() == null) {
                             LeagueDTO league = getLeagueDTO();
                             newExternTeam = new TeamDTO(null, team.getName(), null, null, league, "Extern", null);
-                            ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(DataProvider.getSession(), newExternTeam);
+                            ResponseMessageDTO responseOfNewTeamSaved = this.teamControllerInstance.saveOrUpdateEntry(dataProvider.getSession(), newExternTeam);
                             if (responseOfNewTeamSaved.getContextId() != null) {
-                                TeamDTO savedTeam = this.teamControllerInstance.getById(DataProvider.getSession(), responseOfNewTeamSaved.getContextId());
+                                TeamDTO savedTeam = this.teamControllerInstance.getById(dataProvider.getSession(), responseOfNewTeamSaved.getContextId());
                                 participantTeams.add(new ParticipantDTO(null, savedTeam.getId(), savedTeam.getName(), null, savedTeam.getType(), null, ModificationType.MODIFIED));
                             }
                         } else {
@@ -345,7 +343,7 @@ public class NewCompetition extends HBox implements Initializable {
                     TournamentDTO tournament = new TournamentDTO(null, tournamentName.getText(), leagueId, this.sportId, null, null, datePick.getValue(), null, participantTeams, null, ModificationType.MODIFIED);
 
                     //savedTournament --> Um zu überprüfen ob alles erfolgreich in die Datenbank gespeichert wurde.
-                    TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournament);
+                    TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(dataProvider.getSession(), tournament);
 
                     //Encoutner
                     PageProvider.getPageProvider().switchEncounter(savedTournament);
@@ -364,8 +362,8 @@ public class NewCompetition extends HBox implements Initializable {
         ArrayList<SportDTO> sports = null;
 
         try {
-            ResponseMessageDTO response = this.departmentController.getAllSportEntriesFull(DataProvider.getSession()).getResponse();
-            sports = this.departmentController.getAllSportEntriesFull(DataProvider.getSession()).getContents();
+            ResponseMessageDTO response = this.departmentController.getAllSportEntriesFull(dataProvider.getSession()).getResponse();
+            sports = this.departmentController.getAllSportEntriesFull(dataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -424,7 +422,7 @@ public class NewCompetition extends HBox implements Initializable {
 
             ListWrapper<TeamDTO> teamEntries = new ListWrapper<>();
             try {
-                teamEntries = this.teamControllerInstance.getByLeague(DataProvider.getSession(), selectedLeague.getId());
+                teamEntries = this.teamControllerInstance.getByLeague(dataProvider.getSession(), selectedLeague.getId());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -444,7 +442,7 @@ public class NewCompetition extends HBox implements Initializable {
         } else {
             ListWrapper<TeamDTO> wrapper = null;
             try {
-                wrapper = this.teamControllerInstance.getByLeague(DataProvider.getSession(), loadedTournament.getLeague());
+                wrapper = this.teamControllerInstance.getByLeague(dataProvider.getSession(), loadedTournament.getLeague());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -476,7 +474,7 @@ public class NewCompetition extends HBox implements Initializable {
             this.sportId = selectedSport.getId();
 
             ArrayList<TeamDTO> teams;
-            teams = this.teamControllerInstance.getBySport(DataProvider.getSession(), selectedSport.getId()).getContents();
+            teams = this.teamControllerInstance.getBySport(dataProvider.getSession(), selectedSport.getId()).getContents();
 
             teamViewModels.clear();
             if (teams != null) {
@@ -486,11 +484,11 @@ public class NewCompetition extends HBox implements Initializable {
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
         } else {
-            //SportDTO sportByLeagueId = this.departmentController.getSportByLeagueId(DataProvider.getSession(), this.loadedLeagueId);
+            //SportDTO sportByLeagueId = this.departmentController.getSportByLeagueId(dataProvider.getSession(), this.loadedLeagueId);
             this.sportId = loadedTournament.getSport();
             ListWrapper<TeamDTO> wrapper = null;
             try {
-                wrapper = this.teamControllerInstance.getBySport(DataProvider.getSession(), loadedTournament.getSport());
+                wrapper = this.teamControllerInstance.getBySport(dataProvider.getSession(), loadedTournament.getSport());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -540,11 +538,11 @@ public class NewCompetition extends HBox implements Initializable {
         if (leagueCombo.getSelectionModel().getSelectedItem() != null) {
             LeagueViewModel selectedLeague = (LeagueViewModel) leagueCombo.getSelectionModel().getSelectedItem();
             leagueId = selectedLeague.getId();
-            leagueForExternTeam = this.departmentController.getLeagueById(DataProvider.getSession(), leagueId);
+            leagueForExternTeam = this.departmentController.getLeagueById(dataProvider.getSession(), leagueId);
         } else {
             SportViewModel selectedLeague = (SportViewModel) sportsCombo.getSelectionModel().getSelectedItem();
             String sportId = selectedLeague.getId();
-            ListWrapper<LeagueDTO> leaguesBySportId = this.departmentController.getLeaguesBySportId(DataProvider.getSession(), sportId);
+            ListWrapper<LeagueDTO> leaguesBySportId = this.departmentController.getLeaguesBySportId(dataProvider.getSession(), sportId);
 
             if (leaguesBySportId != null) {
                 Random rand = new Random();

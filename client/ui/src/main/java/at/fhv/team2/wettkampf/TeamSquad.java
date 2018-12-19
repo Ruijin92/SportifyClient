@@ -1,20 +1,17 @@
 package at.fhv.team2.wettkampf;
 
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.interfacesReturn.ITeamControllerReturn;
+import at.fhv.sportsclub.interfacesReturn.ITournamentControllerReturn;
 import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
-import at.fhv.sportsclub.model.tournament.EncounterDTO;
-import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.team2.DataProvider;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
-import at.fhv.team2.wettkampf.ViewModels.EncounterViewModel;
-import at.fhv.team2.wettkampf.ViewModels.ParticipantViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,8 +35,9 @@ public class TeamSquad extends VBox implements Initializable {
     private CompetitionViewModel comp;
     public ListSelectionView listView;
 
-    private ITeamController teamController;
-    private ITournamentController tournamentController;
+    private ITeamControllerReturn teamController;
+    private ITournamentControllerReturn tournamentController;
+    private IDataProvider dataProvider;
 
     private boolean loadTeamSquadToChange;
 
@@ -73,6 +71,8 @@ public class TeamSquad extends VBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
+        
         listView.setCellFactory(view -> {
             ListCell<PersonViewModel> cell = new ListCell<PersonViewModel>() {
 
@@ -91,13 +91,13 @@ public class TeamSquad extends VBox implements Initializable {
             return cell;
         });
 
-        this.teamController = DataProvider.getTeamControllerInstance();
-        this.tournamentController = DataProvider.getTournamentControllerInstance();
+        this.teamController = dataProvider.getTeamControllerInstance();
+        this.tournamentController = dataProvider.getTournamentControllerInstance();
 
         TeamDTO team = null;
         String id =  comp.getParticipants().get(0).getTeam();
         try {
-            team = teamController.getEntryDetails(DataProvider.getSession(), id);
+            team = teamController.getEntryDetails(dataProvider.getSession(), id);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -105,7 +105,7 @@ public class TeamSquad extends VBox implements Initializable {
         if (loadTeamSquadToChange) {
             TournamentDTO tournamentDTO = null;
             try {
-                tournamentDTO = this.tournamentController.getEntryDetails(DataProvider.getSession(), comp.getId());
+                tournamentDTO = this.tournamentController.getEntryDetails(dataProvider.getSession(), comp.getId());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -164,7 +164,7 @@ public class TeamSquad extends VBox implements Initializable {
         }
         SquadMemberDTO squad = new SquadMemberDTO();
 
-        TournamentDTO tournamentDTO = this.tournamentController.getEntryDetails(DataProvider.getSession(), comp.getId());
+        TournamentDTO tournamentDTO = this.tournamentController.getEntryDetails(dataProvider.getSession(), comp.getId());
 
         int indexUpdatingParticipants = -1;
         boolean participantAlreadyFound = false;
@@ -179,7 +179,7 @@ public class TeamSquad extends VBox implements Initializable {
         tournamentDTO.getTeams().get(indexUpdatingParticipants).setParticipants(parti);
         tournamentDTO.getTeams().get(indexUpdatingParticipants).setModificationType(ModificationType.MODIFIED);
 
-        TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(DataProvider.getSession(), tournamentDTO);
+        TournamentDTO savedTournament = this.tournamentController.saveOrUpdateEntry(dataProvider.getSession(), tournamentDTO);
 
         if (savedTournament.getResponse() == null) {
             PageProvider.getPageProvider().switchCompetitions();

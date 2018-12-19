@@ -1,24 +1,22 @@
 package at.fhv.team2.member;
 
-import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
-import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.interfacesReturn.IDepartmentControllerReturn;
+import at.fhv.sportsclub.interfacesReturn.IPersonControllerReturn;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.person.AddressDTO;
 import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.sportsclub.model.security.SessionDTO;
-import at.fhv.team2.DataProvider;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -27,12 +25,10 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,8 +73,9 @@ public class Member extends HBox implements Initializable {
 
     private ValidationSupport validation = new ValidationSupport();
 
-    private IPersonController personControllerInstance;
-    private IDepartmentController departmentController;
+    private IPersonControllerReturn personControllerInstance;
+    private IDepartmentControllerReturn departmentController;
+    private IDataProvider dataProvider;
 
     public Member() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Member.fxml"));
@@ -94,21 +91,22 @@ public class Member extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
 
         saveButton.setVisible(Permission.getPermission().createMemberPermission());
         changeButton.setVisible(Permission.getPermission().createMemberPermission());
         newMemeberButton.setVisible(Permission.getPermission().createMemberPermission());
 
-        this.personControllerInstance = DataProvider.get().getPersonControllerInstance();
-        this.departmentController = DataProvider.get().getDepartmentControllerInstance();
+        this.personControllerInstance = dataProvider.getPersonControllerInstance();
+        this.departmentController = dataProvider.getDepartmentControllerInstance();
 
         ArrayList<PersonDTO> personEntries = null;
         ArrayList<SportDTO> sportEntries = null;
 
         try {
-            ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(DataProvider.getSession());
-            personEntries = personControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
-            sportEntries = departmentController.getAllSportEntries(DataProvider.getSession()).getContents();
+            ListWrapper<PersonDTO> allEntries = personControllerInstance.getAllEntries(dataProvider.getSession());
+            personEntries = personControllerInstance.getAllEntries(dataProvider.getSession()).getContents();
+            sportEntries = departmentController.getAllSportEntries(dataProvider.getSession()).getContents();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -148,7 +146,7 @@ public class Member extends HBox implements Initializable {
         PersonDTO entryDetails = new PersonDTO();
 
         try {
-            entryDetails = personControllerInstance.getEntryDetails(DataProvider.getSession(), pr.getId());
+            entryDetails = personControllerInstance.getEntryDetails(dataProvider.getSession(), pr.getId());
             if (entryDetails.getResponse() != null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Loading failed");
@@ -271,9 +269,9 @@ public class Member extends HBox implements Initializable {
     }
 
     private void saveData(String id) throws RemoteException {
-        IPersonController personController = DataProvider.get().getPersonControllerInstance();
+        IPersonControllerReturn personController = dataProvider.getPersonControllerInstance();
         List<SportDTO> sports = new LinkedList<>();
-        ListWrapper<SportDTO> allSportEntries = this.departmentController.getAllSportEntries(DataProvider.getSession());
+        ListWrapper<SportDTO> allSportEntries = this.departmentController.getAllSportEntries(dataProvider.getSession());
         ArrayList<SportDTO> contents = allSportEntries.getContents();
         HashMap<String, String> allSports = new HashMap<>();
         for (SportDTO content : contents) {
@@ -296,7 +294,7 @@ public class Member extends HBox implements Initializable {
         } else {
             PersonDTO entryDetails = null;
             try {
-                entryDetails = personController.getEntryDetails(DataProvider.getSession(), id);
+                entryDetails = personController.getEntryDetails(dataProvider.getSession(), id);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -326,7 +324,7 @@ public class Member extends HBox implements Initializable {
         }
 
         try {
-            response = personController.saveOrUpdateEntry(DataProvider.getSession(), personDTO);
+            response = personController.saveOrUpdateEntry(dataProvider.getSession(), personDTO);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

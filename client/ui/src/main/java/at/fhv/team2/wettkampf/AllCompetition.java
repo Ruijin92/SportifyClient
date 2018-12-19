@@ -1,16 +1,14 @@
 package at.fhv.team2.wettkampf;
 
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.interfacesReturn.ITournamentControllerReturn;
 import at.fhv.sportsclub.model.common.ListWrapper;
-import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
-import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.team2.DataProvider;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
 import at.fhv.team2.PageProvider;
 import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.roles.Permission;
@@ -26,7 +24,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -62,7 +59,8 @@ public class AllCompetition extends HBox implements Initializable {
     private String role;
 
     private CompetitionViewModel tournamentDetails;
-    private ITournamentController tournamentControllerInstance;
+    private ITournamentControllerReturn tournamentControllerInstance;
+    private IDataProvider dataProvider;
 
     public AllCompetition() {
 
@@ -79,7 +77,9 @@ public class AllCompetition extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<RoleDTO> roles = DataProvider.getSession().getRoles();
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
+
+        List<RoleDTO> roles = dataProvider.getSession().getRoles();
         if (roles.get(0).getName().equals("Admin")) {
             role = "Admin";
         }
@@ -96,7 +96,7 @@ public class AllCompetition extends HBox implements Initializable {
         squadChangeButton.setDisable(true);
 
         this.showAllCompetitions = true;
-        this.tournamentControllerInstance = DataProvider.getTournamentControllerInstance();
+        this.tournamentControllerInstance = dataProvider.getTournamentControllerInstance();
         showCompetitions();
 
         listCompetitions.setCellFactory(lv -> new ListCell<CompetitionViewModel>() {
@@ -157,7 +157,8 @@ public class AllCompetition extends HBox implements Initializable {
         if (selectedCompetition == null) {
             tournament = new TournamentDTO();
         } else {
-            tournament = this.tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), selectedCompetition.getId());
+            SessionDTO a = dataProvider.getSession();
+            tournament = this.tournamentControllerInstance.getEntryDetails(dataProvider.getSession(), selectedCompetition.getId());
         }
 
         if (selectedItem != null) {
@@ -242,7 +243,7 @@ public class AllCompetition extends HBox implements Initializable {
 
             ListWrapper<TournamentDTO> allEntries = null;
             try {
-                allEntries = tournamentControllerInstance.getAllEntries(DataProvider.getSession());
+                allEntries = tournamentControllerInstance.getAllEntries(dataProvider.getSession());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -257,7 +258,7 @@ public class AllCompetition extends HBox implements Initializable {
         } else {
             ListWrapper<TournamentDTO> allTournaments = new ListWrapper<>();
             try {
-                allTournaments = tournamentControllerInstance.getTournamentByTrainerId(DataProvider.getSession(), DataProvider.getSession().getMyUserId());
+                allTournaments = tournamentControllerInstance.getTournamentByTrainerId(dataProvider.getSession(), dataProvider.getSession().getMyUserId());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

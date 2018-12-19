@@ -4,7 +4,6 @@ import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
-import at.fhv.team2.PageProvider;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

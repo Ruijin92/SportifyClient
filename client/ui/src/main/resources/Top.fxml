@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
 <fx:root fx:id="hBox" styleClass="header-section" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <ImageView fitHeight="62.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
       <image>
