@@ -14,7 +14,7 @@ import java.rmi.registry.Registry;
 public class RunMe {
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(1099);
+        Registry registry = LocateRegistry.getRegistry(1090);
         IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
 
         IPersonController personController = controllerFactory.getPersonController();
