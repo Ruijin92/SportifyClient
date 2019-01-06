@@ -29,7 +29,7 @@
       </padding>
    </Label>
    <HBox alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-      <Button fx:id="messageButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchMessage" scaleShape="false" styleClass="messageButton" text="0 Nachrichten" textAlignment="CENTER">
+      <Button fx:id="messageButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchMessage" scaleShape="false" styleClass="messageButton" text="Nachrichten" textAlignment="CENTER">
          <font>
             <Font name="Agency FB" size="34.0" />
          </font>

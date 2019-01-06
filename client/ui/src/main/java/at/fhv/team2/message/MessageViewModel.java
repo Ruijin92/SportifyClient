@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.jms.Message;
 import java.util.List;
 
 /**

@@ -22,12 +22,11 @@ public class DataProviderRMI implements IDataProvider{
     private static IAuthenticationController authenticationController = null;
     private static IMessageController messageController = null;
 
-    private static DataProviderRMI instance = null;
+    private static IDataProvider instance = null;
     private static Registry registry;
     private static SessionDTO session;
 
-    @Getter
-    private static StringProperty messageStatus = new SimpleStringProperty();
+    private static SimpleStringProperty messageStatus = new SimpleStringProperty();
 
     public DataProviderRMI(){
         registry = DataProviderFactory.getRegistry();
@@ -39,7 +38,6 @@ public class DataProviderRMI implements IDataProvider{
             }
         }
     }
-
 
     public IPersonController getPersonControllerInstance() {
         if (personController == null) {
@@ -103,6 +101,11 @@ public class DataProviderRMI implements IDataProvider{
 
     public void setMessageStatus(String newMessageStatus) {
         messageStatus.set(newMessageStatus);
+    }
+
+    @Override
+    public SimpleStringProperty getMessageStatus() {
+        return messageStatus;
     }
 
     public String authenticate(String userId, char[] pw) throws RemoteException, NotBoundException {

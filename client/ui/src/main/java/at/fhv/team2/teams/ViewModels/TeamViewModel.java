@@ -22,8 +22,9 @@ public class TeamViewModel {
 
     private String loadedParticipantId;
     private ModificationType modificationType;
+    private Boolean partOfTournament;
 
-    public TeamViewModel(String id, String name, List<PersonDTO> members, List<PersonDTO> trainers, String league, String type, ModificationType modificationType) {
+    public TeamViewModel(String id, String name, List<PersonDTO> members, List<PersonDTO> trainers, String league, String type, ModificationType modificationType, Boolean partOfTournament) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.members = members;
@@ -31,6 +32,7 @@ public class TeamViewModel {
         this.league = new SimpleStringProperty(league);
         this.type = new SimpleStringProperty(type);
         this.modificationType = modificationType;
+        this.partOfTournament = partOfTournament;
     }
 
     public String getId() {
@@ -112,4 +114,6 @@ public class TeamViewModel {
     public void setModificationType(ModificationType modificationType) {
         this.modificationType = modificationType;
     }
+
+    public boolean getPartOfTournament(){return partOfTournament;}
 }

@@ -8,10 +8,7 @@ import javafx.stage.Stage;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Properties;
-
 /**
  * Created by Uray Örnek on 11/5/2018.
  */

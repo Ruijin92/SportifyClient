@@ -16,7 +16,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -54,6 +53,7 @@ public class MessageModel extends AnchorPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         messageViewModel = new MessageViewModel();
         messageViewModel.setMessages(FXCollections.observableArrayList());
         messageTable.setItems(messageViewModel.getMessages());
@@ -87,6 +87,7 @@ public class MessageModel extends AnchorPane implements Initializable {
         });
         thread.setDaemon(true);
         thread.start();
+
     }
 
     public void openMessage(MouseEvent event) {

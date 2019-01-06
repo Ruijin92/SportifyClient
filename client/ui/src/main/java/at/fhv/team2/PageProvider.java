@@ -42,7 +42,7 @@ public class PageProvider {
     }
 
     public void switchCompetitions() {
-        mainPage.mainPane.setCenter(new AllCompetition());
+         mainPage.mainPane.setCenter(new AllCompetition());
     }
 
     public void switchTeams() {

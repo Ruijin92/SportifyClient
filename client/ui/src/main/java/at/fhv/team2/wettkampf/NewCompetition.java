@@ -209,7 +209,8 @@ public class NewCompetition extends HBox implements Initializable {
 
             ArrayList<TeamViewModel> loadedTeams = new ArrayList<>();
             for (ParticipantDTO team : loadedTournament.getTeams()) {
-                TeamViewModel teamModel = new TeamViewModel(team.getTeam(), team.getTeamName(), null, null, null, team.getType(), ModificationType.NONE);
+                //schon dabei!! blabla
+                TeamViewModel teamModel = new TeamViewModel(team.getTeam(), team.getTeamName(), null, null, null, team.getType(), ModificationType.NONE, true);
                 teamModel.setLoadedParticipantId(team.getId());
                 loadedTeams.add(teamModel);
             }
@@ -219,7 +220,7 @@ public class NewCompetition extends HBox implements Initializable {
 
     public void addExternTeam(ActionEvent event) {
         if (!teamName.getText().equals("")) {
-            listView.getSourceItems().add(new TeamViewModel(null, teamName.getText(), null, null, null, "Extern", ModificationType.MODIFIED));
+            listView.getSourceItems().add(new TeamViewModel(null, teamName.getText(), null, null, null, "Extern", ModificationType.MODIFIED, null));
             teamName.clear();
             this.changed = true;
         } else {
@@ -280,7 +281,11 @@ public class NewCompetition extends HBox implements Initializable {
                             if (teamViewModel.getLoadedParticipantId() != null) {
                                 participantId = teamViewModel.getLoadedParticipantId();
                             }
-                            participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null,teamViewModel.getType(), null, ModificationType.MODIFIED));
+                            if(teamViewModel.getPartOfTournament()){
+                                participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null,teamViewModel.getType(), null, ModificationType.MODIFIED));
+                            } else {
+                                participantTeams.add(new ParticipantDTO(participantId, teamViewModel.getId(), teamViewModel.getName(), null,teamViewModel.getType(), null, ModificationType.ADDEDTEAM));
+                            }
                         }
                     }
 
@@ -435,7 +440,7 @@ public class NewCompetition extends HBox implements Initializable {
             teamViewModels.clear();
             if (teams != null) {
                 for (TeamDTO team : teams) {
-                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
+                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED, false));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
@@ -460,7 +465,8 @@ public class NewCompetition extends HBox implements Initializable {
                     }
                 }
                 if (matched == false) {
-                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
+                    //nocht nicht dabei hinzifüche blabla
+                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED, false));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
@@ -479,7 +485,7 @@ public class NewCompetition extends HBox implements Initializable {
             teamViewModels.clear();
             if (teams != null) {
                 for (TeamDTO team : teams) {
-                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
+                    teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED, false));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);
@@ -506,7 +512,7 @@ public class NewCompetition extends HBox implements Initializable {
                     }
                 }
                 if (matched == false) {
-                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED));
+                    this.teamViewModels.add(new TeamViewModel(team.getId(), team.getName(), null, null, null, team.getType(), ModificationType.MODIFIED, false));
                 }
             }
             this.teams = FXCollections.observableArrayList(teamViewModels);

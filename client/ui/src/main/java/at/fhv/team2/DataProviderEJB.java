@@ -25,8 +25,7 @@ public class DataProviderEJB implements IDataProvider {
     private static InitialContext initialContext;
     private static SessionDTO session;
 
-    @Getter
-    private static StringProperty messageStatus = new SimpleStringProperty();
+    private static SimpleStringProperty messageStatus = new SimpleStringProperty();
 
 
     public DataProviderEJB(){
@@ -128,5 +127,10 @@ public class DataProviderEJB implements IDataProvider {
     @Override
     public void setMessageStatus(String newMessageStatus) {
         messageStatus.set(newMessageStatus);
+    }
+
+    @Override
+    public SimpleStringProperty getMessageStatus() {
+        return messageStatus;
     }
 }

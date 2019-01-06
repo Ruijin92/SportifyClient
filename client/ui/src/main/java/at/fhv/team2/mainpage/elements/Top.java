@@ -1,13 +1,15 @@
 package at.fhv.team2.mainpage.elements;
 
+import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.interfacesReturn.IPersonControllerReturn;
 import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.team2.*;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
+import at.fhv.team2.PageProvider;
 import at.fhv.team2.roles.Permission;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,12 +17,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.naming.NamingException;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
@@ -70,7 +74,6 @@ public class Top extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         PersonDTO person = null;
         try {
             person = this.personController.getEntryDetails(dataProvider.getSession(), dataProvider.getSession().getMyUserId());
