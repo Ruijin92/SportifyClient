@@ -2,6 +2,9 @@ package at.fhv.team2;
 
 import at.fhv.sportsclub.ejb.interfaces.*;
 import at.fhv.sportsclub.model.security.SessionDTO;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import lombok.Getter;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -21,6 +24,10 @@ public class DataProviderEJB implements IDataProvider {
     private static DataProviderEJB instance = null;
     private static InitialContext initialContext;
     private static SessionDTO session;
+
+    @Getter
+    private static StringProperty messageStatus = new SimpleStringProperty();
+
 
     public DataProviderEJB(){
         initialContext = DataProviderFactory.getInitialContext();
@@ -116,5 +123,10 @@ public class DataProviderEJB implements IDataProvider {
     @Override
     public void setRegistry(Registry registry) {
 
+    }
+
+    @Override
+    public void setMessageStatus(String newMessageStatus) {
+        messageStatus.set(newMessageStatus);
     }
 }

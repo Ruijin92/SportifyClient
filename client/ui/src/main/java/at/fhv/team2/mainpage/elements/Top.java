@@ -1,8 +1,11 @@
 package at.fhv.team2.mainpage.elements;
 
 import at.fhv.sportsclub.interfacesReturn.IPersonControllerReturn;
+import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.team2.*;
+import at.fhv.team2.roles.Permission;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -79,6 +83,39 @@ public class Top extends HBox implements Initializable {
             username.setText(person.getFirstName());
         }
         siteName.setText("DASHBOARD");
+
+        username.setText(Permission.getPermission().getUsername());
+        dataProvider.setMessageStatus("Nachrichten");
+        messageButton.textProperty().bind(dataProvider.getMessageStatus());
+
+        new Thread(() -> {
+            while(dataProvider.getSession() != null) {
+                List<MessageDTO> messageDTOS = null;
+                try {
+                    messageDTOS =
+                            dataProvider.
+                                    getMessageControllerInstance().
+                                    browseMessagesForUser(null, dataProvider.getSession().getMyUserId());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+                String messageText;
+                if(messageDTOS != null && messageDTOS.size() > 0) {
+                    messageText = "Neue Nachrichten";
+                } else {
+                    messageText = "Nachrichten";
+                }
+
+                Platform.runLater(() -> dataProvider.setMessageStatus(messageText));
+
+                try {
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void setSiteName(String name){

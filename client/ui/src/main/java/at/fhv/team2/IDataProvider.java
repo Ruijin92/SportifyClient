@@ -3,6 +3,7 @@ package at.fhv.team2;
 
 import at.fhv.sportsclub.interfacesReturn.*;
 import at.fhv.sportsclub.model.security.SessionDTO;
+import javafx.beans.property.SimpleStringProperty;
 
 import javax.naming.NamingException;
 import java.rmi.NotBoundException;
@@ -28,6 +29,10 @@ public interface IDataProvider {
     SessionDTO getSession();
 
     void setRegistry(Registry registry);
+
+    void setMessageStatus(String newMessageStatus);
+
+    SimpleStringProperty getMessageStatus();
 }
 
 

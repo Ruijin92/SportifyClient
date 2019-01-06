@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.interfacesReturn;
 
+import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 
 import javax.ejb.Remote;
@@ -22,6 +23,6 @@ public interface IMessageControllerReturn {
     void sendMessagesToQueue(SessionDTO sessionDTO, Map<String, String> messages) throws RemoteException;
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username) throws RemoteException;
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo) throws RemoteException;
-    List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username) throws RemoteException;
-    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage) throws RemoteException;
+    List<MessageDTO> browseMessagesForUser(SessionDTO sessionDTO, String username) throws RemoteException;
+    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, Boolean confirm) throws RemoteException;
 }
