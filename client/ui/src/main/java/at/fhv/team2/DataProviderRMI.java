@@ -4,12 +4,15 @@ import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import lombok.Getter;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 
-public class DataProvider {
+public class DataProviderRMI implements IDataProvider{
 
     private static IControllerFactory controllerFactory = null;
     private static IPersonController personController = null;
@@ -17,14 +20,17 @@ public class DataProvider {
     private static ITeamController teamController = null;
     private static ITournamentController tournamentController = null;
     private static IAuthenticationController authenticationController = null;
+    private static IMessageController messageController = null;
 
-    private static DataProvider instance = null;
+    private static DataProviderRMI instance = null;
     private static Registry registry;
     private static SessionDTO session;
 
+    @Getter
+    private static StringProperty messageStatus = new SimpleStringProperty();
 
-
-    private DataProvider(){
+    public DataProviderRMI(){
+        registry = DataProviderFactory.getRegistry();
         if (controllerFactory == null) {
             try {
                 controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
@@ -34,14 +40,8 @@ public class DataProvider {
         }
     }
 
-    public static DataProvider get() {
-        if (instance == null) {
-            instance = new DataProvider();
-        }
-        return instance;
-    }
 
-    public static IPersonController getPersonControllerInstance() {
+    public IPersonController getPersonControllerInstance() {
         if (personController == null) {
             try {
                 return controllerFactory.getPersonController();
@@ -52,7 +52,7 @@ public class DataProvider {
         return personController;
     }
 
-    public static IDepartmentController getDepartmentControllerInstance() {
+    public IDepartmentController getDepartmentControllerInstance() {
         if (departmentController == null) {
             try {
                 return controllerFactory.getDepartmentController();
@@ -63,7 +63,7 @@ public class DataProvider {
         return departmentController;
     }
 
-    public static ITeamController getTeamControllerInstance() {
+    public ITeamController getTeamControllerInstance() {
         if (teamController == null) {
             try {
                 return controllerFactory.getTeamController();
@@ -74,7 +74,7 @@ public class DataProvider {
         return teamController;
     }
 
-    public static ITournamentController getTournamentControllerInstance() {
+    public ITournamentController getTournamentControllerInstance() {
         if (tournamentController == null) {
             try {
                 return controllerFactory.getTournamentController();
@@ -85,20 +85,43 @@ public class DataProvider {
         return tournamentController;
     }
 
-    public static void setRegistry(Registry registry) {
-        DataProvider.registry = registry;
-    }
-
-    public static String authenticate(String userId, char[] pw) throws RemoteException, NotBoundException {
-        if (session == null) {
-            IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
-            session = authenticationController.authenticate(userId, pw);
-            return "";
+    public IMessageController getMessageControllerInstance() {
+        if (messageController == null) {
+            try {
+                return controllerFactory.getMessageController();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
-           return session.getResponseMessage().getInfoMessage();
+        return messageController;
     }
 
-    public static SessionDTO getSession() {
+
+    public void setRegistry(Registry registry) {
+        DataProviderRMI.registry = registry;
+    }
+
+    public void setMessageStatus(String newMessageStatus) {
+        messageStatus.set(newMessageStatus);
+    }
+
+    public String authenticate(String userId, char[] pw) throws RemoteException, NotBoundException {
+        IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
+        session = authenticationController.authenticate(userId, pw);
+        if (session.getResponseMessage() == null) {
+            return "";
+        } else {
+            return session.getResponseMessage().getInfoMessage();
+        }
+    }
+
+    public void logout() throws RemoteException, NotBoundException {
+        IAuthenticationController authenticationController = (IAuthenticationController) registry.lookup("AuthenticationService");
+        authenticationController.logout(session);
+        session = null;
+    }
+
+    public SessionDTO getSession() {
         return session;
     }
 }

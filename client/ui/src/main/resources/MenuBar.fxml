@@ -2,4 +2,4 @@
 
 <?import javafx.scene.layout.VBox?>
 
-<fx:root fx:id="vBox" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" spacing="2" type="VBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" />
+<fx:root fx:id="vBox" styleClass="side-section" stylesheets="@main.css" maxWidth="135.0" minWidth="135.0" prefWidth="135.0" type="VBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" />

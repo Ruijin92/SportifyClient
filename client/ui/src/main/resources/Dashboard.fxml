@@ -1,34 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<fx:root fx:id="vBox" type="VBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox VBox.vgrow="ALWAYS">
-         <children>
-            <VBox HBox.hgrow="ALWAYS">
-               <children>
-                  <Label text="Heutige Veranstaltungen" />
-                  <ListView prefHeight="200.0" prefWidth="200.0" />
-               </children>
-               <HBox.margin>
-                  <Insets right="5.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox HBox.hgrow="ALWAYS">
-               <children>
-                  <Label text="Letztes Match" />
-                  <ListView prefHeight="200.0" prefWidth="200.0" />
-               </children>
-            </VBox>
-         </children>
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </VBox.margin>
-      </HBox>
-   </children>
+<fx:root fx:id="vBox" stylesheets="@main.css" type="VBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <HBox VBox.vgrow="ALWAYS">
+      <children>
+         <VBox prefHeight="100.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+            <children>
+               <VBox alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" styleClass="header-dash" VBox.vgrow="ALWAYS">
+                  <children>
+                     <Label text="Gespielt" />
+                  </children></VBox>
+               <VBox alignment="CENTER" prefHeight="100.0">
+                  <children>
+                     <Label text="42 Spiele" VBox.vgrow="ALWAYS">
+                        <font>
+                           <Font name="System Bold" size="23.0" />
+                        </font>
+                     </Label>
+                  </children>
+               </VBox>
+            </children>
+         </VBox>
+         <VBox prefHeight="100.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="5.0" right="10.0" />
+            </HBox.margin>
+            <children>
+               <VBox alignment="CENTER" maxHeight="25.0" prefHeight="25.0" styleClass="header-dash" VBox.vgrow="ALWAYS">
+                  <children>
+                     <Label text="Heute" />
+                  </children></VBox>
+            </children>
+         </VBox>
+         <VBox prefHeight="100.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="5.0" right="10.0" />
+            </HBox.margin>
+            <children>
+               <VBox alignment="CENTER" maxHeight="25.0" prefHeight="25.0" styleClass="header-dash" VBox.vgrow="ALWAYS">
+                  <children>
+                     <Label text="Gewonnen" />
+                  </children></VBox>
+            </children>
+         </VBox>
+         <VBox prefHeight="100.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="5.0" />
+            </HBox.margin>
+            <children>
+               <VBox alignment="CENTER" maxHeight="25.0" prefHeight="25.0" styleClass="header-dash" VBox.vgrow="ALWAYS">
+                  <children>
+                     <Label text="Verloren" />
+                  </children></VBox>
+            </children>
+         </VBox>
+      </children>
+      <VBox.margin>
+         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+      </VBox.margin></HBox>
+   <HBox prefHeight="300.0" prefWidth="200.0">
+      <VBox.margin>
+         <Insets bottom="15.0" left="15.0" right="15.0" />
+      </VBox.margin>
+      <children>
+         <VBox prefHeight="200.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets right="10.0" />
+            </HBox.margin>
+            <children>
+               <VBox alignment="CENTER" maxHeight="25.0" prefHeight="25.0" styleClass="header-dash">
+                  <children>
+                     <Label text="Nachrichten" />
+                  </children></VBox>
+               <ImageView fitHeight="280.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                  <image>
+                     <Image url="@asd.PNG" />
+                  </image>
+               </ImageView>
+            </children>
+         </VBox>
+         <VBox prefHeight="200.0" styleClass="body-dash" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="5.0" />
+            </HBox.margin>
+            <children>
+               <VBox alignment="CENTER" maxHeight="25.0" prefHeight="25.0" styleClass="header-dash">
+                  <children>
+                     <Label text="Detail" />
+                  </children></VBox>
+            </children>
+         </VBox>
+      </children>
+   </HBox>
+   <VBox prefHeight="200.0" prefWidth="100.0" styleClass="body-dash" VBox.vgrow="ALWAYS">
+      <children>
+         <VBox alignment="CENTER" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" styleClass="header-dash">
+            <children>
+               <Label text="Wettkampf Statistik" />
+            </children></VBox>
+         <LineChart legendSide="TOP" legendVisible="false" VBox.vgrow="ALWAYS">
+           <xAxis>
+             <CategoryAxis side="BOTTOM" />
+           </xAxis>
+           <yAxis>
+             <NumberAxis side="LEFT" />
+           </yAxis>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </LineChart>
+      </children>
+      <VBox.margin>
+         <Insets bottom="15.0" left="15.0" right="15.0" />
+      </VBox.margin>
+   </VBox>
 </fx:root>

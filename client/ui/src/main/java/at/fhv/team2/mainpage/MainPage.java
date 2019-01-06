@@ -19,21 +19,27 @@ public class MainPage implements Initializable {
     @FXML
     public BorderPane mainPane;
 
-    private PageProvider pageProvider = new PageProvider(this);
+    private PageProvider pageProvider = PageProvider.getPageProvider();
+
 
     public void initialize(URL location, ResourceBundle resources) {
         setMainPageUp();
     }
 
     private void setMainPageUp() {
-        MenuBar menubar = new MenuBar(pageProvider);
+        pageProvider.setMainPage(this);
+
+        Top topBar = new Top();
+        MenuBar menubar = new MenuBar();
         menubar.addingButtons();
+        menubar.setTopBar(topBar);
 
         //Dashboard as standard
         pageProvider.switchDashboard();
 
         mainPane.setLeft(menubar);
-        mainPane.setTop(new Top());
+        mainPane.setTop(topBar);
         mainPane.setBottom(new Bottom());
+
     }
 }

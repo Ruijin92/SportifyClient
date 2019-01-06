@@ -1,31 +1,39 @@
 package at.fhv.team2.wettkampf;
 
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
-import at.fhv.sportsclub.model.dept.SportDTO;
-import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.sportsclub.model.tournament.EncounterDTO;
+import at.fhv.sportsclub.interfacesReturn.ITournamentControllerReturn;
+import at.fhv.sportsclub.model.common.ListWrapper;
+import at.fhv.sportsclub.model.security.RoleDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.team2.DataProvider;
+import at.fhv.team2.DataProviderFactory;
+import at.fhv.team2.IDataProvider;
+import at.fhv.team2.PageProvider;
 import at.fhv.team2.member.PersonViewModel;
 import at.fhv.team2.roles.Permission;
+import at.fhv.team2.wettkampf.ViewModels.CompetitionViewModel;
+import at.fhv.team2.wettkampf.ViewModels.ParticipantViewModel;
+import at.fhv.team2.wettkampf.ViewModels.SquadViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Uray Örnek on 11/6/2018.
@@ -33,22 +41,26 @@ import java.util.ResourceBundle;
 public class AllCompetition extends HBox implements Initializable {
 
     public HBox hBox;
-
     public Button changeButton;
     public Button newButton;
     public Button resultButton;
+    public Button squadButton;
+    public Button squadChangeButton;
+    public Button personalCompetition;
+    public Button allCompetitions;
+    public TextField searchTournament;
+
     public Button searchButton;
 
-    public TableView table;
-    public TableColumn tournamentNameTable;
-
-    private ListView listCompetitions;
-
-    private List<CompetitionViewModel> tournaments;
-    private CompetitionViewModel tournamentDetails;
-    private ITournamentController tournamentControllerInstance;
-
+    public ListView listCompetitions;
+    private List<CompetitionViewModel> tournaments = new ArrayList<>();
     private ObservableList<CompetitionViewModel> competitionTableList;
+    private boolean showAllCompetitions;
+    private String role;
+
+    private CompetitionViewModel tournamentDetails;
+    private ITournamentControllerReturn tournamentControllerInstance;
+    private IDataProvider dataProvider;
 
     public AllCompetition() {
 
@@ -65,107 +77,217 @@ public class AllCompetition extends HBox implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        dataProvider = DataProviderFactory.getCurrentDataProvider();
+
+        List<RoleDTO> roles = dataProvider.getSession().getRoles();
+        if (roles.get(0).getName().equals("Admin")) {
+            role = "Admin";
+        }
 
         newButton.setVisible(Permission.getPermission().createCompetitionPermission());
         resultButton.setVisible(Permission.getPermission().createCompetitionPermission());
         changeButton.setVisible(Permission.getPermission().createCompetitionPermission());
+        squadButton.setVisible(Permission.getPermission().createTeamPermission());
+        squadChangeButton.setVisible(Permission.getPermission().createTeamPermission());
+
 
         changeButton.setDisable(true);
-        addCompetitions();
+        squadButton.setDisable(true);
+        squadChangeButton.setDisable(true);
 
-        this.tournamentControllerInstance = DataProvider.getTournamentControllerInstance();
+        this.showAllCompetitions = true;
+        this.tournamentControllerInstance = dataProvider.getTournamentControllerInstance();
+        showCompetitions();
 
-        ArrayList<TournamentDTO> tournamentEntries = null;
-
-        try {
-            tournamentEntries = tournamentControllerInstance.getAllEntries(DataProvider.getSession()).getContents();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        tournaments = new ArrayList<>();
-
-        for (TournamentDTO tournament: tournamentEntries) {
-            tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
-        }
-        addCompetitionsToTable(tournaments);
+        listCompetitions.setCellFactory(lv -> new ListCell<CompetitionViewModel>() {
+            @Override
+            public void updateItem(CompetitionViewModel item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 
     public void changeCompetition(ActionEvent event) {
-
-        Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
-
-        if(selectedItem != null){
-
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchChangeCompetitions(selectedCompetition.getId());
         }
     }
 
     public void createCompetition(ActionEvent event) {
-
+        PageProvider.getPageProvider().switchNewComp();
     }
 
     public void enterResult(ActionEvent event) {
-
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            CompetitionViewModel selectedCompetition = (CompetitionViewModel) listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchEnterResult(selectedCompetition.getId());
+        }
     }
 
-    //TODO: mit Server verbinden und Daten auf Screen binden
-    public void showDetailInformations(MouseEvent mouseEvent) {
-       /* //CompetitionViewModel pr = (CompetitionViewModel) table.getSelectionModel().getSelectedItem();
-        TournamentDTO tournamentEntryDetails = new TournamentDTO();
-
-        try {
-            tournamentEntryDetails = tournamentControllerInstance.getEntryDetails(DataProvider.getSession(), pr.getId());
-            if (tournamentEntryDetails.getResponse() != null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Loading failed");
-                alert.setContentText("Loading of tournament failed");
-                alert.showAndWait();
-                return;
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
+    public void setSquad(ActionEvent event) {
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchTeamSquad((CompetitionViewModel) selectedItem);
         }
-
-
-        List<ParticipantViewModel> teams = null;
-        for (ParticipantDTO participant: tournamentEntryDetails.getTeams()) {
-            List<PersonViewModel> participants = createParticipants(participant.getParticipants());
-            teams.add(new ParticipantViewModel(participant.getId(), participant.getTeam(), participant.getTeamName(), participants));
-        }
-        List<EncounterViewModel> encounters = null;
-        for (EncounterDTO encounterEntry: tournamentEntryDetails.getEncounters()) {
-            List<PersonViewModel> homeTeamPersons = createParticipants(encounterEntry.getHomeTeam().getParticipants());
-            List<PersonViewModel> guestTeamPersons = createParticipants(encounterEntry.getGuestTeam().getParticipants());
-            ParticipantViewModel homeTeam = new ParticipantViewModel(encounterEntry.getHomeTeam().getId(), encounterEntry.getHomeTeam().getTeam(), encounterEntry.getHomeTeam().getTeamName(), homeTeamPersons);
-            ParticipantViewModel guestTeam = new ParticipantViewModel(encounterEntry.getGuestTeam().getId(), encounterEntry.getGuestTeam().getTeam(), encounterEntry.getGuestTeam().getTeamName(), guestTeamPersons);
-            encounters.add(new EncounterViewModel(encounterEntry.getId(), encounterEntry.getDate().toString(), encounterEntry.getTime().toString(), homeTeam, guestTeam, encounterEntry.getHomePoints(), encounterEntry.getGuestPoints()));
-        }
-        tournamentDetails = new CompetitionViewModel(tournamentEntryDetails.getId(), tournamentEntryDetails.getName(), tournamentEntryDetails.getLeagueName(), tournamentEntryDetails.getSportsName(), tournamentEntryDetails.getLeague(), encounters, teams);
-   */ }
-
-    private void addCompetitions() {
-
     }
 
-    private void addCompetitionsToTable(List<CompetitionViewModel> competitions) {
+    public void changeSquad(ActionEvent event) {
+        if (listCompetitions.getSelectionModel().getSelectedItem() != null) {
+            Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
+            PageProvider.getPageProvider().switchToChangeTeamSquad((CompetitionViewModel) selectedItem, true);
+        }
+    }
+
+    private void addCompetitionsToList(List<CompetitionViewModel> competitions) {
         competitionTableList = FXCollections.observableArrayList(competitions);
-
-        tournamentNameTable.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        table.setItems(competitionTableList);
+        listCompetitions.setItems(competitionTableList);
     }
 
-    private List<PersonViewModel> createParticipants(List<PersonDTO> participantsDTO) {
-        List<PersonViewModel> participants = new LinkedList<>();
-        for (PersonDTO personEntry: participantsDTO) {
-            List<String> sports = new LinkedList<>();
-            for (SportDTO sportEntry: personEntry.getSports()) {
-                sports.add(sportEntry.getName());
-            }
-            participants.add(new PersonViewModel(personEntry.getId(), personEntry.getFirstName(), personEntry.getLastName(),
-                    personEntry.getAddress().getCity(),personEntry.getAddress().getStreet(),
-                    personEntry.getAddress().getZipCode(), personEntry.getContact().getPhoneNumber(), sports));
+    public void clickItem(MouseEvent event) throws RemoteException {
+        Object selectedItem = listCompetitions.getSelectionModel().getSelectedItem();
+        CompetitionViewModel selectedCompetition = (CompetitionViewModel) selectedItem;
+
+        TournamentDTO tournament = null;
+        if (selectedCompetition == null) {
+            tournament = new TournamentDTO();
+        } else {
+            SessionDTO a = dataProvider.getSession();
+            tournament = this.tournamentControllerInstance.getEntryDetails(dataProvider.getSession(), selectedCompetition.getId());
         }
-        return participants;
+
+        if (selectedItem != null) {
+            if (!showAllCompetitions) {
+                if (selectedCompetition.getParticipants().get(0).getParticipants() == null || selectedCompetition.getParticipants().get(0).getParticipants().size() < 1) {
+                    squadButton.setDisable(false);
+                    squadChangeButton.setDisable(true);
+                } else {
+                    squadButton.setDisable(true);
+                    squadChangeButton.setDisable(false);
+                }
+                resultButton.setDisable(checkForResultButton(tournament));
+                changeButton.setDisable(false);
+            } else {
+                if (role.equals("Admin")) {
+                    resultButton.setDisable(checkForResultButton(tournament));
+                    changeButton.setDisable(false);
+                } else if (selectedCompetition.getEncounters() == null) {
+                    resultButton.setDisable(true);
+                }
+            }
+        } else {
+            changeButton.setVisible(true);
+            squadButton.setDisable(true);
+            squadChangeButton.setDisable(true);
+        }
+    }
+
+    private boolean checkForResultButton(TournamentDTO tournament) {
+        boolean showResultButton = false;
+        if (tournament.getEncounters() != null && tournament.getTeams() != null) {
+            if (tournament.getTeams().size() > 0) {
+                showResultButton = false;
+            } else {
+                showResultButton = true;
+            }
+        } else {
+            showResultButton = true;
+        }
+        return showResultButton;
+    }
+
+    public void searchTournament() {
+        String searchQuery = searchTournament.getText();
+
+        Pattern p = Pattern.compile("^" + searchQuery, Pattern.CASE_INSENSITIVE);
+        Matcher m;
+
+        if (searchQuery.isEmpty()) {
+            addCompetitionsToList(tournaments);
+            return;
+        }
+
+        List<CompetitionViewModel> filteredCompetitions =
+                tournaments.stream()
+                        .filter(t -> p.matcher(t.getName()).find())
+                        .collect(toList());
+
+        addCompetitionsToList(filteredCompetitions);
+    }
+
+    public void showOnlyPersonalCompetitions() {
+        this.showAllCompetitions = false;
+        showCompetitions();
+    }
+
+    public void showAllCompetitions() {
+        this.showAllCompetitions = true;
+        showCompetitions();
+    }
+
+    private void showCompetitions() {
+        this.tournaments.clear();
+        ArrayList<TournamentDTO> tournamentsForList = new ArrayList<>();
+        if (this.showAllCompetitions) {
+            if (!role.equals("Admin")) {
+                squadButton.setDisable(true);
+                squadButton.setVisible(false);
+                squadChangeButton.setDisable(true);
+                squadChangeButton.setVisible(false);
+            }
+
+            ListWrapper<TournamentDTO> allEntries = null;
+            try {
+                allEntries = tournamentControllerInstance.getAllEntries(dataProvider.getSession());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            if (allEntries.getContents() == null) {
+                showAlert(allEntries.getResponse().getInfoMessage());
+            } else {
+                tournamentsForList = allEntries.getContents();
+                for (TournamentDTO tournament : tournamentsForList) {
+                    tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, null));
+                }
+            }
+        } else {
+            ListWrapper<TournamentDTO> allTournaments = new ListWrapper<>();
+            try {
+                allTournaments = tournamentControllerInstance.getTournamentByTrainerId(dataProvider.getSession(), dataProvider.getSession().getMyUserId());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+            if (allTournaments.getContents() == null) {
+                showAlert(allTournaments.getResponse().getInfoMessage());
+            } else
+                tournamentsForList = allTournaments.getContents();
+            for (TournamentDTO tournament : tournamentsForList) {
+                ArrayList<ParticipantViewModel> participants = new ArrayList<>();
+                for (ParticipantDTO team : tournament.getTeams()) {
+                    ArrayList<SquadViewModel> teamSquad = new ArrayList<>();
+                    if (team.getParticipants() != null) {
+                        for (SquadMemberDTO participant : team.getParticipants()) {
+                            teamSquad.add(new SquadViewModel(new PersonViewModel(participant.getMember().getId(), participant.getMember().getFirstName(), participant.getMember().getLastName(), null, null, null, null, null), participant.isParticipating()));
+                        }
+                    }
+                    participants.add(new ParticipantViewModel(team.getId(), team.getTeam(), team.getTeamName(), teamSquad, null));
+                }
+                tournaments.add(new CompetitionViewModel(tournament.getId(), tournament.getName(), null, null, null, null, participants));
+            }
+        }
+        addCompetitionsToList(tournaments);
+    }
+
+    private void showAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Loading Tournaments error");
+        alert.setContentText(text);
+        alert.showAndWait();
     }
 }

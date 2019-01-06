@@ -7,43 +7,79 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root fx:id="hBox" type="HBox" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="hBox" stylesheets="@main.css" type="HBox" xmlns="http://javafx.com/javafx/9.0.1"
+         xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox HBox.hgrow="ALWAYS">
             <children>
-                <HBox maxHeight="25.0" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" maxHeight="25.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <TextField promptText="Wettkampf suchen" />
-                        <Button fx:id="searchButton" mnemonicParsing="false" text="Suchen">
+                        <TextField prefHeight="26.0" promptText="Wettkampf suchen" fx:id="searchTournament"/>
+                        <Button fx:id="searchButton" mnemonicParsing="false" text="Suchen" onAction="#searchTournament">
                             <HBox.margin>
-                                <Insets left="5.0" />
+                                <Insets left="5.0"/>
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="changeButton" mnemonicParsing="false" onAction="#changeCompetition" text="Wettkampf ändern">
+                        <Button fx:id="newButton" mnemonicParsing="false" onAction="#createCompetition"
+                                text="Wettkampf erstellen">
                             <HBox.margin>
-                                <Insets left="5.0" />
+                                <Insets left="5.0"/>
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="newButton" mnemonicParsing="false" onAction="#createCompetition" text="Wettkampf erstellen">
+                        <Button fx:id="changeButton" mnemonicParsing="false" onAction="#changeCompetition"
+                                text="Wettkampf ändern">
                             <HBox.margin>
-                                <Insets left="5.0" />
+                                <Insets left="5.0"/>
                             </HBox.margin>
                         </Button>
-                  <Button fx:id="resultButton" mnemonicParsing="false" onAction="#enterResult" text="Ergebnis eintragen">
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </Button>
+                        <Button fx:id="resultButton" mnemonicParsing="false" onAction="#enterResult"
+                                text="Ergebnis eintragen">
+                            <HBox.margin>
+                                <Insets left="5.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <Button fx:id="squadButton" mnemonicParsing="false" onAction="#setSquad"
+                                text="Wettkampfkader festlegen">
+                            <HBox.margin>
+                                <Insets left="5.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <Button fx:id="squadChangeButton" mnemonicParsing="false" onAction="#changeSquad"
+                                text="Wettkampfkader ändern">
+                            <HBox.margin>
+                                <Insets left="5.0"/>
+                            </HBox.margin>
+                        </Button>
                     </children>
                     <VBox.margin>
-                        <Insets bottom="5.0" right="5.0" top="5.0" />
+                        <Insets bottom="5.0" right="5.0" top="5.0"/>
                     </VBox.margin>
                 </HBox>
-                <ListView fx:id="listCompetitions" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="listCompetitions" onMouseClicked="#clickItem" VBox.vgrow="ALWAYS"/>
             </children>
             <HBox.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </HBox.margin>
+            <HBox alignment="CENTER_LEFT" maxHeight="25.0" VBox.vgrow="ALWAYS">
+                <HBox.margin>
+                    <Insets left="500"/>
+                </HBox.margin>
+                <Button fx:id="personalCompetition" mnemonicParsing="false" onAction="#showOnlyPersonalCompetitions"
+                        text="Wettkämpfe meines Teams anzeigen" minWidth="200" >
+                    <HBox.margin>
+                        <Insets left="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="allCompetitions" mnemonicParsing="false" onAction="#showAllCompetitions"
+                        text="Alle Wettkämpfe anzeigen" minWidth="200">
+                    <HBox.margin>
+                        <Insets left="5.0"/>
+                    </HBox.margin>
+                </Button>
+                <VBox.margin>
+                    <Insets bottom="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </HBox>
         </VBox>
     </children>
 </fx:root>
