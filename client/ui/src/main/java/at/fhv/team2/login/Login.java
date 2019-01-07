@@ -140,7 +140,7 @@ public class Login implements Initializable {
         } else {
             Registry registry = null;
             try {
-                registry = LocateRegistry.getRegistry(ipBox.getText(), 1099);
+                registry = LocateRegistry.getRegistry(ipBox.getText(), 1090);
             } catch (RemoteException e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
